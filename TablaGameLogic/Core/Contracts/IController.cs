@@ -1,37 +1,39 @@
 ﻿namespace TablaGameLogic.Core.Contracts
 {
-    using System.Collections.Generic;
+     using System.Collections.Generic;
 
-    using TablaGameLogic.Services.Contracts;
-    using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaGameLogic.Services.Contracts;
+     using TablaModels.ComponentModels.Components.Interfaces;
 
-    public interface IController
-    {
-        IBoard TablaBoard { get; }
+     public interface IController
+     {
+          IBoard TablaBoard { get; }
 
-        IList<IPlayer> Players { get; }
+          IList<IPlayer> Players { get; }
 
-        IPlayer CurrentPlayer { get; set; }
+          IPlayer CurrentPlayer { get; set; }
 
-        int CurrentPlayerMovesNumber { get; }
+          int CurrentPlayerMovesNumber { get; }
 
-        IMotionValidation MotionValidate { get;  }
+          IMotionValidation MotionValidate { get;  }
 
-        string PlayersChooseAColor(int color);
+          void CreatePlayers( string firstPlayerName, string secondPlayerName );
 
-        string ArrangingTheCheckersToPlay();
+          string PlayersChooseAColor(int color);
 
-        string InitialInfoCurrentPlayerMoves();
+          string ArrangingTheCheckersToPlay();
 
-        bool RollDice();
+          string InitialInfoCurrentPlayerMoves();
 
-        string CurrentPlayerMakesMove(string[] moveWithParameters);
+          bool RollDice();
 
-        void CurrentPlayerFirstSet();
+          string CurrentPlayerMakesMove(string[] moveWithParameters);
 
-        void ChangeCurrentPlayer();
+          void CurrentPlayerFirstSet();
 
-        void ClearBoardFromCheckers();
+          void ChangeCurrentPlayer();
 
-    }
+          void ClearBoardFromCheckers();
+
+     }
 }

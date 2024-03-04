@@ -5,6 +5,6 @@
 
     public interface IPlayerFactory
     {
-        IPlayer CreatePlayer(string name, Dictionary<int, IColumn> columnSet);
+        IPlayer CreatePlayer(string playerName,Dictionary<int, IColumn> columnSet);
     }
 }

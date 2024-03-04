@@ -12,16 +12,22 @@
 
     public class BoardFactory : IBoardFactory
     {
-        public IBoard Create()
-        {
-            Dictionary<int,IColumn> columns = CreateColumns();
-            Dictionary<int, IDice> diceSet = CreateDice();
-            List<IPool> whitePools = CreatePools(PoolColor.White);
-            List<IPool> blackPools = CreatePools(PoolColor.Black);
+          public IBoard Create()
+          {
+               Dictionary<int,IColumn> columns = CreateColumns();
+               
+               Dictionary<int, IDice> diceSet = CreateDice();
+               
+               List<IPool> whitePools = CreatePools(PoolColor.White);
+               
+               List<IPool> blackPools = CreatePools(PoolColor.Black);
+               
+               IBoard board = new Board( columns, diceSet, whitePools, blackPools );
+               
+               board.ValueOfDiceAndCountOfMoves = new Dictionary<int, int>();
 
-
-            return new Board(columns, diceSet, whitePools,blackPools);
-        }
+               return board;
+          }
 
         private Dictionary<int, IColumn> CreateColumns()
         {

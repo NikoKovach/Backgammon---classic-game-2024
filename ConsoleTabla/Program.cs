@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 using TablaEngine.Engine.Contracts;
 using TablaEngine.Engine;
-
 using TablaGameLogic.Core;
-using TablaGameLogic.Core.Contracts;
-
-using TablaModels.ComponentModels;
 using TablaModels.ComponentModels.Components.Interfaces;
-using TablaModels.ComponentModels.Enums;
 
 namespace ConsoleTabla
 {
@@ -26,104 +17,104 @@ namespace ConsoleTabla
             //GameHasAWinner();
         }
 
-        private static void Test1()
-        {
-            //Engine engine = new Engine();
+          private static void CreateEngine()
+          {
+               IConsoleEngine engine = new ClassicConsoleEngine();
 
-            //engine.ChoiceOfColorByThePlayers();
+               try
+               {
+                   engine.Run();
+               }
+               catch (ArgumentNullException argNullEx)
+               {
+                   Console.WriteLine(argNullEx.Message);
+               }
+               catch (Exception ex)
+               {
+                   Console.WriteLine(ex.InnerException.Message);
+               }
 
-            //engine.PlayersArrangeTheirCheckers();
+          }
 
-            //IPlayer player = engine.controller.Players[1];
+          private static void Test1()
+          {
+              //Engine engine = new Engine();
 
-            //engine.controller.CurrentPlayer = player;
+              //engine.ChoiceOfColorByThePlayers();
 
-            //engine.controller.CreateAdditionalServices();
+              //engine.PlayersArrangeTheirCheckers();
 
-            //engine.controller.TablaBoard.DiceSet[1].ValueOfOneDice = 2;
-            //engine.controller.TablaBoard.DiceSet[2].ValueOfOneDice = 2;
+              //IPlayer player = engine.controller.Players[1];
 
-            //engine.controller.SetValueOfDiceAndCountOfMoves();
+              //engine.controller.CurrentPlayer = player;
 
-            //engine.CurrentPlayerMoves();
-        }
+              //engine.controller.CreateAdditionalServices();
 
-        private static void CreateEngine()
-        {
-            IEngine engine = new ClassicConsoleEngine();
+              //engine.controller.TablaBoard.DiceSet[1].ValueOfOneDice = 2;
+              //engine.controller.TablaBoard.DiceSet[2].ValueOfOneDice = 2;
 
-            try
-            {
-                engine.Run();
-            }
-            catch (ArgumentNullException argNullEx)
-            {
-                Console.WriteLine(argNullEx.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+              //engine.controller.SetValueOfDiceAndCountOfMoves();
 
-        }
+              //engine.CurrentPlayerMoves();
+          }
 
-        private static void GameHasAWinner()
-        {
-            IEngine engine = new ClassicConsoleEngine();
+          private static void GameHasAWinner()
+          {
+              IEngine engine = new ClassicConsoleEngine();
 
-            //engine.controller.Players[0].MyPoolsColor = PoolColor.White;
-            //engine.controller.Players[1].MyPoolsColor = PoolColor.Black;
+              //engine.controller.Players[0].MyPoolsColor = PoolColor.White;
+              //engine.controller.Players[1].MyPoolsColor = PoolColor.Black;
 
-            ////engine.controller.CurrentPlayer = engine.controller.Players[1];// black
+              ////engine.controller.CurrentPlayer = engine.controller.Players[1];// black
 
-            //engine.controller.CurrentPlayer = engine.controller.Players[0];//white
+              //engine.controller.CurrentPlayer = engine.controller.Players[0];//white
 
 
-            //ArrangeTheWhiteCheckers(engine);
+              //ArrangeTheWhiteCheckers(engine);
 
-            //ArrangeTheBlackCheckers(engine);
+              //ArrangeTheBlackCheckers(engine);
 
-            //engine.MainGameMethod();
+              //engine.MainGameMethod();
 
-        }
+          }
 
-        private static void ArrangeTheBlackCheckers(IEngine engine)
-        {
-            //for (int i = 0; i < engine.controller.TablaBoard.BlackPoolsSet.Count - 1; i++)
-            //{
-            //    engine.controller.TablaBoard.BlackPoolsSet[i].State = PoolState.OutOfGame;
-            //}
+          private static void ArrangeTheBlackCheckers(IEngine engine)
+          {
+              //for (int i = 0; i < engine.controller.TablaBoard.BlackPoolsSet.Count - 1; i++)
+              //{
+              //    engine.controller.TablaBoard.BlackPoolsSet[i].State = PoolState.OutOfGame;
+              //}
 
-            //IPool blackPool = engine.controller.TablaBoard.BlackPoolsSet[14];
+              //IPool blackPool = engine.controller.TablaBoard.BlackPoolsSet[14];
 
-            //blackPool.State = PoolState.AtHome;
-            //engine.controller.TablaBoard.ColumnSet[23].PoolStack.Push(blackPool);
-        }
+              //blackPool.State = PoolState.AtHome;
+              //engine.controller.TablaBoard.ColumnSet[23].PoolStack.Push(blackPool);
+          }
 
-        private static void ArrangeTheWhiteCheckers(IEngine engine)
-        {
-            //for (int i = 0; i < engine.controller.TablaBoard.WhitePoolsSet.Count - 1; i++)
-            //{
-            //    engine.controller.TablaBoard.WhitePoolsSet[i].State = PoolState.OutOfGame;
-            //}
+          private static void ArrangeTheWhiteCheckers(IEngine engine)
+          {
+              //for (int i = 0; i < engine.controller.TablaBoard.WhitePoolsSet.Count - 1; i++)
+              //{
+              //    engine.controller.TablaBoard.WhitePoolsSet[i].State = PoolState.OutOfGame;
+              //}
 
-            //IPool whitePool = engine.controller.TablaBoard.WhitePoolsSet[14];
+              //IPool whitePool = engine.controller.TablaBoard.WhitePoolsSet[14];
 
-            //whitePool.State = PoolState.AtHome;
-            //engine.controller.TablaBoard.ColumnSet[2].PoolStack.Push(whitePool);
-        }
+              //whitePool.State = PoolState.AtHome;
+              //engine.controller.TablaBoard.ColumnSet[2].PoolStack.Push(whitePool);
+          }
 
-        private static void CreateController()
-        {
-            Controller controller = new Controller();
+          private static void CreateController()
+          {
+              Controller controller = new Controller();
 
-            string text = controller.PlayersChooseAColor(2);
-            Console.WriteLine(text);
+              string text = controller.PlayersChooseAColor(2);
+              Console.WriteLine(text);
 
-            Console.WriteLine(controller.ArrangingTheCheckersToPlay());
+              Console.WriteLine(controller.ArrangingTheCheckersToPlay());
 
-            
-        }
+              
+          }
 
         private static void PrintBoardInfo(IBoard board)
         {
@@ -171,44 +162,3 @@ namespace ConsoleTabla
         }
     }
 }
-
-/*
-    //IPlayer somePl = engine.controller.Players[0];
-                //MethodInfo[] arMethods = somePl.Move.GetType().GetMethods();
-                //foreach (var item in arMethods)
-                //{
-                //    Console.WriteLine(item.Name + " <<>> " + item.GetType().FullName);
-                //}
-
-                //engine.ChoiceOfColorByThePlayers();
-
-                //engine.PlayersArrangeTheirCheckers();
-
-                //IPool pool = engine.controller.TablaBoard.ColumnSet[1].PoolStack.Pop();
-                //pool.State = PoolState.OnTheBar;
-
-                //IPlayer player = engine.controller.Players.Find(x=>x.MyPoolsColor == PoolColor.Black);
-
-                //engine.controller.TablaBoard.DiceSet[1].ValueOfOneDice = 6;
-                //engine.controller.TablaBoard.DiceSet[2].ValueOfOneDice = 6;
-
-                //var boolValue = engine.controller.ConfirmationOfTheMoves.CurrentPlayerHasNoMoves(player, engine.controller.TablaBoard);
-
-                //List<int> dices = engine.controller.TablaBoard.DiceSet
-                //    .Select(x=>x.Value.ValueOfOneDice)
-                //    .Distinct()
-                //    .ToList();
-
-                //List<IColumn> cols =  engine.controller.TablaBoard.ColumnSet
-                //    .Select(x=>x.Value)
-                //    .ToList();
-
-                //List<IColumn> newColsCollection = new List<IColumn>();
-
-                //dices.ForEach(x=> 
-                //    {
-                //        newColsCollection.Add(cols.Find(w=>w.IdentityNumber == x));
-                //    });
-
-                //newColsCollection.All(x=>x.PoolStack.Count > 1 && x.PoolStack.Peek().PoolColor == PoolColor.White); 
-*/

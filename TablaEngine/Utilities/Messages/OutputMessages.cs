@@ -2,13 +2,28 @@
 {
     public static class OutputMessages
     {
-        public const string ChooseOfColor = "Player one please select a color ( 1 for \"White\" or 2  \"Black\" color ). \n\rOr 0 for EXIT THE GAME : ";
+          public const string NewRow = "\r\n";
 
-        public const string InvalidChooseOfColor = "You have entered an invalid digit ! Please, try again !";
+          public const string PlayerNameRequirement = "The name of player must contains at least 3 characters.";
+
+          public const string EnterPlayerName = "Player {0} enter your name : ";
+
+          public const string ChooseOfColor =
+               "Player one (with name :{0}) please select a color:" + NewRow +
+               "Press 1 : for \"White\"      ;"    + NewRow +
+               "Press 2 : for \"Black\"      ;"    + NewRow +
+               "Press x : for EXIT THE GAME  ."    + NewRow +
+               "Enter your choice : ";
+
+        public const string InvalidChooseOfColor = 
+               "You have entered an invalid digit ! Please, try again !" + NewRow +
+               "Enter your choice : ";
 
         public const string PlayersRollADie = "Players : please rolls a dice! ";
 
-        public const string OnePlayerRollADice = "Player {0} : please roll a dice !For roll press 'r': ";
+        public const string OnePlayerRollADice = 
+               "Player {0} : please roll a dice !" + NewRow + 
+               "For roll press 'r': ";
 
         public const string OneDiceRollResult = "Player {0} threw {1}.";
 

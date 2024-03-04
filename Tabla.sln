@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33328.57
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TablaModels", "TablaModels\TablaModels.csproj", "{6C02F437-9E37-4534-8C66-99E8A018A19D}"
 EndProject
@@ -12,8 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TablaModels.Test", "TablaModels.Test\TablaModels.Test.csproj", "{CD9B1C84-1A63-4228-A6E6-21974A2D5AFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TablaEngine", "TablaEngine\TablaEngine.csproj", "{7D88BBA4-402F-4E0D-A029-AAE5910A257E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTablaDemo", "ConsoleTablaDemo\ConsoleTablaDemo.csproj", "{B86FA648-8674-4EC4-A65A-44769D61E5F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{7D88BBA4-402F-4E0D-A029-AAE5910A257E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D88BBA4-402F-4E0D-A029-AAE5910A257E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D88BBA4-402F-4E0D-A029-AAE5910A257E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B86FA648-8674-4EC4-A65A-44769D61E5F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B86FA648-8674-4EC4-A65A-44769D61E5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B86FA648-8674-4EC4-A65A-44769D61E5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B86FA648-8674-4EC4-A65A-44769D61E5F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

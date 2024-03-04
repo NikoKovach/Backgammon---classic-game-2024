@@ -1,17 +1,19 @@
-﻿namespace TablaEngine.Engine.Contracts
+﻿using TablaGameLogic.Core.Contracts;
+
+namespace TablaEngine.Engine.Contracts
 {
-    using TablaEngine.IO.Contracts;
-    using TablaEngine.Services.Contracts;
-    using TablaGameLogic.Core.Contracts;
+     public interface IEngine
+     {
+          IController Controller { get; }
 
-    public interface IEngine
-    {
-        IController Controller { get; }
-        IWriter Writer { get; }
-        IReader Reader { get; }
+          void RegistrationOfPlayers();
 
-        void Run();
+          void ChoiceOfColorByThePlayers();
 
-        //void Run(IEngineServices services);
-    }
+          void PlayersArrangeTheirCheckers();
+
+          void WhoWillMakeTheFirstMove();
+
+          void Run();
+     }
 }
