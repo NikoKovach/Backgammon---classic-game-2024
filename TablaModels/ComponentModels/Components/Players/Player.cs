@@ -1,85 +1,42 @@
 ﻿namespace TablaModels.ComponentModels.Components.Players
 {
-    using System;
-    using System.Collections.Generic;
+     using System;
+     using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaModels.ComponentModels.Enums;
 
-    using TablaModels.ComponentModels.Components.Interfaces;
-    using TablaModels.ComponentModels.Enums;
-    using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
+     public abstract class Player : IPlayer
+     {        
+          public Player(string name)
+          {
+               this.Name = name ;
 
-    public abstract class Player : IPlayer
-    {        
-        private string name;
-        private IMoveChecker move;
+               this.State = PlayerState.NormalState;
+          }
 
-        public Player(string name)
-        {
-            this.Name = name;
+          public Player(string name,IMoveChecker moveChecker)
+             :this(name)
+          {
+               this.Move = moveChecker;
+          }
 
-            this.State = PlayerState.NormalState;
-        }
+          public string Name{ get; set; }
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
+          public PoolColor MyPoolsColor { get ; set ; }
 
-            set
-            {
-                if (value.Length < TableGlobalConstants.MinLenghtPlayerName)
-                {
-                    throw new ArgumentException(InvalidPlayerName);
-                }
+          public PlayerState State { get ; set ; }
 
-                if (value == null)
-                {
-                    throw new ArgumentNullException(NullPlayerName);
-                }
+          public IMoveChecker Move { get; set; }
 
-                this.name = value;
-            }
-        }
+          public abstract void ArrangingTheCheckers( IBoard board);
 
-        public PoolColor MyPoolsColor 
-        { 
-            get ; set ; 
-        }
+          public int RollADice()
+          {
+              Random rnd = new Random();
 
-        public PlayerState State
-        {
-            get; set;
-        }
+              int number = rnd.Next
+                  (TableGlobalConstants.MinDiceValue, TableGlobalConstants.MaxDiceValue + 1);
 
-        public IMoveChecker Move 
-        {
-            get
-            { 
-                return this.move; 
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(string.Format(NullMoveParameter,nameof(this.Move)));
-                }
-
-                this.move = value;
-            }
-        }
-
-        public abstract void ArrangingTheCheckers( IBoard board);
-
-        public int RollADice()
-        {
-            Random rnd = new Random();
-
-            int number = rnd.Next
-                (TableGlobalConstants.MinDiceValue, TableGlobalConstants.MaxDiceValue + 1);
-
-            return number;
-        }      
-    }
+              return number;
+          }      
+     }
 }
