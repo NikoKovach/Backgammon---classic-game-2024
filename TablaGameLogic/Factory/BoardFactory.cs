@@ -23,6 +23,10 @@
                List<IPool> blackPools = CreatePools(PoolColor.Black);
                
                IBoard board = new Board( columns, diceSet, whitePools, blackPools );
+
+               board.BeatenWhitePoolList = new List<IPool>();
+
+               board.BeatenBlackPoolList = new List<IPool>();
                
                board.ValueOfDiceAndCountOfMoves = new Dictionary<int, int>();
 

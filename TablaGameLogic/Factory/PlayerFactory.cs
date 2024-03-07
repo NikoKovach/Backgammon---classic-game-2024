@@ -13,6 +13,19 @@
 
                return player;
           }
+
+          public ICollection<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName,IBoard board )
+          {
+               IMoveChecker moves = new MoveCheckersClassicGame( board.ColumnSet );
+
+               List<IPlayer> someDefaultPlayers = new List<IPlayer>
+               {
+                    new PlayerClassicGame( firstPlayerName,moves ),
+                    new PlayerClassicGame( secondPlayerName,moves)
+               };
+
+               return someDefaultPlayers;
+          }
      }
 }
 

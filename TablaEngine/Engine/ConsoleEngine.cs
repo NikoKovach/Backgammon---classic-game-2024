@@ -7,13 +7,12 @@
      using TablaGameLogic.Core.Contracts;
      using TablaModels.ComponentModels;
      using TablaModels.ComponentModels.Components.Interfaces;
-     using static TablaEngine.Utilities.Messages.OutputMessages;
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
+     using static TablaGameLogic.Utilities.Messages.OutputMessages;
+     using static TablaGameLogic.Utilities.Messages.GameConstants;
 
      public abstract class ConsoleEngine : IConsoleEngine,IEngine
      {
-          private const int NumberOfPlayers = 2;
-
           private readonly IController controller;
           private readonly IWriter writer;
           private readonly IReader reader;
@@ -55,9 +54,7 @@
                     Console.Clear();
                }
                
-               this.controller.CreatePlayers( playersName[0], playersName[1] );
-
-               
+               this.controller.CreatePlayers( playersName[0], playersName[1] ); 
           }
 
           public virtual void ChoiceOfColorByThePlayers()
@@ -94,38 +91,40 @@
 
           public virtual void PlayersArrangeTheirCheckers() 
           {
-              string message = this.Controller.ArrangingTheCheckersToPlay();
+               string message = this.Controller.ArrangingTheCheckersToPlay();
 
-              this.Writer.WriteLine(message);
+               this.Writer.WriteLine(message);
+
+               Thread.Sleep( 5000 );
+               Console.Clear();
           }
 
           public virtual void WhoWillMakeTheFirstMove()
           {
+               int[] diceValues = { 0, 0 };
+
                while (true)
                {
-                    EachOtherPlayerRollOneDice();
+                    EachOtherPlayerRollOneDice(diceValues);
 
-                    this.Controller.CurrentPlayerFirstSet();
+                    if ( diceValues[0] != diceValues[1] )
+                    {     
+                        break;
+                    }
+                        
+                    this.Writer.WriteLine(TheDiceOfPlayersAreTheSame);
+               }
 
-                    if (this.Controller.CurrentPlayerMovesNumber == 2)
-                    {
-                        this.Writer.WriteLine(string.Format(PlayerStartFirst,
+               this.Controller.CurrentPlayerFirstSet();
+
+               this.Writer.WriteLine(string.Format(PlayerStartFirst,
                              this.Controller.CurrentPlayer.Name,
                              this.Controller.CurrentPlayer.MyPoolsColor));
 
-                        break;
-                    }
-                    else 
-                    {
-                        this.Writer.WriteLine(TheDiceOfPlayersAreTheSame);
-                    }
-               }
-
-               int seconds = 10;
-               GameStartsAfterAFewSeconds(seconds);
+               GameStartsAfterAFewSeconds();
           } 
-
-          public void PressKeyForRolling(string playerName,string printMessage)
+          
+          public virtual void PressKeyForRolling(string playerName,string printMessage)
           {
                this.Writer.Write(string.Format(printMessage, playerName));
 
@@ -144,7 +143,7 @@
                }
           }
 
-          public void PrintTheWinner(IPlayer currentPlayer)
+          public virtual void PrintTheWinner(IPlayer currentPlayer)
           {
               this.Writer.WriteLine(string.Format(TheWinnerIs, currentPlayer.Name));
           }
@@ -186,6 +185,22 @@
 
      //******************************************************************
 
+          private void EachOtherPlayerRollOneDice(int[] diceValues)
+          {
+               for (int i = 0; i < this.Controller.Players.Count; i++)
+               {
+                    string currentPlayerName = this.Controller.Players[i].Name;
+
+                    PressKeyForRolling(currentPlayerName, OnePlayerRollADice);
+
+                    diceValues[i] = this.Controller.Players[i].RollADice();
+
+                    this.Controller.TablaBoard.DiceSet[i + 1].ValueOfOneDice = diceValues[i];
+
+                    this.Writer.WriteLine(string.Format(RollResultOfOneDice, currentPlayerName, diceValues[i]));
+               }
+          }
+
           private string GetValidPlayerName(int number)
           {
                string name = this.reader.ReadLine();
@@ -208,28 +223,11 @@
                return name;
           }
 
-          private void EachOtherPlayerRollOneDice()
+          private void GameStartsAfterAFewSeconds()
           {
-               int[] diceValues = { 0, 0 };
+              this.Writer.WriteLine(string.Format(DelayTheGame,SecondsToDelayTheGame));
 
-               for (int i = 0; i < this.Controller.Players.Count; i++)
-               {
-                    string currentPlayerName = this.Controller.Players[i].Name;
-
-                    PressKeyForRolling(currentPlayerName, OnePlayerRollADice);
-
-                    diceValues[i] = this.Controller.Players[i].RollADice();
-
-                    this.Controller.TablaBoard.DiceSet[i + 1].ValueOfOneDice = diceValues[i];
-
-                    this.Writer.WriteLine(string.Format(OneDiceRollResult, currentPlayerName,          diceValues[i]));
-               }
-          }
-
-          private void GameStartsAfterAFewSeconds(int seconds)
-          {
-              this.Writer.WriteLine($"\n\rThe game will start after {seconds} seconds !");
-              Thread.Sleep(seconds * 1000);
+              Thread.Sleep(SecondsToDelayTheGame * 1000);
           }
      }
 }

@@ -34,8 +34,6 @@
                     this.PlayersArrangeTheirCheckers();
                     this.WhoWillMakeTheFirstMove();
 
-                    GeneralLoopCurrentPlayerMoves();
-
                     while (true)
                     {
                         MainGameMethod(); 
@@ -55,20 +53,20 @@
 
           private void MainGameMethod() // be private
           {
-              Console.Clear();
-              this.Controller.ChangeCurrentPlayer();
-              string currentPlayerName = this.Controller.CurrentPlayer.Name;
+               GeneralLoopCurrentPlayerMoves();
 
-              PressKeyForRolling(currentPlayerName, AskPlayerToRollDiceAndMakeMove);
+               this.Controller.ChangeCurrentPlayer();
 
-              if (!this.Controller.RollDice())
-              {
-                  this.Writer.WriteLine(string.Format(ThePlayerHaveNoMove, currentPlayerName));
+               string currentPlayerName = this.Controller.CurrentPlayer.Name;
 
-                  return;
-              }
+               this.PressKeyForRolling(currentPlayerName, AskPlayerToRollDiceAndMakeMove);
 
-              GeneralLoopCurrentPlayerMoves();
+               if (!this.Controller.RollDice())
+               {
+                   this.Writer.WriteLine(string.Format(ThePlayerHaveNoMove,      currentPlayerName));
+
+                   return;
+               }
           }
 
           private void GeneralLoopCurrentPlayerMoves()
@@ -100,24 +98,13 @@
 
                while (message.Equals(InvalidMove))
                {
-                   string[] moveTypeAndParams = this.Reader
-                   .ReadLine()
-                   .Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
-                   .ToArray();
+                    message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 
-                   message = this.Controller.CurrentPlayerMakesMove(moveTypeAndParams);
-
-                   this.Writer.WriteLine(message);
+                    this.Writer.WriteLine(message);
                }
           }
     }
 }
 
-//private void CurrentPlayerMoves() //be private
-//{
-//    GeneralLoopCurrentPlayerMoves();
-
-//    this.controller.ChangeCurrentPlayer();
-//}
 
 

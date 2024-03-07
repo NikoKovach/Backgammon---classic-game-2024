@@ -1,40 +1,45 @@
 ﻿namespace TablaGameLogic.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+     using System;
+     using System.Collections.Generic;
+     using System.Linq;
 
-    using TablaGameLogic.Services.Contracts;
-    using TablaModels.ComponentModels.Components.Interfaces;
-    using TablaModels.ComponentModels.Enums;
+     using TablaGameLogic.Services.Contracts;
+     using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaModels.ComponentModels.Enums;
 
-    public  class MotionValidate : IMotionValidation
-    {
-        private IBoard board;       
-        private IPlayer player;
+     public  class MotionValidate : IMotionValidation
+     {
+          private IBoard board;       
+          private IPlayer player;
 
-        public MotionValidate(IBoard gameBoard, IPlayer currentPlayer)
-        {
-            this.board = gameBoard;
+          public MotionValidate()
+          {
 
-            this.player = currentPlayer;
+          }
 
-        }
+          public MotionValidate(IBoard gameBoard, IPlayer currentPlayer)
+          {
+              this.board = gameBoard;
 
-        public IBoard Board 
-        {
-            get => this.board;
-        }
+              this.player = currentPlayer;
 
-        public IPlayer Player
-        {
-            get => this.player;
-        }
+          }
 
-        public PoolColor CurrentColor
-        {
-            get => this.player.MyPoolsColor;
-        }
+          public IBoard Board 
+          {
+              get => this.board;
+          }
+
+          public IPlayer Player
+          {
+              get => this.player;
+          }
+
+          public PoolColor CurrentColor
+          {
+              get => this.player.MyPoolsColor;
+          }
 
         public bool CurrentPlayerHasNoMoves()
         {
@@ -362,6 +367,6 @@
 
             return true;
         }
-    }
+     }
 }
 

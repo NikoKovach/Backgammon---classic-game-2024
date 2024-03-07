@@ -27,7 +27,7 @@
 
           bool RollDice();
 
-          string CurrentPlayerMakesMove(string[] moveWithParameters);
+          string CurrentPlayerMakesMove(string moveString);
 
           void CurrentPlayerFirstSet();
 

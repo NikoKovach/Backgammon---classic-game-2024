@@ -8,4 +8,8 @@
     <ProjectReference Include="..\TablaGameLogic\TablaGameLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+
 </Project>
