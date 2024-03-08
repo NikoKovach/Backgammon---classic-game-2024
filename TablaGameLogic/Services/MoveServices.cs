@@ -8,6 +8,8 @@
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
 
+     using static TablaGameLogic.Services.CalculateService;
+
      public class MoveServices : IMoveService
      {
           //"Please enter your move type in following format :"         + NewRow + 
@@ -15,11 +17,7 @@
           //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
           //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
 
-          public MoveServices()
-          { }
-
-          public KeyValuePair<string,object[]> ParseMove(string moveString,
-               IBoard board,IPlayer player)
+          public KeyValuePair<string,int[]> ParseMove(string moveString)
           {    
                int[] moveArray = moveString
                                    .Split(new char[] { ' ', ',' },                                                StringSplitOptions.RemoveEmptyEntries)
@@ -28,16 +26,37 @@
 
                string moveMethodName = GetMethodName( moveArray[0] );
 
-               object[] paramsList = GetParameters( moveArray,board,player ); 
+               int[]paramsList = moveArray.Skip(1).ToArray();
 
-               return new KeyValuePair<string,object[]>(moveMethodName, paramsList);
+               return new KeyValuePair<string,int[]>(moveMethodName, paramsList);
+          }
+
+          public object[] GetInvokeMethodParameters(string moveMethod,int[] moveParams,IBoard board,IPlayer player)
+          {
+               object[] parametersArray = new object[ moveParams.Length ];
+
+               for ( int i = 0; i < parametersArray.Length; i++ )
+               {
+                    parametersArray[ i ] = moveParams[ i ];
+               }
+
+               if ( moveMethod.Equals("Inside") )
+               {
+                    IPool pool = GetPool( board, player, moveParams.Last() );
+
+                    parametersArray[ parametersArray.Length - 1 ] = pool;
+
+                    return parametersArray.ToArray();
+               }
+
+               return parametersArray.ToArray();
           }
 
           public void InvokeMoveMethod(string moveType,object[] moveParams,IPlayer CurrentPlayer)
           {
                MethodInfo moveMethodType = CurrentPlayer.Move.GetType().GetMethod     (moveType);
 
-               moveMethodType.Invoke(CurrentPlayer.Move, moveParams);
+               moveMethodType.Invoke(CurrentPlayer.Move, moveParams); 
           }
 
           private string GetMethodName( int moveType )
@@ -60,182 +79,88 @@
                return moveName;
           }
 
-          private object[] GetParameters( int[] moveArray, 
-               IBoard board, IPlayer player )
-          {
-               try
-               {
-                    int[] moveParameters = moveArray.Skip(1).ToArray();
-
-                    object[] parametersArray = new object[moveParameters.Length];
-
-                    //moveParameters.CopyTo(parametersArray, 0);
-
-                    for ( int i = 0; i < parametersArray.Length; i++ )
-                    {
-                         parametersArray[ i ] = moveParameters[i];
-                    }
-
-                    IPool pool = default;
-
-                    if ( moveArray[0] == 1 )
-                    {
-                         pool = GetPool(board,  player,moveArray.Last());
-                    }
-
-                    parametersArray[ parametersArray.Length - 1 ] = pool;
-
-                    return parametersArray.ToArray();
-
-               }
-               catch ( Exception ex)
-               {
-                    throw ex;      
-               }        
-          }
-
           private IPool GetPool( IBoard board, IPlayer player,int poolNumber )
           {
                PoolColor color = player.MyPoolsColor;
 
-               List<IPool> beatenPoolList = 
+               IList<IPool> chipList = 
                       player.MyPoolsColor == PoolColor.White ?
-                      board.BeatenWhitePoolList : board.BeatenBlackPoolList;
+                      board.WhitePoolsSet : board.BlackPoolsSet;
 
-               return beatenPoolList.FirstOrDefault( x => x.IdentityNumber == poolNumber );
+               return chipList.FirstOrDefault( x => x.IdentityNumber == poolNumber );
           }
+     }
+}
 
-          //if (moveType.Equals("Move"))
+//if (moveType.Equals("Move"))
           //{
           //    int numberOfMoves = CalculateTheNumberOfMoves(moveParameters[1],       this.TablaBoard.ValueOfDiceAndCountOfMoves);
 
           //    moveParameters.Add(numberOfMoves);
           //}
 
-          public static int CalculateTheNumberOfMoves(int positions,IDictionary<int,int>       valueOfDiceAndCountOfMoves)
-          {
-               int number = 0;
+          ///// <summary>
+          ///// Old name : CalculateTheNumberOfMoves
+          ///// </summary>
+          ///// <param name="positions"></param>
+          ///// <param name="valueOfDiceAndCountOfMoves"></param>
+          ///// <returns></returns>
+          //public int ChangeMovesNumbers(int positions,IDictionary<int,int>       diceValueAndMovesCount)
+          //{
+          //     int number = 0;
 
-               var kvpDicesCountOfMoves = valueOfDiceAndCountOfMoves
-                   .Where(x => x.Value > 0)
-                   .ToDictionary(x => x.Key, x => x.Value);
+          //     var kvpDicesCountOfMoves = diceValueAndMovesCount
+          //         .Where(x => x.Value > 0)
+          //         .ToDictionary(x => x.Key, x => x.Value);
 
-               int KeysSum = kvpDicesCountOfMoves.Select(x => x.Key).Sum();
+          //     int KeysSum = kvpDicesCountOfMoves.Select(x => x.Key).Sum();
 
-               if (kvpDicesCountOfMoves.Count == 2 && (positions < KeysSum))
-               {
-                   number = 1;
-               }
+          //     if (kvpDicesCountOfMoves.Count == 2 && (positions < KeysSum))
+          //     {
+          //         number = 1;
+          //     }
 
-               if (kvpDicesCountOfMoves.Count == 2 && (positions == KeysSum))
-               {
-                   number = 2;
-               }
+          //     if (kvpDicesCountOfMoves.Count == 2 && (positions == KeysSum))
+          //     {
+          //         number = 2;
+          //     }
 
-               if (kvpDicesCountOfMoves.Count == 1 && (positions >= kvpDicesCountOfMoves.First().Key)   && (positions % kvpDicesCountOfMoves.First().Key == 0))
-               {
-                   number = positions / kvpDicesCountOfMoves.First().Key;
-               }
+          //     if (kvpDicesCountOfMoves.Count == 1 && (positions >= kvpDicesCountOfMoves.First().Key)   && (positions % kvpDicesCountOfMoves.First().Key == 0))
+          //     {
+          //         number = positions / kvpDicesCountOfMoves.First().Key;
+          //     }
 
-               return number;
-          }
+          //     return number;
+          //}
 
-          public static void ChangeValueOfDiceAndCountOfMoves(string typeOfMove, IEnumerable<int> moveParams, PoolColor playerColor, IBoard board)
-          {
-               if (typeOfMove.Equals("Move"))
-               {
-                   ForMoveMotion(moveParams, board);
-               }
+          //private object[] GetParameters( int[] moveArray,
+          //     IBoard board, IPlayer player )
+          //{
+          //     try
+          //     {
+          //          int[] moveParameters = moveArray.Skip( 1 ).ToArray();
 
-               if (typeOfMove.Equals("Inside"))
-               {
-                   ForInsideMotion(moveParams, playerColor, board);
-               }
+          //          object[] parametersArray = new object[ moveParameters.Length ];
 
-               if (typeOfMove.Equals("Outside"))
-               {
-                   ForOutsideMotion(moveParams, playerColor, board);
-               }
-          }
+          //          for ( int i = 0; i < parametersArray.Length; i++ )
+          //          {
+          //               parametersArray[ i ] = moveParameters[ i ];
+          //          }
 
-          private static void ForMoveMotion( IEnumerable<int> moveParams, IBoard board)
-          {
-               int positions = moveParams.ToArray()[1];
-               int numberOfMotions = moveParams.ToArray()[2];
+          //          IPool pool = default;
 
-               if (numberOfMotions == 1)
-               {
-                   board.ValueOfDiceAndCountOfMoves[positions] -= 1;
-               }
+          //          if ( moveArray[ 0 ] == 1 )
+          //          {
+          //               pool = GetPool( board, player, moveArray.Last() );
+          //               parametersArray[ parametersArray.Length - 1 ] = pool;
+          //               return parametersArray.ToArray();
+          //          }
 
-               Dictionary<int, int> kvpDicesCountOfMoves = board.ValueOfDiceAndCountOfMoves
-               .Where(x => x.Value > 0)
-               .ToDictionary(x => x.Key, x => x.Value);
+          //          return parametersArray.ToArray();
 
-               int keysSum = kvpDicesCountOfMoves.Select(x => x.Key).Sum();
-
-               int[] keys = kvpDicesCountOfMoves.Select(x => x.Key).ToArray();
-
-               if (numberOfMotions == 2 && kvpDicesCountOfMoves.Count == 2 && positions ==   keysSum)
-               {
-                   for (int i = 0; i < keys.Length; i++)
-                   {
-                       board.ValueOfDiceAndCountOfMoves[keys[i]] -= 1;
-                   }
-               }
-
-               if (numberOfMotions > 2 && positions > keysSum)
-               {
-                   board.ValueOfDiceAndCountOfMoves[keysSum] -= numberOfMotions;
-               }
-          }
-
-          private static void ForInsideMotion(IEnumerable<int> moveParams, PoolColor   playerColor, IBoard board)
-          {
-               int column = moveParams.ToArray()[0];
-               int positions = (playerColor == PoolColor.Black) ? column : (24 + 1 - column);
-
-               int countOfMotions = board.ValueOfDiceAndCountOfMoves
-                   .Where(x => x.Key == positions )
-                   .Select(y=>y.Value)
-                   .First();
-
-               if (countOfMotions > 0)
-               {
-                   board.ValueOfDiceAndCountOfMoves[positions] -= 1;
-               }
-          }
-
-          private static void ForOutsideMotion(IEnumerable<int> moveParams, PoolColor playerColor, IBoard board)
-          {   
-               int column = moveParams.ToArray()[0];
-
-               int positions = (playerColor == PoolColor.Black) ? (24 + 1 - column) : column;
-
-               //TODO:::
-               //Белите вадят пул :пример колоната,от която се дърпа пул е №4,а зара е 5
-               //колона 5 и 6 са празни
-               Dictionary<int, int> kvpDicesCountOfMoves = board.ValueOfDiceAndCountOfMoves
-                                                    .Where(x => x.Value > 0)
-                                                    .OrderBy(y => y.Key)
-                                                    .ToDictionary(x => x.Key, x => x.Value);
-
-               bool diceExists = kvpDicesCountOfMoves.ContainsKey(positions);
-
-               if (diceExists)
-               {
-                   board.ValueOfDiceAndCountOfMoves[positions] -= 1;
-                   return;
-               }
-
-               int diseValue = kvpDicesCountOfMoves.First(x=>x.Key > positions).Key;
-
-               board.ValueOfDiceAndCountOfMoves[positions] -= 1;
-          }
-     }
-}
-
-               //int[] realParams = moveParams.SkipLast(1).ToArray();
-               //object[] parametersArray = new object[realParams.Length];
-
-               //realParams.CopyTo(parametersArray, 0);
+          //     }
+          //     catch ( Exception ex )
+          //     {
+          //          throw new InvalidOperationException( ex.Message );
+          //     }
+          //}

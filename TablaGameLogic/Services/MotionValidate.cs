@@ -8,22 +8,19 @@
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
 
-     public  class MotionValidate : IMotionValidation
+     public class MotionValidate : IMotionValidation
      {
           private IBoard board;       
           private IPlayer player;
 
           public MotionValidate()
-          {
-
-          }
+          { }
 
           public MotionValidate(IBoard gameBoard, IPlayer currentPlayer)
           {
               this.board = gameBoard;
 
               this.player = currentPlayer;
-
           }
 
           public IBoard Board 
@@ -41,8 +38,13 @@
               get => this.player.MyPoolsColor;
           }
 
-        public bool CurrentPlayerHasNoMoves()
-        {
+          public virtual bool MoveIsValid(int[] moveParams)
+          {
+               return true;
+          }
+
+          public bool CurrentPlayerHasNoMoves()
+          {
             bool anyCheckersOnTheBar;
 
             if (this.CurrentColor == PoolColor.White)
@@ -54,7 +56,7 @@
                 anyCheckersOnTheBar = this.board.BlackPoolsSet.Any(x => x.State == PoolState.OnTheBar);
             }
 
-            List<int> dices = this.board.ValueOfDiceAndCountOfMoves
+            List<int> dices = this.board.DiceValueAndMovesCount
                                        .Where(x => x.Value > 0)
                                        .Select(x => x.Key)
                                        .ToList();
@@ -88,10 +90,10 @@
             }
 
             return false;
-        }
+          }
 
-        public virtual bool HasNoOtherMoves()
-        {
+          public virtual bool HasNoOtherMoves()
+          {
             //When player has checkers with status 'OnTheBar'
             if (CurrentPlayerHasNoMoves())
             {
@@ -113,12 +115,9 @@
             }
 
             return false;
-        }
+          }
 
-        public virtual bool IsValidMove(int[] moveParams)
-        {
-            return true;
-        }
+        
 
         protected bool HasValidMotionInHomeField()
         {
@@ -159,7 +158,7 @@
                                        .ToList();
             }
 
-            List<int> diceCollection = this.board.ValueOfDiceAndCountOfMoves
+            List<int> diceCollection = this.board.DiceValueAndMovesCount
                                        .Where(x => x.Value > 0)
                                        .Select(y => y.Key)
                                        .ToList();
@@ -251,7 +250,7 @@
                        x.Value.PoolStack.Peek().PoolColor == this.CurrentColor)
                 .Select(y => y.Value).ToList();
 
-            List<int> dices = this.board.ValueOfDiceAndCountOfMoves
+            List<int> dices = this.board.DiceValueAndMovesCount
                                        .Where(x => x.Value > 0)
                                        .Select(x => x.Key)
                                        .ToList();
@@ -331,7 +330,7 @@
         //There are checkers with state 'OnTheBar'
         protected bool HaveCheckersWithStateOnTheBar()
         {
-            List<IPool> checkersList = new List<IPool>();
+            IList<IPool> checkersList = new List<IPool>();
 
             checkersList = (this.CurrentColor == PoolColor.White) ? this.Board.WhitePoolsSet : Board.BlackPoolsSet;
 
@@ -352,7 +351,7 @@
 
         protected bool ThereAreCheckersOutsideFromHomeField()
         {
-            List<IPool> checkersList = new List<IPool>();
+            IList<IPool> checkersList = new List<IPool>();
 
             checkersList = (this.CurrentColor == PoolColor.White) ? this.Board.WhitePoolsSet : Board.BlackPoolsSet;
 

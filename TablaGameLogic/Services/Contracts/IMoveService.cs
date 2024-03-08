@@ -7,8 +7,9 @@ namespace TablaGameLogic.Services.Contracts
 {
      public interface IMoveService
      {
-          KeyValuePair<string, object[]> ParseMove( string moveString,
-               IBoard board, IPlayer player );
+          KeyValuePair<string, int[]> ParseMove( string moveString);
+
+          public object[] GetInvokeMethodParameters( string moveMethod, int[] moveParams, IBoard board, IPlayer player );
 
           void InvokeMoveMethod( string moveType, object[] moveParams, IPlayer CurrentPlayer );
      }

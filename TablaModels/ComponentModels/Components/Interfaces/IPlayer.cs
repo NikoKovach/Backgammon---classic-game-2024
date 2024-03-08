@@ -1,19 +1,19 @@
 ﻿namespace TablaModels.ComponentModels.Components.Interfaces
 {
-    using TablaModels.ComponentModels.Enums;
+     using TablaModels.ComponentModels.Enums;
 
-    public interface IPlayer
-    {
-        string Name { get; }
+     public interface IPlayer
+     {
+          string Name { get; }
 
-        PoolColor MyPoolsColor { get; set; }
+          PoolColor MyPoolsColor { get; set; }
 
-        public PlayerState State { get; set; }
+          public PlayerState State { get; set; }
 
-        public IMoveChecker Move { get; set; }
+          public IMoveChecker Move { get; set; }
 
-        void ArrangingTheCheckers(IBoard board);
+          void ArrangingTheCheckers(IBoard board,IArrangeChips arrangeChips);
 
-        int RollADice();
+          int RollADice();
     }
 }

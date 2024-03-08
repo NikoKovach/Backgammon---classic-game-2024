@@ -51,7 +51,7 @@
                }       
           }
 
-          private void MainGameMethod() // be private
+          public void MainGameMethod() // be private
           {
                GeneralLoopCurrentPlayerMoves();
 
@@ -98,7 +98,11 @@
 
                while (message.Equals(InvalidMove))
                {
-                    message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
+                    //Move = "3 24 4";
+                    //Inside = "1 24 15"
+                    string input = "1 24 15";
+                    message = this.Controller.CurrentPlayerMakesMove(input);
+                    //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 
                     this.Writer.WriteLine(message);
                }

@@ -3,34 +3,35 @@
      using System;
      using System.Linq;
      using System.Collections.Generic;
-     using System.Reflection;
 
      using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Factory;
+     using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums; 
+     using TablaModels.ComponentModels.Components.Players;
 
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
-     using static TablaGameLogic.Services.MoveServices;
+     using static TablaGameLogic.Services.CalculateService;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
-     using TablaGameLogic.Services;
 
      public class Controller : IController
      {        
           private static IBoard  defaultTablaBoard = CreateDefaultBoard();
-          private static IMotionValidation defaultMotionValidate = GetMoveValidation();
+          //private static IMotionValidation defaultMotionValidate = GetMoveValidation();
           private static IMoveService defaultMoveService = GetMoveService();
 
           private readonly IBoard   tablaBoard;
           private IList<IPlayer>    players;
-          private IMotionValidation motionValidate;
+          //private IMotionValidation motionValidate;
           private IMoveService moveService;
-          public Controller() :this(defaultTablaBoard,defaultMotionValidate,defaultMoveService)
+
+          public Controller() :this(defaultTablaBoard,defaultMoveService)
           { }
 
-          public Controller(IBoard board,IMotionValidation motionValidate,IMoveService moveService)
+          public Controller(IBoard board,IMoveService moveService)
           {          
                this.tablaBoard = board ?? 
                     throw new ArgumentNullException
@@ -38,12 +39,6 @@
                          string.Format(InvalidGameBoard,nameof(board))
                     );
 
-               this.motionValidate = motionValidate ?? 
-                    throw new ArgumentNullException
-                    (
-                        string.Format(InvalidMoveConfirmationParameter,
-                        nameof(motionValidate))
-                    );
 
                this.moveService = moveService ??
                     throw new ArgumentNullException
@@ -51,22 +46,28 @@
                         string.Format(InvalidMoveConfirmationParameter,
                         nameof(moveService))
                     );
+
+               //this.motionValidate = motionValidate ?? 
+               //     throw new ArgumentNullException
+               //     (
+               //         string.Format(InvalidMoveConfirmationParameter,
+               //         nameof(motionValidate))
+               //     );
           }
 
           public IBoard TablaBoard => this.tablaBoard;
 
-          public IList<IPlayer> Players => this.players;
+          public IList<IPlayer> Players 
+          {
+               get => this.players;
+               set => this.players = value; 
+          } 
     
           public IPlayer CurrentPlayer { get; set; }
 
-          public int CurrentPlayerMovesNumber => this.TablaBoard.ValueOfDiceAndCountOfMoves.Values.Sum();
+          public int CurrentPlayerMovesNumber => this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
 
-          public IMotionValidation MotionValidate => this.motionValidate;
-
-          public void CreatePlayers( string firstPlayerName, string secondPlayerName)
-          {
-               this.players = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.TablaBoard).ToList();
-          }
+          public IMotionValidation MotionValidate { get; set; }
 
           public string PlayersChooseAColor(int color)
           {
@@ -81,7 +82,7 @@
           {
                for (int i = 0; i < this.Players.Count; i++)
                {
-                   this.players[i].ArrangingTheCheckers(this.tablaBoard);
+                    this.Players[ i ].ArrangingTheCheckers( this.TablaBoard, DefaultArrangePools() );
                }
 
                string message = PlayersArrangedHisCheckers;
@@ -96,7 +97,7 @@
                     this.TablaBoard.DiceSet[i+1].ValueOfOneDice = this.CurrentPlayer.RollADice();
                }
 
-               SetValueOfDiceAndCountOfMoves();
+               SetDiceValueAndMovesCount(this.TablaBoard);
 
                if (this.MotionValidate.CurrentPlayerHasNoMoves())
                {
@@ -121,30 +122,48 @@
 
           public string CurrentPlayerMakesMove(string moveString)
           {
-               //TODO : Work here 
-               //MoveService class and ValidateService class
-
-               KeyValuePair<string,object[]> moveKvp = 
-                    this.moveService.ParseMove(moveString,this.TablaBoard,this.CurrentPlayer);
-
-               if ( moveKvp.Value.Any( x => x.Equals(null) ))
+               try
                {
-                    return InvalidMove;
+                    KeyValuePair<string,int[]> moveKvp = this.moveService.ParseMove(moveString);
+
+                    int[] realInvokeMethodParams = 
+                         GetlInvokeMethodParams( moveKvp.Key, 
+                         moveKvp.Value ,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
+
+                    if ( moveKvp.Value.Any( x => x.Equals(null) ))
+                    {
+                         return InvalidMove;
+                    }
+
+                    //TODO : Work here 
+                    //MoveService class and ValidateService class
+
+                    //bool moveIsValid = new ValidateService().MoveIsValid( moveKvp.Key,  realInvokeMethodParams, this.TablaBoard, this.CurrentPlayer );
+
+                    bool moveIsValid = MotionValidate.MoveIsValid( realInvokeMethodParams );
+                    
+                    //bool moveIsValid = true;
+
+                    if ( !moveIsValid )
+                    {
+                         return InvalidMove;
+                    }
+
+                    object[] moveParams = 
+                         this.moveService.GetInvokeMethodParameters( moveKvp.Key, realInvokeMethodParams, this.TablaBoard, this.CurrentPlayer );
+
+                    this.moveService.InvokeMoveMethod(moveKvp.Key, moveParams,this.CurrentPlayer);
+
+                    ChangeDiceValueAndMoveCount( moveKvp.Key, moveKvp.Value, this.CurrentPlayer.MyPoolsColor, this.TablaBoard );
+               
+                    GameHasAWinner();
+
+                    return MoveIsMade;
                }
-
-               bool moveIsValid = new ValidateService().MoveIsValid( moveKvp.Key, moveKvp.Value, this.TablaBoard, this.CurrentPlayer );
-
-               if ( moveIsValid == false)
+               catch ( Exception ex)
                {
-                    //if  false  - > return съобщение за невалиден ход
-                    return InvalidMove;
-               }
-               
-               this.moveService.InvokeMoveMethod(moveKvp.Key, moveKvp.Value,this.CurrentPlayer); 
-               
-               GameHasAWinner();
-
-               return MoveIsMade;
+                    return ex.Message;
+               }    
           }
 
           public void CurrentPlayerFirstSet()
@@ -154,10 +173,7 @@
 
                this.CurrentPlayer = numberOne > numberTwo ? this.Players[0] : this.Players[1];
 
-               SetValueOfDiceAndCountOfMoves();
-
-          //##################################################
-               //CreateAdditionalServices();
+               SetDiceValueAndMovesCount( this.TablaBoard );
           }
 
           public void ChangeCurrentPlayer()
@@ -185,32 +201,13 @@
 //****************************************************************************
           private void GameHasAWinner()
           {
-               IEnumerable<IPool> currentPlayerCheckersSet = 
+               IEnumerable<IPool> playerChipSet = 
                     (this.CurrentPlayer.MyPoolsColor == PoolColor.White)
                     ? this.TablaBoard.WhitePoolsSet : this.TablaBoard.BlackPoolsSet;
 
-               if (!currentPlayerCheckersSet.Any(x => x.State != PoolState.OutOfGame))
+               if (!playerChipSet.Any(x => x.State != PoolState.OutOfGame))
                {
                    this.CurrentPlayer.State = PlayerState.Winner;
-               }
-          }
-
-          private void SetValueOfDiceAndCountOfMoves()
-          {
-               int numberOne = this.TablaBoard.DiceSet[1].ValueOfOneDice;
-               int numberTwo = this.TablaBoard.DiceSet[2].ValueOfOneDice;
-
-               this.TablaBoard.ValueOfDiceAndCountOfMoves.Clear();
-
-               if (numberOne != numberTwo)
-               {
-                   this.TablaBoard.ValueOfDiceAndCountOfMoves[numberOne] = 1;
-                   this.TablaBoard.ValueOfDiceAndCountOfMoves[numberTwo] = 1;
-               }
-
-               if (numberOne == numberTwo)
-               {
-                   this.TablaBoard.ValueOfDiceAndCountOfMoves[numberOne] = 4;
                }
           }
 
@@ -228,7 +225,7 @@
                }
           }     
 
-          private void ChangeAllCheckersStateToStarting(List<IPool> checkersCollection) 
+          private void ChangeAllCheckersStateToStarting(IList<IPool> checkersCollection) 
           {
               foreach (var item in checkersCollection)
               {
@@ -236,17 +233,9 @@
               }
           }
 
-          //private bool MoveIsValid()
-          //{
-          //     //TODO :
-          //     //public static bool InvokeMotionValidationMethod(string moveType,IBoard board,IPlayer CurrentPlayer)
-
-          //     return true;
-          //}
-
-          private static IMotionValidation GetMoveValidation()
+          public IMotionValidation SetUpMoveValidation()
           {
-               return new MotionValidate();
+               return new MotionValidate(this.TablaBoard,this.CurrentPlayer);
           }
 
           private static IBoard CreateDefaultBoard()
@@ -258,9 +247,29 @@
           {
                return new MoveServices();
           }
+
+          private IArrangeChips DefaultArrangePools()
+          {
+               return new ArrangePools();
+          }
      }
 }
 
+          //SetValueOfDiceAndCountOfMoves();
+
+          //##################################################
+          //CreateAdditionalServices();
+
+
+          //private bool MoveIsValid()
+          //{
+          //     //TODO :
+          //     //public static bool InvokeMotionValidationMethod(string moveType,IBoard board,IPlayer CurrentPlayer)
+
+          //     return true;
+          //}
+
+//**************************************************************************
 //Has A Valid Move true or false *******************************************
 
 //bool motionIsValid = true;
@@ -300,3 +309,8 @@
 
 //realParams.CopyTo(parametersArray, 0);
 //}
+
+          //public void CreatePlayers( string firstPlayerName, string secondPlayerName)
+          //{
+          //     this.players = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.TablaBoard).ToList();
+          //}

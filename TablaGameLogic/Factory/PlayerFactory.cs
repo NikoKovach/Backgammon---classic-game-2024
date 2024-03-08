@@ -6,25 +6,25 @@
      using TablaModels.ComponentModels.Components.Players;
      public class PlayerFactory : IPlayerFactory
      {
-          public IPlayer CreatePlayer(string playerName,Dictionary<int, IColumn> columnSet)
+          public IPlayer CreatePlayer(string playerName,IMoveChecker moveChecker)
           {
                IPlayer player  = new PlayerClassicGame(playerName,
-                    new MoveCheckersClassicGame(columnSet));         
+                    moveChecker);         
 
                return player;
           }
 
-          public ICollection<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName,IBoard board )
+          public IList<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName,IBoard board )
           {
                IMoveChecker moves = new MoveCheckersClassicGame( board.ColumnSet );
 
-               List<IPlayer> someDefaultPlayers = new List<IPlayer>
+               List<IPlayer> defaultPlayers = new List<IPlayer>
                {
-                    new PlayerClassicGame( firstPlayerName,moves ),
+                    new PlayerClassicGame( firstPlayerName,moves),
                     new PlayerClassicGame( secondPlayerName,moves)
                };
 
-               return someDefaultPlayers;
+               return defaultPlayers;
           }
      }
 }

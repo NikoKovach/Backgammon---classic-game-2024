@@ -7,14 +7,14 @@
 
     using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
 
-    public class PlayerCorkGame : Player, IPlayer
+    public class PlayerCorkGame : PlayerClassicGame, IPlayer
     {
         public PlayerCorkGame(string name)
            : base(name)
         {
         }
 
-        public override void ArrangingTheCheckers(IBoard board)
+        public override void ArrangingTheCheckers(IBoard board,IArrangeChips arrangeChips)
         {
             if (board == null)
             {
@@ -31,7 +31,7 @@
             };
         }
 
-        private void ArrangeWhitePools(IColumn column,List<IPool> whiteCheckers)
+        private void ArrangeWhitePools(IColumn column,IList<IPool> whiteCheckers)
         {
             for (int i = 0; i < whiteCheckers.Count; i++)
             {
@@ -40,7 +40,7 @@
             }
         }
 
-        private void ArrangeBlackPools(IColumn column, List<IPool> blackCheckers)
+        private void ArrangeBlackPools(IColumn column, IList<IPool> blackCheckers)
         {
             for (int i = 0; i < blackCheckers.Count; i++)
             {

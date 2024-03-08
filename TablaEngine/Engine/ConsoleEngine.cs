@@ -10,6 +10,7 @@
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
+     using TablaGameLogic.Factory;
 
      public abstract class ConsoleEngine : IConsoleEngine,IEngine
      {
@@ -54,7 +55,9 @@
                     Console.Clear();
                }
                
-               this.controller.CreatePlayers( playersName[0], playersName[1] ); 
+               this.controller.Players = new PlayerFactory().CreatePlayers(playersName[0],playersName[1],this.Controller.TablaBoard);
+
+               //this.controller.CreatePlayers( playersName[0], playersName[1] ); 
           }
 
           public virtual void ChoiceOfColorByThePlayers()
@@ -95,7 +98,7 @@
 
                this.Writer.WriteLine(message);
 
-               Thread.Sleep( 5000 );
+               Thread.Sleep( 3000 );
                Console.Clear();
           }
 
@@ -116,6 +119,7 @@
                }
 
                this.Controller.CurrentPlayerFirstSet();
+               this.Controller.SetUpMoveValidation();
 
                this.Writer.WriteLine(string.Format(PlayerStartFirst,
                              this.Controller.CurrentPlayer.Name,

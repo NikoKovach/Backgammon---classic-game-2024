@@ -5,8 +5,8 @@
 
      public interface IPlayerFactory
      {
-          IPlayer CreatePlayer(string playerName,Dictionary<int, IColumn> columnSet);
+          IPlayer CreatePlayer(string playerName,IMoveChecker moveChecker);
 
-          ICollection<IPlayer> CreatePlayers( string firstPlayerName, string    secondPlayerName,IBoard board );
+          IList<IPlayer> CreatePlayers( string firstPlayerName, string    secondPlayerName,IBoard board );
      }
 }

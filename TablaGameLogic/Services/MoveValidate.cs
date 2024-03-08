@@ -11,7 +11,7 @@
         public MoveValidate(IBoard gameBoard, IPlayer currentPlayer) : base(gameBoard, currentPlayer)
         { }
 
-        public override bool IsValidMove(params int[] moveParams)
+        public override bool MoveIsValid(params int[] moveParams)
         {
             // two parameters -> <<column number>> <<places to move>>
 
@@ -67,7 +67,7 @@
 
         private bool PositionsAreValid(int positions, int numberOfMotions)
         {
-            Dictionary<int,int> kvpDicesCountOfMoves = this.Board.ValueOfDiceAndCountOfMoves
+            Dictionary<int,int> kvpDicesCountOfMoves = this.Board.DiceValueAndMovesCount
                                                       .Where(x => x.Value > 0)
                                                       .ToDictionary(x => x.Key, x => x.Value);
 

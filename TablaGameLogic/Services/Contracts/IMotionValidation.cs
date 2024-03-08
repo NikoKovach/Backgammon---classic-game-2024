@@ -3,18 +3,18 @@
     using TablaModels.ComponentModels.Components.Interfaces;
     using TablaModels.ComponentModels.Enums;
 
-    public interface IMotionValidation
-    {
-        IBoard Board { get; }
+     public interface IMotionValidation
+     {
+          IBoard Board { get; }
 
-        public IPlayer Player { get; }
+          public IPlayer Player { get; }
 
-        public PoolColor CurrentColor { get; }
+          public PoolColor CurrentColor { get; }
 
-        bool CurrentPlayerHasNoMoves();
+          bool MoveIsValid(int[] moveParams);
 
-        bool HasNoOtherMoves();
+          bool CurrentPlayerHasNoMoves();
 
-        bool IsValidMove(int[] moveParams);
-    }
+          bool HasNoOtherMoves();     
+     }
 }

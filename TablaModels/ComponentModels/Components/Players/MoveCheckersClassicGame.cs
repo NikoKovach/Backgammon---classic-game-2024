@@ -7,60 +7,60 @@
 
      public class MoveCheckersClassicGame : IMoveChecker
      {
-          private Dictionary<int, IColumn> columns;
+          private IDictionary<int, IColumn> columns;
 
-          public MoveCheckersClassicGame(Dictionary<int, IColumn> columnSet)
+          public MoveCheckersClassicGame(IDictionary<int, IColumn> columnSet)
           {
               this.columns = columnSet;
           }
 
           public void Inside(int columnNumber, IPool pool)
           {
-               HitAnEnemyChecker(columnNumber, pool.PoolColor);
+               HitAnEnemyChecker(columnNumber, pool.PoolColor,columns);
 
                pool.State = PoolState.InGame;
-               this.columns[columnNumber].PoolStack.Push(pool);
+               columns[columnNumber].PoolStack.Push(pool);
           }
 
-        public void Move(int columnNumber, int positions)
-        {          
-            IPool currentPool = this.columns[columnNumber].PoolStack.Pop();
+          public void Move(int columnNumber, int positions)
+          {          
+              IPool currentPool = columns[columnNumber].PoolStack.Pop();
 
-            int targetColumnIndex = default;
+              int targetColumnIndex = default;
 
-            if (currentPool.PoolColor == PoolColor.Black)
-            {
-                targetColumnIndex = columnNumber + positions;
-            }
-            else if (currentPool.PoolColor == PoolColor.White)
-            {
-                targetColumnIndex = columnNumber - positions;
-            }
+              if (currentPool.PoolColor == PoolColor.Black)
+              {
+                  targetColumnIndex = columnNumber + positions;
+              }
+              else if (currentPool.PoolColor == PoolColor.White)
+              {
+                  targetColumnIndex = columnNumber - positions;
+              }
 
-            HitAnEnemyChecker(targetColumnIndex, currentPool.PoolColor);
+              HitAnEnemyChecker(targetColumnIndex, currentPool.PoolColor,columns);
 
-            this.columns[targetColumnIndex].PoolStack.Push(currentPool);
+              columns[targetColumnIndex].PoolStack.Push(currentPool);
 
-            ChangeCheckerStatusToAtHome(targetColumnIndex, currentPool);
-        }
+              ChangeCheckerStatusToAtHome(targetColumnIndex, currentPool);
+          }
 
-        public void Outside(int columnNumber)
+          public void Outside(int columnNumber)
+          {
+              IPool checkerGoOut  = columns[columnNumber].PoolStack.Pop();
+              checkerGoOut.State = PoolState.OutOfGame;
+          }
+
+          private void HitAnEnemyChecker(int targetColumnIndex, PoolColor currentCheckerColor,IDictionary<int, IColumn> columns)
         {
-            IPool checkerGoOut  = this.columns[columnNumber].PoolStack.Pop();
-            checkerGoOut.State = PoolState.OutOfGame;
-        }
-
-        private void HitAnEnemyChecker(int targetColumnIndex, PoolColor currentCheckerColor)
-        {
-            int targetColumnCheckersCount = this.columns[targetColumnIndex].PoolStack.Count;
+            int targetColumnCheckersCount = columns[targetColumnIndex].PoolStack.Count;
 
             if (targetColumnCheckersCount == 1 )
             {
-                PoolColor targetColumnColor = this.columns[targetColumnIndex].PoolStack.Peek().PoolColor;
+                PoolColor targetColumnColor = columns[targetColumnIndex].PoolStack.Peek().PoolColor;
 
                 if (targetColumnColor != currentCheckerColor)
                 {
-                    IPool strikeChecker = this.columns[targetColumnIndex].PoolStack.Pop();
+                    IPool strikeChecker = columns[targetColumnIndex].PoolStack.Pop();
                     strikeChecker.State = PoolState.OnTheBar;
                 }
             }

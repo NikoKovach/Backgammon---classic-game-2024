@@ -54,18 +54,18 @@
                };
           }
 
-          public Dictionary<int, IColumn> ColumnSet => this.columnSet;
+          public IDictionary<int, IColumn> ColumnSet => this.columnSet;
 
-          public Dictionary<int, IDice> DiceSet => this.diceSet;
+          public IDictionary<int, IDice> DiceSet => this.diceSet;
 
-          public Dictionary<int, int> ValueOfDiceAndCountOfMoves { get; set; }
+          public IDictionary<int, int> DiceValueAndMovesCount { get; set; }
 
-          public List<IPool> WhitePoolsSet => this.whitePoolsSet;
+          public IList<IPool> WhitePoolsSet => this.whitePoolsSet;
 
-          public List<IPool> BlackPoolsSet => this.blackPoolsSet;
+          public IList<IPool> BlackPoolsSet => this.blackPoolsSet;
 
-          public List<IPool> BeatenWhitePoolList { get; set; }
+          //public IList<IPool> BeatenWhitePoolList { get; set; }
 
-          public List<IPool> BeatenBlackPoolList { get; set; }
+          //public IList<IPool> BeatenBlackPoolList { get; set; }
     }
 }

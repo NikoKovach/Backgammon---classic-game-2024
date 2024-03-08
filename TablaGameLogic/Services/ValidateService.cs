@@ -17,16 +17,16 @@ namespace TablaGameLogic.Services
           /// <param name="CurrentPlayer"></param>
           /// <returns></returns>
           
-          public bool MoveIsValid(string moveType, object[] parameters,IBoard board,IPlayer CurrentPlayer)
+          public bool MoveIsValid(string moveType, int[] parameters,IBoard board,IPlayer CurrentPlayer)
           {
                
                string motionValidateName = moveType + "Validate";
                Type motionValidateType = Type.GetType($"TablaGameLogic.Services.     {motionValidateName}");
 
-               IMotionValidation instanceOfMotionValidatе = (IMotionValidation)      Activator.CreateInstance(motionValidateType, new object[]     { board,CurrentPlayer});
+               IMotionValidation instanceOfMotionValidatе = (IMotionValidation)      Activator.CreateInstance(motionValidateType, 
+                    new object[]{ board,CurrentPlayer});
 
-               int[] moveParams = new int[1];
-               return instanceOfMotionValidatе.IsValidMove(moveParams);
+               return instanceOfMotionValidatе.MoveIsValid(parameters);
           }
      }
 }

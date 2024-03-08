@@ -4,18 +4,18 @@
 
      public interface IBoard
      {
-          Dictionary<int, IColumn> ColumnSet { get; }
+          IDictionary<int, IColumn> ColumnSet { get; }
 
-          Dictionary<int, IDice> DiceSet { get; }
+          IDictionary<int, IDice> DiceSet { get; }
 
-          List<IPool> WhitePoolsSet { get; }
+          IList<IPool> WhitePoolsSet { get; }
 
-          List<IPool> BlackPoolsSet { get; }
+          IList<IPool> BlackPoolsSet { get; }
 
-          List<IPool> BeatenWhitePoolList { get; set; }
+          //IList<IPool> BeatenWhitePoolList { get; set; }
 
-          List<IPool> BeatenBlackPoolList { get; set; }
+          //IList<IPool> BeatenBlackPoolList { get; set; }
 
-          Dictionary<int, int> ValueOfDiceAndCountOfMoves { get; set; }
+          IDictionary<int, int> DiceValueAndMovesCount { get; set; }
      }
 }

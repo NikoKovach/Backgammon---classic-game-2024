@@ -8,7 +8,7 @@
         public OutsideValidate(IBoard gameBoard, IPlayer currentPlayer) : base(gameBoard, currentPlayer)
         { }
 
-        public override bool IsValidMove( int[] moveParams)
+        public override bool MoveIsValid( int[] moveParams)
         {
             //One parameter -> <<column number = dice number>>
 
@@ -43,7 +43,7 @@
                 return false;
             }
 
-            return base.IsValidMove(moveParams);
+            return base.MoveIsValid(moveParams);
         }
 
         protected bool TargetColumnIsOpen(int targetColNumber)

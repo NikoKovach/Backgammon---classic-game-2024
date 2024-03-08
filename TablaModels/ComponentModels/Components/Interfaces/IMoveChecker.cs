@@ -1,4 +1,6 @@
-﻿namespace TablaModels.ComponentModels.Components.Interfaces
+﻿using System.Collections.Generic;
+
+namespace TablaModels.ComponentModels.Components.Interfaces
 {
     public interface IMoveChecker
     {

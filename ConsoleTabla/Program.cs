@@ -4,6 +4,7 @@ using TablaEngine.Engine.Contracts;
 using TablaEngine.Engine;
 using TablaGameLogic.Core;
 using TablaModels.ComponentModels.Components.Interfaces;
+using TablaConsoleGame;
 
 namespace ConsoleTabla
 {
@@ -11,10 +12,9 @@ namespace ConsoleTabla
     {
         static void Main(string[] args)
         {
-            CreateEngine();
+            //CreateEngine();
 
-            //Test1();
-            //GameHasAWinner();
+            Test1();
         }
 
           private static void CreateEngine()
@@ -38,24 +38,12 @@ namespace ConsoleTabla
 
           private static void Test1()
           {
-              //Engine engine = new Engine();
-
-              //engine.ChoiceOfColorByThePlayers();
-
-              //engine.PlayersArrangeTheirCheckers();
-
-              //IPlayer player = engine.controller.Players[1];
-
-              //engine.controller.CurrentPlayer = player;
-
-              //engine.controller.CreateAdditionalServices();
-
-              //engine.controller.TablaBoard.DiceSet[1].ValueOfOneDice = 2;
-              //engine.controller.TablaBoard.DiceSet[2].ValueOfOneDice = 2;
-
-              //engine.controller.SetValueOfDiceAndCountOfMoves();
-
-              //engine.CurrentPlayerMoves();
+               var scheme = new GameScheme();
+               scheme.SchemaBasic(3,1);
+               scheme.Controler.CurrentPlayerFirstSet();
+               scheme.Engine.MainGameMethod();
+               //string input = "1 24 15";
+               //string message = scheme.Engine.Controller.CurrentPlayerMakesMove(input);
           }
 
           private static void GameHasAWinner()
@@ -78,45 +66,7 @@ namespace ConsoleTabla
 
           }
 
-          private static void ArrangeTheBlackCheckers(IEngine engine)
-          {
-              //for (int i = 0; i < engine.controller.TablaBoard.BlackPoolsSet.Count - 1; i++)
-              //{
-              //    engine.controller.TablaBoard.BlackPoolsSet[i].State = PoolState.OutOfGame;
-              //}
-
-              //IPool blackPool = engine.controller.TablaBoard.BlackPoolsSet[14];
-
-              //blackPool.State = PoolState.AtHome;
-              //engine.controller.TablaBoard.ColumnSet[23].PoolStack.Push(blackPool);
-          }
-
-          private static void ArrangeTheWhiteCheckers(IEngine engine)
-          {
-              //for (int i = 0; i < engine.controller.TablaBoard.WhitePoolsSet.Count - 1; i++)
-              //{
-              //    engine.controller.TablaBoard.WhitePoolsSet[i].State = PoolState.OutOfGame;
-              //}
-
-              //IPool whitePool = engine.controller.TablaBoard.WhitePoolsSet[14];
-
-              //whitePool.State = PoolState.AtHome;
-              //engine.controller.TablaBoard.ColumnSet[2].PoolStack.Push(whitePool);
-          }
-
-          private static void CreateController()
-          {
-              Controller controller = new Controller();
-
-              string text = controller.PlayersChooseAColor(2);
-              Console.WriteLine(text);
-
-              Console.WriteLine(controller.ArrangingTheCheckersToPlay());
-
-              
-          }
-
-        private static void PrintBoardInfo(IBoard board)
+          private static void PrintBoardInfo(IBoard board)
         {
             Console.WriteLine(new String('-',30));
 

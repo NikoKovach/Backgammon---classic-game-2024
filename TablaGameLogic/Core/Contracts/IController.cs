@@ -9,15 +9,15 @@
      {
           IBoard TablaBoard { get; }
 
-          IList<IPlayer> Players { get; }
+          IList<IPlayer> Players { get; set; }
 
           IPlayer CurrentPlayer { get; set; }
 
           int CurrentPlayerMovesNumber { get; }
 
-          IMotionValidation MotionValidate { get;  }
+          IMotionValidation MotionValidate { get; set; }
 
-          void CreatePlayers( string firstPlayerName, string secondPlayerName );
+          IMotionValidation SetUpMoveValidation();
 
           string PlayersChooseAColor(int color);
 
@@ -34,6 +34,7 @@
           void ChangeCurrentPlayer();
 
           void ClearBoardFromCheckers();
-
      }
 }
+
+//void CreatePlayers( string firstPlayerName, string secondPlayerName );
