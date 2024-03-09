@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TablaGameLogic.Core.Contracts;
 using TablaModels.ComponentModels.Components.Interfaces;
 
 namespace TablaGameLogic.Services.Contracts
 {
      public interface IMoveService
      {
-          KeyValuePair<string, int[]> ParseMove( string moveString);
+          void ParseMove( string moveString,IMoveParameters motion);
 
-          public object[] GetInvokeMethodParameters( string moveMethod, int[] moveParams, IBoard board, IPlayer player );
+          public object[] GenerateInvokeMethodParameters( IMoveParameters motion,IBoard board,IPlayer player);
 
-          void InvokeMoveMethod( string moveType, object[] moveParams, IPlayer CurrentPlayer );
+          void InvokeMoveMethod(string methodName, object[] moveParams,IPlayer CurrentPlayer );
      }
 }

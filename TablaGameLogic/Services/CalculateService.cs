@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TablaGameLogic.Core.Contracts;
 using TablaModels.ComponentModels.Components.Interfaces;
 using TablaModels.ComponentModels.Enums;
 using static TablaGameLogic.Utilities.Messages.GameConstants;
@@ -31,89 +32,40 @@ namespace TablaGameLogic.Services
                }
           }
 
-          public static int[] GetlInvokeMethodParams( string typeOfMove, int[] paramameters, PoolColor playerColor, IBoard board )
+          public static void CalculateUseDiceMotionCount( IMoveParameters motion, PoolColor playerColor, IBoard board )
           {
 
-               if ( typeOfMove.Equals( "Inside" ) )
+               if ( motion.MoveMethodName.Equals( "Inside" ) )
                {
-                    return paramameters;
+                    CalculateInsideMoveCount( motion, playerColor, board );
                }
 
-               if (typeOfMove.Equals("Move"))
+               if ( motion.MoveMethodName.Equals( "Outside" ) )
                {
-                    int colNumber = paramameters.First();
-                    int[] diceAndMoveCount = CalculateMoveNumbers( paramameters.Last(), board );
-
-                    int[] moveParams = new int[diceAndMoveCount.Length +1];
-
-                    moveParams[ 0 ] = colNumber;
-
-                    for ( int i = 0; i < diceAndMoveCount.Length; i++ )
-                    {
-                         moveParams[ i + 1 ] = diceAndMoveCount[ i ];
-                    }
-
-                    return moveParams;
+                    CalculateOutsideMoveCount( motion, playerColor, board );
                }
 
-               return default;
-          }
-
-          public static void ChangeDiceValueAndMoveCount(string typeOfMove, int[] moveParams, PoolColor playerColor, IBoard board)
-          {
-               if (typeOfMove.Equals("Move"))
+               if ( motion.MoveMethodName.Equals( "Move" ) )
                {
-                   ForMoveMotion(moveParams, board);
-               }
-
-               if ( typeOfMove.Equals( "Inside" ) )
-               {
-                    ForInsideMotion( moveParams, playerColor, board );
-               }
-
-               if (typeOfMove.Equals("Outside"))
-               {
-                   ForOutsideMotion(moveParams, playerColor, board);
-               }
-
-          }
-
-          private static void ForMoveMotion( int[] moveParams, IBoard board)
-          {
-               //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
-               int positions = (int)moveParams[0];
-               int numberOfMotions = (int)moveParams[1];
-
-               if (numberOfMotions == 1)
-               {
-                   board.DiceValueAndMovesCount[positions] -= 1;
-               }
-
-               Dictionary<int, int> kvpDicesCountOfMoves = board.DiceValueAndMovesCount
-               .Where(x => x.Value > 0)
-               .ToDictionary(x => x.Key, x => x.Value);
-
-               int keysSum = kvpDicesCountOfMoves.Select(x => x.Key).Sum();
-
-               int[] keys = kvpDicesCountOfMoves.Select(x => x.Key).ToArray();
-
-               if (numberOfMotions == 2 && kvpDicesCountOfMoves.Count == 2 && positions ==   keysSum)
-               {
-                   for (int i = 0; i < keys.Length; i++)
-                   {
-                       board.DiceValueAndMovesCount[keys[i]] -= 1;
-                   }
-               }
-
-               if (numberOfMotions > 2 && positions > keysSum)
-               {
-                   board.DiceValueAndMovesCount[keysSum] -= numberOfMotions;
+                    motion.UseDiceMotionCount = 
+                         CalculateMoveNumbers( motion.chipNumberOrPlaceToMove, board );
                }
           }
 
-          private static void ForInsideMotion(int[] moveParams, PoolColor   playerColor, IBoard board)
+          public static void ChangeDiceValueAndMoveCount
+               ( IMoveParameters motion, IBoard board)
           {
-               int columnNumber = moveParams[0];
+               IList<int> presentMoves = motion.UseDiceMotionCount;
+
+               foreach ( var item in presentMoves )
+               {
+                    board.DiceValueAndMovesCount[ item ] -= 1;
+               }
+          }
+
+          private static void CalculateInsideMoveCount(IMoveParameters motion, PoolColor   playerColor, IBoard board)
+          {
+               int columnNumber = motion.ColumnNumber;
 
                int diceNumber = (playerColor == PoolColor.Black) ? 
                     columnNumber : (board.ColumnSet.Count + 1 - columnNumber);
@@ -123,63 +75,98 @@ namespace TablaGameLogic.Services
 
                if (aDiceExist)
                {
-                   board.DiceValueAndMovesCount[diceNumber] -= 1;
+                   motion.UseDiceMotionCount.Add(diceNumber);
                } 
           }
 
-          private static void ForOutsideMotion(int[] moveParams, PoolColor playerColor, IBoard board)
+          private static void CalculateOutsideMoveCount(IMoveParameters motion, PoolColor playerColor, IBoard board)
           {   
-               int column = (int)moveParams[0];
+               int columnNumber = motion.ColumnNumber;
 
-               int positions = (playerColor == PoolColor.Black) ? (24 + 1 - column) : column;
+               int fakeDiceNumber = (playerColor == PoolColor.White) ? 
+                    columnNumber : (board.ColumnSet.Count + 1 - columnNumber);
 
-               //TODO:::
-               //Белите вадят пул :пример колоната,от която се дърпа пул е №4,а зара е 5
-               //колона 5 и 6 са празни
-               Dictionary<int, int> kvpDicesCountOfMoves = board.DiceValueAndMovesCount
-                                                    .Where(x => x.Value > 0)
-                                                    .OrderBy(y => y.Key)
-                                                    .ToDictionary(x => x.Key, x => x.Value);
+               IColumn targetColumt = ( playerColor == PoolColor.White ) ?
+                    board.ColumnSet[ fakeDiceNumber - 1 ] :
+                    board.ColumnSet[ board.ColumnSet.Count + 1 - fakeDiceNumber ];
 
-               bool diceExists = kvpDicesCountOfMoves.ContainsKey(positions);
+               bool hasAValidDice = board.DiceValueAndMovesCount.Any( x => x.Key == fakeDiceNumber && x.Value > 0 );
 
-               if (diceExists)
+               if ( hasAValidDice && targetColumt.PoolStack.Count > 0 )
                {
-                   board.DiceValueAndMovesCount[positions] -= 1;
-                   return;
+                    motion.UseDiceMotionCount.Add(fakeDiceNumber);
                }
+               else
+               {
+                    int diceNumber = LookAtInNeighborColumnsAtHome( fakeDiceNumber,playerColor,board );
 
-               int diseValue = kvpDicesCountOfMoves.First(x=>x.Key > positions).Key;
-
-               board.DiceValueAndMovesCount[positions] -= 1;
+                    motion.UseDiceMotionCount.Add( diceNumber );
+               }
           }
 
-          public static int[] CalculateMoveNumbers(int placeToMove ,IBoard board )
-          {             
-               var kvp = board.DiceValueAndMovesCount
+          private static int LookAtInNeighborColumnsAtHome( int fakeDiceNumber,PoolColor playerColor, IBoard board )
+          {
+               bool columnSetIsEmpty = default ;
+
+               if ( playerColor == PoolColor.White)
+               {
+                    columnSetIsEmpty = board.ColumnSet
+                         .Where( x => x.Key <= 6 || x.Key > fakeDiceNumber )
+                         .All(x => x.Value.PoolStack.Count == 0);  
+               }
+               else
+               {
+                    columnSetIsEmpty = board.ColumnSet
+                         .Where( x => x.Key >= 19 || 
+                              x.Key < ( board.ColumnSet.Count + 1 -  fakeDiceNumber) )
+                         .All(x => x.Value.PoolStack.Count == 0);
+               }
+
+               bool hasAValidDice = board.DiceValueAndMovesCount
+                         .Any( x => ( x.Key <= 6 || x.Key > fakeDiceNumber ) 
+                              && x.Value > 0 );
+
+               return board.DiceValueAndMovesCount
+                    .Where( x => ( x.Key >= 6 || x.Key < fakeDiceNumber ) &&
+                                 x.Value > 0 )
+                    .First().Key;
+          }
+
+          private static List<int> CalculateMoveNumbers(int placeToMove ,IBoard board )
+          {
+               bool diceExist = board.DiceValueAndMovesCount
+                    .Any( x => x.Key == placeToMove && x.Value > 0 );
+
+               if ( diceExist )
+               {
+                    return board.DiceValueAndMovesCount
+                              .Where( x => x.Key == placeToMove && x.Value > 0 )
+                              .Select(x => x.Key)
+                              .ToList();
+               }
+
+               var dices = board.DiceValueAndMovesCount
                     .Where(x => x.Value > 0)
-                    .Select( x => x )
-                    .ToDictionary(t => t.Key,t => t.Value);
+                    .ToDictionary(t => t.Key,t => t.Value) ;
 
-               if ( kvp.ContainsKey(placeToMove) )
+               if ( dices.Count == 2 && dices.Keys.Sum() == placeToMove )
                {
-                    int value = kvp
-                         .Where( x => x.Key == placeToMove )
-                         .Select( x => x.Key)
-                         .FirstOrDefault();
-
-                    return new int[ 1 ] { value };
+                    return  dices.Select(x => x.Key).ToList();
                }
 
-               if ( kvp.Count == 2 && kvp.Keys.Sum() == placeToMove )
+               if ( dices.Count == 1 )
                {
-                    int[] moveNumbers = kvp.Select(x => x.Key).ToArray();
-                    
-                    return moveNumbers;
+                    if ( placeToMove % dices.First().Key == 0 )
+                    {
+                         int number = placeToMove / dices.First().Key;
+                         int diceValue = dices.First().Key;
+
+                         return Enumerable.Repeat(diceValue, number).ToList();
+                    }   
                }
-               
 
                return default;
-          }
+          }     
+
      }
 }

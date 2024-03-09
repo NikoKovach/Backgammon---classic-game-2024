@@ -5,6 +5,7 @@ using TablaEngine.Engine;
 using TablaGameLogic.Core;
 using TablaModels.ComponentModels.Components.Interfaces;
 using TablaConsoleGame;
+using System.Linq;
 
 namespace ConsoleTabla
 {
@@ -12,9 +13,10 @@ namespace ConsoleTabla
     {
         static void Main(string[] args)
         {
-            //CreateEngine();
+               //var samList = Enumerable.Repeat(3, 5).ToList();
+               //CreateEngine();
 
-            Test1();
+               Test1();
         }
 
           private static void CreateEngine()
@@ -39,7 +41,8 @@ namespace ConsoleTabla
           private static void Test1()
           {
                var scheme = new GameScheme();
-               scheme.SchemaBasic(3,1);
+               //scheme.SchemaBasic(3,1); ////Move = "3 24 4"; not Set yet
+               scheme.SchemaBasic(3,1); //Inside = "1 24 15"
                scheme.Controler.CurrentPlayerFirstSet();
                scheme.Engine.MainGameMethod();
                //string input = "1 24 15";

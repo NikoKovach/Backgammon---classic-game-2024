@@ -4,57 +4,54 @@
      using System.Collections.Generic;
      using System.Linq;
      using System.Reflection;
+     using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
 
-     using static TablaGameLogic.Services.CalculateService;
-
      public class MoveServices : IMoveService
      {
-          //"Please enter your move type in following format :"         + NewRow + 
-          //"1.For 'Inside'  - ( 1 ) (column number) (pool number)   ;" + NewRow + 
-          //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
-          //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
-
-          public KeyValuePair<string,int[]> ParseMove(string moveString)
+          public void ParseMove(string moveString,IMoveParameters motion)
           {    
-               int[] moveArray = moveString
-                                   .Split(new char[] { ' ', ',' },                                                StringSplitOptions.RemoveEmptyEntries)
-                                   .Select(x => int.Parse(x))
-                                   .ToArray();
+               int[] moveArray = moveString.Split(new char[] { ' ', ',' },                                                 StringSplitOptions.RemoveEmptyEntries)
+                                            .Select(x => int.Parse(x))
+                                            .ToArray();
 
-               string moveMethodName = GetMethodName( moveArray[0] );
-
-               int[]paramsList = moveArray.Skip(1).ToArray();
-
-               return new KeyValuePair<string,int[]>(moveMethodName, paramsList);
-          }
-
-          public object[] GetInvokeMethodParameters(string moveMethod,int[] moveParams,IBoard board,IPlayer player)
-          {
-               object[] parametersArray = new object[ moveParams.Length ];
-
-               for ( int i = 0; i < parametersArray.Length; i++ )
+               if ( moveArray.Length < 2  )
                {
-                    parametersArray[ i ] = moveParams[ i ];
+                    throw new InvalidOperationException( "" );
                }
 
-               if ( moveMethod.Equals("Inside") )
+               motion.MoveMethodName = GetMethodName( moveArray[0] );
+
+               motion.ColumnNumber = moveArray[ 1 ];
+
+               if ( moveArray.Length > 2 )
                {
-                    IPool pool = GetPool( board, player, moveParams.Last() );
-
-                    parametersArray[ parametersArray.Length - 1 ] = pool;
-
-                    return parametersArray.ToArray();
+                     motion.chipNumberOrPlaceToMove = moveArray.Skip(2).FirstOrDefault();
                }
-
-               return parametersArray.ToArray();
           }
 
-          public void InvokeMoveMethod(string moveType,object[] moveParams,IPlayer CurrentPlayer)
+          public object[] GenerateInvokeMethodParameters(IMoveParameters motion,IBoard board,IPlayer player)
           {
-               MethodInfo moveMethodType = CurrentPlayer.Move.GetType().GetMethod     (moveType);
+               if ( motion.MoveMethodName.Equals( "Inside" ) )
+               {
+                    IPool pool = GetPool( board, player, motion.chipNumberOrPlaceToMove);
+
+                    return new object[] {motion.ColumnNumber,pool};
+               }
+
+               if ( motion.MoveMethodName.Equals( "Outside" ) )
+               {
+                    return new object[] {motion.ColumnNumber};
+               }
+
+               return new object[] {motion.ColumnNumber,motion.UseDiceMotionCount.Sum()};
+          }
+
+          public void InvokeMoveMethod(string methodName, object[] moveParams,IPlayer CurrentPlayer)
+          {
+               MethodInfo moveMethodType = CurrentPlayer.Move.GetType().GetMethod     (methodName);
 
                moveMethodType.Invoke(CurrentPlayer.Move, moveParams); 
           }
@@ -92,75 +89,7 @@
      }
 }
 
-//if (moveType.Equals("Move"))
-          //{
-          //    int numberOfMoves = CalculateTheNumberOfMoves(moveParameters[1],       this.TablaBoard.ValueOfDiceAndCountOfMoves);
-
-          //    moveParameters.Add(numberOfMoves);
-          //}
-
-          ///// <summary>
-          ///// Old name : CalculateTheNumberOfMoves
-          ///// </summary>
-          ///// <param name="positions"></param>
-          ///// <param name="valueOfDiceAndCountOfMoves"></param>
-          ///// <returns></returns>
-          //public int ChangeMovesNumbers(int positions,IDictionary<int,int>       diceValueAndMovesCount)
-          //{
-          //     int number = 0;
-
-          //     var kvpDicesCountOfMoves = diceValueAndMovesCount
-          //         .Where(x => x.Value > 0)
-          //         .ToDictionary(x => x.Key, x => x.Value);
-
-          //     int KeysSum = kvpDicesCountOfMoves.Select(x => x.Key).Sum();
-
-          //     if (kvpDicesCountOfMoves.Count == 2 && (positions < KeysSum))
-          //     {
-          //         number = 1;
-          //     }
-
-          //     if (kvpDicesCountOfMoves.Count == 2 && (positions == KeysSum))
-          //     {
-          //         number = 2;
-          //     }
-
-          //     if (kvpDicesCountOfMoves.Count == 1 && (positions >= kvpDicesCountOfMoves.First().Key)   && (positions % kvpDicesCountOfMoves.First().Key == 0))
-          //     {
-          //         number = positions / kvpDicesCountOfMoves.First().Key;
-          //     }
-
-          //     return number;
-          //}
-
-          //private object[] GetParameters( int[] moveArray,
-          //     IBoard board, IPlayer player )
-          //{
-          //     try
-          //     {
-          //          int[] moveParameters = moveArray.Skip( 1 ).ToArray();
-
-          //          object[] parametersArray = new object[ moveParameters.Length ];
-
-          //          for ( int i = 0; i < parametersArray.Length; i++ )
-          //          {
-          //               parametersArray[ i ] = moveParameters[ i ];
-          //          }
-
-          //          IPool pool = default;
-
-          //          if ( moveArray[ 0 ] == 1 )
-          //          {
-          //               pool = GetPool( board, player, moveArray.Last() );
-          //               parametersArray[ parametersArray.Length - 1 ] = pool;
-          //               return parametersArray.ToArray();
-          //          }
-
-          //          return parametersArray.ToArray();
-
-          //     }
-          //     catch ( Exception ex )
-          //     {
-          //          throw new InvalidOperationException( ex.Message );
-          //     }
-          //}
+          //"Please enter your move type in following format :"         + NewRow + 
+          //"1.For 'Inside'  - ( 1 ) (column number) (pool number)   ;" + NewRow + 
+          //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
+          //"3.For 'Move'    - ( 3 ) (column number) (places to move);";

@@ -1,9 +1,10 @@
-﻿using TablaModels.ComponentModels.Components.Interfaces;
+﻿using TablaGameLogic.Core.Contracts;
+using TablaModels.ComponentModels.Components.Interfaces;
 
 namespace TablaGameLogic.Services.Contracts
 {
      public interface IMoveValidate
      {
-          bool MoveIsValid( string moveType, int[] parameters, IBoard board, IPlayer CurrentPlayer );
+          bool MoveIsValid( IMoveParameters motion,IBoard board,IPlayer player );
      }
 }

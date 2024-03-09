@@ -1,64 +1,64 @@
 ﻿namespace TablaGameLogic.Services
 {
-    using TablaGameLogic.Services.Contracts;
+     using TablaGameLogic.Core.Contracts;
+     using TablaGameLogic.Services.Contracts;
     using TablaModels.ComponentModels.Components.Interfaces;
 
     public class OutsideValidate : MotionValidate, IMotionValidation
     {
-        public OutsideValidate(IBoard gameBoard, IPlayer currentPlayer) : base(gameBoard, currentPlayer)
-        { }
 
-        public override bool MoveIsValid( int[] moveParams)
+        public override bool MoveIsValid( IMoveParameters motion,IBoard gameBoard, IPlayer currentPlayer)
         {
-            //One parameter -> <<column number = dice number>>
+               //One parameter -> <<column number = dice number>>
 
-            if (!base.CheckPametersCountForInsideAndOutsideMove(moveParams))
-            {
-                return false;
-            }
+               //if (!base.CheckPametersCountForInsideAndOutsideMove(moveParams))
+               //{
+               //    return false;
+               //}
 
-            int targetColNumber = moveParams[0];
+               //int targetColNumber = moveParams[0];
 
-            //we check whether the target column is part of board
-            if (!base.CheckForValidTargetColumn(targetColNumber))
-            {
-                return false;
-            }
+               ////we check whether the target column is part of board
+               //if (!base.CheckForValidTargetColumn(targetColNumber))
+               //{
+               //    return false;
+               //}
 
-            //we check whether the target column is free or not for Poping checker
-            if (!TargetColumnIsOpen(targetColNumber))
-            {
-                return false;
-            }
+               ////we check whether the target column is free or not for Poping checker
+               //if (!TargetColumnIsOpen(targetColNumber))
+               //{
+               //    return false;
+               //}
 
-            //There are checkers with state 'OnTheBar'
-            if (!base.HaveCheckersWithStateOnTheBar())
-            {
-                return false;
-            }
+               ////There are checkers with state 'OnTheBar'
+               //if (!base.HaveCheckersWithStateOnTheBar())
+               //{
+               //    return false;
+               //}
 
-            //There are checkers which are not in home field - > with status 'InGame'
-            if (!base.ThereAreCheckersOutsideFromHomeField())
-            {
-                return false;
-            }
+               ////There are checkers which are not in home field - > with status 'InGame'
+               //if (!base.ThereAreCheckersOutsideFromHomeField())
+               //{
+               //    return false;
+               //}
 
-            return base.MoveIsValid(moveParams);
+               //return base.MoveIsValid(moveParams);
+               return true;
         }
 
         protected bool TargetColumnIsOpen(int targetColNumber)
         {
-            int countOfCheckersOnColumn = base.CountOfCheckersOnTheColumn(targetColNumber);
+            //int countOfCheckersOnColumn = base.CountOfCheckersOnTheColumn(targetColNumber);
 
-            if (countOfCheckersOnColumn < 1)
-            {  
-                return false;
-            }
+            //if (countOfCheckersOnColumn < 1)
+            //{  
+            //    return false;
+            //}
 
-            if (countOfCheckersOnColumn >= 1 && !base.IsDifferentChecherColor(targetColNumber))
-            {
-                return false;
-            }
+            //if (countOfCheckersOnColumn >= 1 && !base.IsDifferentChecherColor(targetColNumber))
+            //{
+            //    return false;
+            //}
 
             return true;
         }

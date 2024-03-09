@@ -1,20 +1,21 @@
 ﻿namespace TablaGameLogic.Services.Contracts
 {
-    using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaGameLogic.Core.Contracts;
+     using TablaModels.ComponentModels.Components.Interfaces;
     using TablaModels.ComponentModels.Enums;
 
      public interface IMotionValidation
      {
-          IBoard Board { get; }
+          bool MoveIsValid(IMoveParameters motion,IBoard gameBoard, IPlayer currentPlayer);
 
-          public IPlayer Player { get; }
+          //bool CurrentPlayerHasNoMoves();
 
-          public PoolColor CurrentColor { get; }
-
-          bool MoveIsValid(int[] moveParams);
-
-          bool CurrentPlayerHasNoMoves();
-
-          bool HasNoOtherMoves();     
+          //bool HasNoOtherMoves();     
      }
 }
+
+          //IBoard Board { get; }
+
+          //public IPlayer Player { get; }
+
+          //public PoolColor CurrentColor { get; }

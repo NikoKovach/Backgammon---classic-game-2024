@@ -20,12 +20,10 @@
      public class Controller : IController
      {        
           private static IBoard  defaultTablaBoard = CreateDefaultBoard();
-          //private static IMotionValidation defaultMotionValidate = GetMoveValidation();
           private static IMoveService defaultMoveService = GetMoveService();
 
           private readonly IBoard   tablaBoard;
           private IList<IPlayer>    players;
-          //private IMotionValidation motionValidate;
           private IMoveService moveService;
 
           public Controller() :this(defaultTablaBoard,defaultMoveService)
@@ -47,6 +45,7 @@
                         nameof(moveService))
                     );
 
+               this.MoveParams = new MoveParameters();
                //this.motionValidate = motionValidate ?? 
                //     throw new ArgumentNullException
                //     (
@@ -68,6 +67,8 @@
           public int CurrentPlayerMovesNumber => this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
 
           public IMotionValidation MotionValidate { get; set; }
+
+          public IMoveParameters MoveParams { get; set; }
 
           public string PlayersChooseAColor(int color)
           {
@@ -99,11 +100,11 @@
 
                SetDiceValueAndMovesCount(this.TablaBoard);
 
-               if (this.MotionValidate.CurrentPlayerHasNoMoves())
-               {
-                    this.ChangeCurrentPlayer();
-                    return false;
-               }
+               //if (this.MotionValidate.CurrentPlayerHasNoMoves())
+               //{
+                    //this.ChangeCurrentPlayer();
+                    //return false;
+               //}
 
                return true;
           }
@@ -124,41 +125,34 @@
           {
                try
                {
-                    KeyValuePair<string,int[]> moveKvp = this.moveService.ParseMove(moveString);
+                    this.moveService.ParseMove(moveString,this.MoveParams);
 
-                    int[] realInvokeMethodParams = 
-                         GetlInvokeMethodParams( moveKvp.Key, 
-                         moveKvp.Value ,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
-
-                    if ( moveKvp.Value.Any( x => x.Equals(null) ))
-                    {
-                         return InvalidMove;
-                    }
+                    CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
                     //TODO : Work here 
-                    //MoveService class and ValidateService class
 
-                    //bool moveIsValid = new ValidateService().MoveIsValid( moveKvp.Key,  realInvokeMethodParams, this.TablaBoard, this.CurrentPlayer );
-
-                    bool moveIsValid = MotionValidate.MoveIsValid( realInvokeMethodParams );
+                    //bool moveIsValid = MotionValidate.MoveIsValid( MoveParams,TablaBoard,CurrentPlayer);
                     
-                    //bool moveIsValid = true;
+                    bool moveIsValid = true;
 
                     if ( !moveIsValid )
                     {
                          return InvalidMove;
                     }
 
-                    object[] moveParams = 
-                         this.moveService.GetInvokeMethodParameters( moveKvp.Key, realInvokeMethodParams, this.TablaBoard, this.CurrentPlayer );
+                    object[] invokeMethodParams = this.moveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
 
-                    this.moveService.InvokeMoveMethod(moveKvp.Key, moveParams,this.CurrentPlayer);
+                    this.moveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
 
-                    ChangeDiceValueAndMoveCount( moveKvp.Key, moveKvp.Value, this.CurrentPlayer.MyPoolsColor, this.TablaBoard );
+                    ChangeDiceValueAndMoveCount( this.MoveParams, this.TablaBoard );
                
                     GameHasAWinner();
 
                     return MoveIsMade;
+               }
+               catch ( InvalidOperationException invalidEx)
+               {
+                    return invalidEx.Message;
                }
                catch ( Exception ex)
                {
@@ -235,7 +229,7 @@
 
           public IMotionValidation SetUpMoveValidation()
           {
-               return new MotionValidate(this.TablaBoard,this.CurrentPlayer);
+               return new MotionValidate();
           }
 
           private static IBoard CreateDefaultBoard()
@@ -260,57 +254,3 @@
           //##################################################
           //CreateAdditionalServices();
 
-
-          //private bool MoveIsValid()
-          //{
-          //     //TODO :
-          //     //public static bool InvokeMotionValidationMethod(string moveType,IBoard board,IPlayer CurrentPlayer)
-
-          //     return true;
-          //}
-
-//**************************************************************************
-//Has A Valid Move true or false *******************************************
-
-//bool motionIsValid = true;
-//InvokeMotionValidationMethod( moveKvp.Key, paramsList.ToArray() );
-//***************************************************************************
-
-
-//if (this.MotionValidate.HasNoOtherMoves())
-//{
-//    string resultText = string.Format(NoOtherMoves,this.CurrentPlayer.Name);
-
-//    return resultText;
-//}
-
-//ChangeValueOfDiceAndCountOfMoves(moveKvp.Key, moveKvp.Value,     this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
-
-
-//private bool InvokeMotionValidationMethod(string typeOfMove, int[] moveParams)
-//{
-//     string motionValidateName = typeOfMove + "Validate";
-
-//     Type motionValidateType = Type.GetType($"TablaGameLogic.Services.     {motionValidateName}");
-
-//     IMotionValidation instanceOfMotionValidatе = (IMotionValidation)      Activator.CreateInstance(motionValidateType, new object[]     { this.TablaBoard,this.CurrentPlayer});
-
-//     return instanceOfMotionValidatе.IsValidMove(moveParams);
-//}
-
-//private void InvokeMoveMethod(string moveType,object[] moveParams)
-//{
-//     MethodInfo moveMethodType = this.CurrentPlayer.Move.GetType().GetMethod   (moveType);
-
-//     moveMethodType.Invoke(this.CurrentPlayer.Move, moveParams);
-
-//     //int[] realParams = moveParams.SkipLast(1).ToArray();
-//object[] parametersArray = new object[realParams.Length];
-
-//realParams.CopyTo(parametersArray, 0);
-//}
-
-          //public void CreatePlayers( string firstPlayerName, string secondPlayerName)
-          //{
-          //     this.players = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.TablaBoard).ToList();
-          //}

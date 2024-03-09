@@ -100,7 +100,7 @@
                {
                     //Move = "3 24 4";
                     //Inside = "1 24 15"
-                    string input = "1 24 15";
+                    string input  = "3 24 4";
                     message = this.Controller.CurrentPlayerMakesMove(input);
                     //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 

@@ -1,6 +1,5 @@
 ﻿namespace TablaGameLogic.Factory
 {
-    using System;
     using System.Collections.Generic;
 
     using TablaGameLogic.Factory.Contracts;
@@ -23,10 +22,6 @@
                List<IPool> blackPools = CreatePools(PoolColor.Black);
                
                IBoard board = new Board( columns, diceSet, whitePools, blackPools );
-
-               //board.BeatenWhitePoolList = new List<IPool>();
-
-               //board.BeatenBlackPoolList = new List<IPool>();
                
                board.DiceValueAndMovesCount = new Dictionary<int, int>();
 
