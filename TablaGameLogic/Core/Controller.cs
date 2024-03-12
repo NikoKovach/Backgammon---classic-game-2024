@@ -14,20 +14,20 @@
 
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
-     using static TablaGameLogic.Services.CalculateService;
+     using static TablaGameLogic.Services.ServiceCalculate;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
+     using TablaGameLogic.Exeptions;
 
      public class Controller : IController
      {        
-          private static IBoard  defaultTablaBoard = CreateDefaultBoard();
+          private static IBoard       defaultTablaBoard  = CreateDefaultBoard();
           private static IMoveService defaultMoveService = GetMoveService();
 
           private readonly IBoard   tablaBoard;
           private IList<IPlayer>    players;
-          private IMoveService moveService;
+          private readonly IMoveService moveService;
 
-          public Controller() :this(defaultTablaBoard,defaultMoveService)
-          { }
+          public Controller() :this(defaultTablaBoard,defaultMoveService){ }
 
           public Controller(IBoard board,IMoveService moveService)
           {          
@@ -37,21 +37,12 @@
                          string.Format(InvalidGameBoard,nameof(board))
                     );
 
-
                this.moveService = moveService ??
                     throw new ArgumentNullException
                     (
                         string.Format(InvalidMoveConfirmationParameter,
                         nameof(moveService))
                     );
-
-               this.MoveParams = new MoveParameters();
-               //this.motionValidate = motionValidate ?? 
-               //     throw new ArgumentNullException
-               //     (
-               //         string.Format(InvalidMoveConfirmationParameter,
-               //         nameof(motionValidate))
-               //     );
           }
 
           public IBoard TablaBoard => this.tablaBoard;
@@ -66,7 +57,7 @@
 
           public int CurrentPlayerMovesNumber => this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
 
-          public IMotionValidation MotionValidate { get; set; }
+          //public IValidateService MotionValidate { get; set; }
 
           public IMoveParameters MoveParams { get; set; }
 
@@ -125,15 +116,15 @@
           {
                try
                {
+                    this.MoveParams = new MoveParameters();
+
                     this.moveService.ParseMove(moveString,this.MoveParams);
 
                     CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
-                    //TODO : Work here 
+                    bool moveIsValid = moveService.MoveIsValid( MoveParams, TablaBoard, CurrentPlayer );
 
-                    //bool moveIsValid = MotionValidate.MoveIsValid( MoveParams,TablaBoard,CurrentPlayer);
-                    
-                    bool moveIsValid = true;
+                    //bool moveIsValid = true;
 
                     if ( !moveIsValid )
                     {
@@ -148,7 +139,13 @@
                
                     GameHasAWinner();
 
+                    this.MoveParams = default;
+
                     return MoveIsMade;
+               }
+               catch (  ValidateException validateEx)
+               {
+                    return validateEx.Message;
                }
                catch ( InvalidOperationException invalidEx)
                {
@@ -227,11 +224,6 @@
               }
           }
 
-          public IMotionValidation SetUpMoveValidation()
-          {
-               return new MotionValidate();
-          }
-
           private static IBoard CreateDefaultBoard()
           {
                return new BoardFactory().Create();
@@ -239,7 +231,7 @@
           
           private static IMoveService GetMoveService()
           {
-               return new MoveServices();
+               return new ServicesMotion();
           }
 
           private IArrangeChips DefaultArrangePools()
@@ -253,4 +245,9 @@
 
           //##################################################
           //CreateAdditionalServices();
+
+         //public IValidateService SetUpMoveValidation()
+          //{
+          //     return new ServiceValidate();
+          //}
 

@@ -7,7 +7,7 @@ using static TablaGameLogic.Utilities.Messages.GameConstants;
 
 namespace TablaGameLogic.Services
 {
-     public class CalculateService
+     public static class ServiceCalculate
      {
           public static void SetDiceValueAndMovesCount(IBoard board)
           {

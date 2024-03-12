@@ -5,6 +5,6 @@
 
     public interface IMotionValidateFactory
     {
-        IMotionValidation Create(IBoard board,IPlayer currentPlayer);
+        IValidateMove Create(IBoard board,IPlayer currentPlayer);
     }
 }

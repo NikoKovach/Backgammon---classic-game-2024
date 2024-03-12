@@ -119,7 +119,6 @@
                }
 
                this.Controller.CurrentPlayerFirstSet();
-               this.Controller.SetUpMoveValidation();
 
                this.Writer.WriteLine(string.Format(PlayerStartFirst,
                              this.Controller.CurrentPlayer.Name,

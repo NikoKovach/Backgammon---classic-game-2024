@@ -75,7 +75,7 @@
 
                this.Writer.WriteLine(this.Controller.InitialInfoCurrentPlayerMoves());
                this.Writer.WriteLine(MovesType);
-               this.Writer.Write(EnterTheWayOfMoveAndItsParameters);
+               this.Writer.WriteLine(EnterTheWayOfMoveAndItsParameters);
 
                while (this.Controller.CurrentPlayerMovesNumber > 0)
                {
@@ -100,7 +100,7 @@
                {
                     //Move = "3 24 4";
                     //Inside = "1 24 15"
-                    string input  = "3 24 4";
+                    string input  = "3 24 5";//Move = "3 24 4";
                     message = this.Controller.CurrentPlayerMakesMove(input);
                     //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 

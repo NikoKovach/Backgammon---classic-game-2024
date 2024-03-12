@@ -6,16 +6,17 @@ using TablaGameLogic.Core;
 using TablaModels.ComponentModels.Components.Interfaces;
 using TablaConsoleGame;
 using System.Linq;
+using System.Reflection;
+using TablaGameLogic.Services;
 
-namespace ConsoleTabla
+namespace TablaConsoleGame
 {
     public class Program
     {
         static void Main(string[] args)
         {
-               //var samList = Enumerable.Repeat(3, 5).ToList();
                //CreateEngine();
-
+               //Test2();
                Test1();
         }
 
@@ -41,14 +42,58 @@ namespace ConsoleTabla
           private static void Test1()
           {
                var scheme = new GameScheme();
-               //scheme.SchemaBasic(3,1); ////Move = "3 24 4"; not Set yet
-               scheme.SchemaBasic(3,1); //Inside = "1 24 15"
-               scheme.Controler.CurrentPlayerFirstSet();
+
+               scheme.SchemaBasic(3,2); //Move = "3 24 4"
+               //scheme.Controler.CurrentPlayerFirstSet();
                scheme.Engine.MainGameMethod();
-               //string input = "1 24 15";
-               //string message = scheme.Engine.Controller.CurrentPlayerMakesMove(input);
           }
 
+          //Inside = "1 24 15"
+          //Move = "3 24 4";
+
+          private static bool Test2()
+          {
+               int movesCount = 2; // 1 - 4
+               int diceNumber = 2;
+
+
+               for ( int i = 1; i <= movesCount; i++ )
+               {
+                    if ( !TargetColumnIsValid(i * diceNumber))
+                    {
+                         return false;
+                    }
+               }
+
+               return true;
+          }
+
+          //private static bool RecursionTargetColIsValid(int movesCount,int diceNumber)
+          //{
+          //     int counter = 1;
+
+          //     while ( counter  <= movesCount )
+          //     {
+          //          if ( !TargetColumnIsValid(counter * diceNumber))
+          //          {
+          //               return false;
+          //          }
+
+          //          RecursionTargetColIsValid( counter++, diceNumber );
+          //     }
+
+          //     return true;
+          //}
+
+          private static bool TargetColumnIsValid( int targetColumn )
+          {
+               if ( targetColumn == 4 )
+               {
+                    return false;
+               }
+
+               return true;
+          }
           private static void GameHasAWinner()
           {
               IEngine engine = new ClassicConsoleEngine();

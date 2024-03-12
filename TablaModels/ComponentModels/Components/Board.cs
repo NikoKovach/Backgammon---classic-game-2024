@@ -10,15 +10,15 @@
           /// <summary>
           /// Keys in range [1 - 24]
           /// </summary>
-          private readonly Dictionary<int, IColumn> columnSet;
+          private readonly IDictionary<int, IColumn> columnSet;
           /// <summary>
           /// Keys in range [1 - 2]
           /// </summary>
-          private readonly Dictionary<int, IDice> diceSet;
-          private readonly List<IPool> whitePoolsSet;
-          private readonly List<IPool> blackPoolsSet;
+          private readonly IDictionary<int, IDice> diceSet;
+          private readonly IList<IPool> whitePoolsSet;
+          private readonly IList<IPool> blackPoolsSet;
 
-          public Board( Dictionary<int, IColumn> columns, Dictionary<int, IDice> dice, List<IPool> whitePools, List<IPool> blackPools )
+          public Board( IDictionary<int, IColumn> columns, IDictionary<int, IDice> dice, IList<IPool> whitePools, IList<IPool> blackPools )
           {
                CheckInnerParameters( columns, dice, whitePools, blackPools );
 
@@ -31,7 +31,7 @@
                this.blackPoolsSet = blackPools;
           }
 
-          private void CheckInnerParameters( Dictionary<int, IColumn> columns, Dictionary<int, IDice> dice, List<IPool> whitePools, List<IPool> blackPools )
+          private void CheckInnerParameters( IDictionary<int, IColumn> columns, IDictionary<int, IDice> dice, IList<IPool> whitePools, IList<IPool> blackPools )
           {
                if ( columns == null )
                {
@@ -64,8 +64,5 @@
 
           public IList<IPool> BlackPoolsSet => this.blackPoolsSet;
 
-          //public IList<IPool> BeatenWhitePoolList { get; set; }
-
-          //public IList<IPool> BeatenBlackPoolList { get; set; }
     }
 }

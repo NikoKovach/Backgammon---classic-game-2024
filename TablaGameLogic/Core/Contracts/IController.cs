@@ -15,9 +15,9 @@
 
           int CurrentPlayerMovesNumber { get; }
 
-          IMotionValidation MotionValidate { get; set; }
+          //IValidateService MotionValidate { get; set; }
 
-          IMotionValidation SetUpMoveValidation();
+          //IValidateService SetUpMoveValidation();
 
           string PlayersChooseAColor(int color);
 

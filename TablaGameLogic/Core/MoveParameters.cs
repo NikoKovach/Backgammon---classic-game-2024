@@ -7,6 +7,11 @@ namespace TablaGameLogic.Core
 {
     public class MoveParameters : IMoveParameters
      {
+          public MoveParameters()
+          {
+               UseDiceMotionCount = new List<int>();
+          }
+
           public string MoveMethodName { get; set; }
 
           public int ColumnNumber { get; set; }

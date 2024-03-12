@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TablaEngine.Engine;
-using TablaEngine.Engine.Contracts;
 using TablaEngine.IO;
 using TablaGameLogic.Core;
 using TablaGameLogic.Core.Contracts;
 using TablaGameLogic.Factory;
 using TablaGameLogic.Services;
-using TablaGameLogic.Services.Contracts;
 using TablaModels.ComponentModels.Components.Interfaces;
-using TablaModels.ComponentModels.Components.Players;
 using TablaModels.ComponentModels.Enums;
 
 namespace TablaConsoleGame
@@ -32,7 +28,6 @@ namespace TablaConsoleGame
 
           public void SchemaBasic(int firstDice,int secondDice)
           {
-               //this.board = new BoardFactory().Create();
                this.controler = new Controller();
                this.players = CreatePlayers();
 
@@ -41,7 +36,7 @@ namespace TablaConsoleGame
 
                this.controler.CurrentPlayer = this.Players[ 0 ];
 
-               this.controler.SetUpMoveValidation();
+               ServiceCalculate.SetDiceValueAndMovesCount(this.controler.TablaBoard);
 
                this.engine = new ClassicConsoleEngine(this.Controler,new Writer(),new Reader());
           }
@@ -54,7 +49,6 @@ namespace TablaConsoleGame
 
                this.Controler.Players  = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.controler.TablaBoard);
 
-               //var playerList = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.controler.TablaBoard).ToList();
                var playerList = this.Controler.Players;
 
                playerList[ 0 ].MyPoolsColor = PoolColor.White;
@@ -63,24 +57,25 @@ namespace TablaConsoleGame
                foreach ( var item in playerList )
                {
                     //IArrangeChips arrange = new ArrangePoolsScheme();
-                    IArrangeChips arrange = new ArrangePools();
+                    IArrangeChips arrange = new ArrangeMoveMovePools();
                     item.ArrangingTheCheckers( this.controler.TablaBoard,arrange);
                }
 
                return playerList;
           }
 
-          private IMoveService GetMoveService()
-          {
-               return new MoveServices();
-          }
-
-          private IMotionValidation GetMotionValidation()
-          {
-               return new MotionValidate();
-          }
      }
 }
+
+//private IMoveService GetMoveService()
+//{
+//     return new MoveServices();
+//}
+
+//private IMotionValidation GetMotionValidation()
+//{
+//     return new MotionValidate();
+//}
 
           //public GameScheme()
           //{

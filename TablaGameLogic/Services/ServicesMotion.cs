@@ -5,11 +5,12 @@
      using System.Linq;
      using System.Reflection;
      using TablaGameLogic.Core.Contracts;
+     using TablaGameLogic.Exeptions;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
 
-     public class MoveServices : IMoveService
+     public class ServicesMotion : IMoveService
      {
           public void ParseMove(string moveString,IMoveParameters motion)
           {    
@@ -55,6 +56,39 @@
 
                moveMethodType.Invoke(CurrentPlayer.Move, moveParams); 
           }
+
+//****************************************************************
+          public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
+          {
+               try
+               {
+                    if ( motion == null || board == null || player == null )
+                    {
+                         throw new ArgumentNullException();
+                    }
+
+                    string className = "Validate" + motion.MoveMethodName;
+
+                    string typeName = $"TablaGameLogic.Services.{className}";
+
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+
+                    IValidateMove validateInstance =
+                              (IValidateMove) assembly.CreateInstance(typeName);
+
+                    
+                    return validateInstance.MoveIsCorrect( motion, board, player );
+               }
+               catch ( ArgumentNullException nullEx)
+               {
+                    throw new Exception(nullEx.Message);
+               }
+               catch ( Exception ex)
+               {
+                    throw new ValidateException(ex.Message);
+               }
+          }
+//**************************************************************
 
           private string GetMethodName( int moveType )
           {

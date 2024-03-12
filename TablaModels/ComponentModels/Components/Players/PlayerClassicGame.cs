@@ -46,7 +46,7 @@
                }
                else 
                {
-                    arrangeChips.ArrangeWhiteChips( board.ColumnSet, board.WhitePoolsSet );
+                    arrangeChips.ArrangeBlackChips( board.ColumnSet, board.BlackPoolsSet );
                };            
           }
 
