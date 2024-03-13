@@ -55,7 +55,7 @@ namespace TablaConsoleGame
                foreach ( var item in playerList )
                {
                     //IArrangeChips arrange = new ArrangePoolsScheme();
-                    IArrangeChips arrange = new ArrangeMoveMovePools();
+                    IArrangeChips arrange = new ArrangeOutsideScheme();
                     item.ArrangingTheCheckers( this.controler.TablaBoard,arrange);
                }
 

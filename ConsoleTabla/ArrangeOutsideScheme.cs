@@ -12,12 +12,12 @@ namespace TablaConsoleGame
           public void ArrangeBlackChips( IDictionary<int, IColumn> columns, IList<IPool> blackCheckers )
           {
                /*
-                    4 checkers on 20st column
-                    4 checkers on 22th column
-                    3 checkers on 23th column
-                    3 checkers on 24th column
+                    4 chips on 20st column
+                    4 chips on 22th column
+                    3 chips on 23th column
+                    3 chips on 24th column
 
-                    1 checkers on 17th column InGame
+                    1 chip   - OutOfGame      1 chip on 17th column InGame
             */
 
                for (int i = 0; i < blackCheckers.Count; i++)
@@ -52,8 +52,8 @@ namespace TablaConsoleGame
                     }
                } 
 
-               columns[17].PoolStack.Push(blackCheckers[14]);
-               blackCheckers[14].State = PoolState.InGame;
+               //columns[17].PoolStack.Push(blackCheckers[14]);
+               blackCheckers[14].State = PoolState.OutOfGame;
           }
 
           public void ArrangeWhiteChips( IDictionary<int, IColumn> columns, IList<IPool> whiteCheckers )

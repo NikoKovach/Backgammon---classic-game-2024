@@ -99,7 +99,7 @@
                while (message.Equals(InvalidMove))
                {
 
-                    string input  = "3 1 8";      //Move    = "3 1 12"
+                    string input  = "2,20";      //Out    = "2 20";
                     message = this.Controller.CurrentPlayerMakesMove(input);
                     //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 

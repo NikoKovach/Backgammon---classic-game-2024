@@ -57,8 +57,6 @@
 
           public int CurrentPlayerMovesNumber => this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
 
-          //public IValidateService MotionValidate { get; set; }
-
           public IMoveParameters MoveParams { get; set; }
 
           public string PlayersChooseAColor(int color)

@@ -45,7 +45,7 @@ namespace TablaConsoleGame
           {
                var scheme = new GameScheme();
 
-               scheme.SchemaBasic(4,4); // Move    = "3 1 12";
+               scheme.SchemaBasic(5,5); // Out    = "2 20";
                scheme.Engine.MainGameMethod();
           }
 

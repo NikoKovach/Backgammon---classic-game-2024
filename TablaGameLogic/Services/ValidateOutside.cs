@@ -166,6 +166,11 @@
                                          x.Key <= 24 + 1 - colNumberRange.Min() );
                }
 
+
+               if ( !diceExist )
+               {
+                    return false;
+               }
                //ChechSpecialVariant ще връща  true : когато
                //diceExist == true  и колоните в дадение обхват нямат пулове със същия цвят
                bool columnWithChipsExist = this.Columns
