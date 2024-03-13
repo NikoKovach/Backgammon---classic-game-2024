@@ -98,9 +98,8 @@
 
                while (message.Equals(InvalidMove))
                {
-                    //Move = "3 24 4";
-                    //Inside = "1 24 15"
-                    string input  = "3 24 5";//Move = "3 24 4";
+
+                    string input  = "3 1 8";      //Move    = "3 1 12"
                     message = this.Controller.CurrentPlayerMakesMove(input);
                     //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 
@@ -110,5 +109,8 @@
     }
 }
 
-
+//White :
+//Outside = "2 5 4"
+//Move = "3 24 4";
+//Inside = "1 24 15"
 

@@ -17,15 +17,20 @@
                base.SetColumns( board.ColumnSet );
                base.SetMotionParams( motion );
 
-               if ( ChipsOnTheBar() )
-               {
-                    return false;
-               }
-
                //if ( !base.HasMoves())
                //{
                //     return false;
                //}
+
+               if ( this.MotionParams.UseDiceMotionCount == null )
+               {
+                    return false;
+               }
+
+               if ( ChipsOnTheBar() )
+               {
+                    return false;
+               }
 
                if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) )
                {
@@ -44,6 +49,8 @@
 
                return true;
           }
+
+          //**************************************************************************
 
           protected bool TargetColumnIsOpen()
           {
@@ -71,7 +78,6 @@
                return true;
           }
 
-//**************************************************************************
           private bool TargetColumnIsValid( int targetColumn )
           {
                if ( !base.ColumnIsPartOfTheBoard(targetColumn) )
@@ -79,18 +85,7 @@
                     return false;
                }
 
-               int chipsCount   = this.Columns[ targetColumn ].PoolStack.Count;
-
-               if ( chipsCount == 0 )
-               {
-                    return true;
-               }
-
-               PoolColor chipsColor = this.Columns[ targetColumn ]
-                                          .PoolStack
-                                          .Peek().PoolColor;
-
-               if ( chipsCount > 1 && chipsColor != this.Color )
+               if ( !ColumnIsNotLock( targetColumn ) )
                {
                     return false;
                }
@@ -104,7 +99,6 @@
                     baseColumnNumber  + movesNumber : baseColumnNumber - movesNumber ;
           }
           
-
           private bool PathIsValidDicesAreNotSame(List<int> dices)
           {
                List<bool> movesTypeList = new List<bool>();
@@ -144,8 +138,6 @@
                     {
                          return false;
                     }
-
-                    //baseColumn = targetCol;
                }
 
                return true;
@@ -159,6 +151,7 @@
           //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
           //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
           //
+
           /*
           Пул може да бъде преместен само на отворена позиция, 
           която не е заета с капия (2 или повече противникови пула).
@@ -166,19 +159,20 @@
           Например, ако метнеш 5 и 3, може да преместиш един пул с 5 места и друг пул с 3 места 
           или може да преместиш един пул с 8 места общо, 
           стига да има отворена позиция, където да стъпи с 5ца или с 3ка.
-           
-           
+
            */
-               //int counter = 1;
+               //int chipsCount   = this.Columns[ targetColumn ].PoolStack.Count;
 
-               //while ( counter  <= movesCount )
+               //if ( chipsCount == 0 )
                //{
-               //     if ( !TargetColumnIsValid(counter * diceNumber))
-               //     {
-               //          return false;
-               //     }
-
-               //     RecursionTargetColIsValid( counter++, diceNumber );
+               //     return true;
                //}
 
-               //return true;
+               //PoolColor chipsColor = this.Columns[ targetColumn ]
+               //                           .PoolStack
+               //                           .Peek().PoolColor;
+
+               //if ( chipsCount > 1 && chipsColor != this.Color )
+               //{
+               //     return false;
+               //}

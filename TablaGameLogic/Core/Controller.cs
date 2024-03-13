@@ -8,6 +8,7 @@
      using TablaGameLogic.Factory;
      using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
+     using TablaGameLogic.Exeptions;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums; 
      using TablaModels.ComponentModels.Components.Players;
@@ -16,7 +17,6 @@
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
      using static TablaGameLogic.Services.ServiceCalculate;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
-     using TablaGameLogic.Exeptions;
 
      public class Controller : IController
      {        

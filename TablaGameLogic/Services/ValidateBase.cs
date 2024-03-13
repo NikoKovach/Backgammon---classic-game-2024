@@ -33,23 +33,21 @@
                return true;
           }
 
-          //TODO
-          protected bool HasMoves()
-          {
-               //ToDO
-               return true;
-          }
+          //TODO :
+          //protected bool HasMoves()
+          //{
+          //     //ToDO
+          //     return true;
+          //}
 
           protected bool ColumnIsPartOfTheBoard(int colNumber)
           {
-               //int colNumber = MotionParams.ColumnNumber;
-
                return Columns.Any( x => x.Key == colNumber );
           }
 
           protected bool ChipsOnTheBar()
           {
-               var chipsSet = Color == PoolColor.White ?
+               var chipsSet = (Color == PoolColor.White) ?
                     Board.WhitePoolsSet : Board.BlackPoolsSet;
 
                return chipsSet.Any( x => x.State == PoolState.OnTheBar );
@@ -57,11 +55,7 @@
 
           protected virtual bool BaseColumnIsOpen()
           {
-               int colNumber = MotionParams.ColumnNumber;
-               int chipsCount       = this.Columns[ colNumber ].PoolStack.Count;
-               PoolColor chipsColor = this.Columns[ colNumber ].PoolStack.Peek().PoolColor;
-
-               if ( chipsCount == 0 || chipsColor != this.Color )
+               if ( !ColumnIsNotLock( MotionParams.ColumnNumber ) )
                {
                     return false;
                }
@@ -69,12 +63,26 @@
                return true;
           }
 
+          protected virtual bool ColumnIsNotLock(int colNumber)
+          {
+               int chipsCount = this.Columns[ colNumber ].PoolStack.Count;
+
+               if ( chipsCount > 1 )
+               {
+                    PoolColor chipsColor = this.Columns[ colNumber ]
+                                          .PoolStack
+                                          .Peek().PoolColor;
+
+                    if ( chipsColor != this.Color )
+                    {
+                         return false;
+                    }  
+               }
+
+               return true;
+          }
 
 //****************************************************************************
-          protected void CalculateMoveCombination()
-          {
-
-          }
 
           //"Please enter your move type in following format :"         + NewRow + 
           //"1.For 'Inside'  - ( 1 ) (int columnNumber) (IPool chip)   ;" + NewRow + 

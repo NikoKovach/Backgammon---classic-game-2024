@@ -16,8 +16,6 @@ namespace TablaGameLogic.Core
 
           public int ColumnNumber { get; set; }
 
-          public IPool Chip { get; set; }
-
           public int chipNumberOrPlaceToMove { get; set; }
 
           public IList<int> UseDiceMotionCount { get; set; }

@@ -16,6 +16,7 @@ namespace TablaConsoleGame
         static void Main(string[] args)
         {
                //CreateEngine();
+
                //Test2();
                Test1();
         }
@@ -39,80 +40,18 @@ namespace TablaConsoleGame
 
           }
 
+//*****************************************************************
           private static void Test1()
           {
                var scheme = new GameScheme();
 
-               scheme.SchemaBasic(3,2); //Move = "3 24 4"
-               //scheme.Controler.CurrentPlayerFirstSet();
+               scheme.SchemaBasic(4,4); // Move    = "3 1 12";
                scheme.Engine.MainGameMethod();
           }
 
-          //Inside = "1 24 15"
-          //Move = "3 24 4";
-
-          private static bool Test2()
-          {
-               int movesCount = 2; // 1 - 4
-               int diceNumber = 2;
-
-
-               for ( int i = 1; i <= movesCount; i++ )
-               {
-                    if ( !TargetColumnIsValid(i * diceNumber))
-                    {
-                         return false;
-                    }
-               }
-
-               return true;
-          }
-
-          //private static bool RecursionTargetColIsValid(int movesCount,int diceNumber)
-          //{
-          //     int counter = 1;
-
-          //     while ( counter  <= movesCount )
-          //     {
-          //          if ( !TargetColumnIsValid(counter * diceNumber))
-          //          {
-          //               return false;
-          //          }
-
-          //          RecursionTargetColIsValid( counter++, diceNumber );
-          //     }
-
-          //     return true;
-          //}
-
-          private static bool TargetColumnIsValid( int targetColumn )
-          {
-               if ( targetColumn == 4 )
-               {
-                    return false;
-               }
-
-               return true;
-          }
-          private static void GameHasAWinner()
-          {
-              IEngine engine = new ClassicConsoleEngine();
-
-              //engine.controller.Players[0].MyPoolsColor = PoolColor.White;
-              //engine.controller.Players[1].MyPoolsColor = PoolColor.Black;
-
-              ////engine.controller.CurrentPlayer = engine.controller.Players[1];// black
-
-              //engine.controller.CurrentPlayer = engine.controller.Players[0];//white
-
-
-              //ArrangeTheWhiteCheckers(engine);
-
-              //ArrangeTheBlackCheckers(engine);
-
-              //engine.MainGameMethod();
-
-          }
+          //Inside  = "1 24 15"
+          //Outside = "2 4"
+          //Move    = "3 24 4";
 
           private static void PrintBoardInfo(IBoard board)
         {

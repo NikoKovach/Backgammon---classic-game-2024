@@ -52,16 +52,16 @@ namespace TablaConsoleGame
                     }
                } 
 
-               columns[17].PoolStack.Push(blackCheckers[15]);
-               blackCheckers[15].State = PoolState.InGame;
+               columns[17].PoolStack.Push(blackCheckers[14]);
+               blackCheckers[14].State = PoolState.InGame;
           }
 
           public void ArrangeWhiteChips( IDictionary<int, IColumn> columns, IList<IPool> whiteCheckers )
           {
                /*
                     3 chips on 5th column   
-                    4 chips on 3th column       OutOfGame = 1 chip
-                    4 chips on 2th column         InGame = 1 chip
+                    4 chips on 3th column       OutOfGame = 2 chip
+                    4 chips on 2th column        
                     2 chips on 1th column
                */
 
@@ -98,10 +98,10 @@ namespace TablaConsoleGame
                     }
                }
 
-               columns[8].PoolStack.Push(whiteCheckers[14]);
-               whiteCheckers[ 14 ].State = PoolState.InGame;
+               //columns[8].PoolStack.Push(whiteCheckers[13]);
+               whiteCheckers[ 13 ].State = PoolState.OutOfGame;
 
-               whiteCheckers[ 15 ].State = PoolState.OutOfGame;
+               whiteCheckers[ 14 ].State = PoolState.OutOfGame;
           }
      }
 }

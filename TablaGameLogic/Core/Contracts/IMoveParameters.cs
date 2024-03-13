@@ -5,9 +5,7 @@ using TablaModels.ComponentModels.Components.Interfaces;
 namespace TablaGameLogic.Core.Contracts
 {
     public interface IMoveParameters
-    {    
-          IPool Chip{ get; set; }
-        
+    {        
           int ColumnNumber { get; set; }
         
           string MoveMethodName { get; set; }

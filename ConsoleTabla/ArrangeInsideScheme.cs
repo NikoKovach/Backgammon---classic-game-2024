@@ -19,7 +19,7 @@ namespace TablaConsoleGame
 
                     2 checkers on 19th column
                     2 checkers on 20th column
-                    2 checkers on 22th column
+                                                       2 checkers on 22th column
                */
                /*
                 *White
@@ -66,13 +66,15 @@ namespace TablaConsoleGame
                         continue;
                     }
 
-                    if (columns[22].PoolStack.Count < 2)
-                    {
-                        columns[22].PoolStack.Push(blackCheckers[i]);
-                        blackCheckers[i].State = PoolState.AtHome;
-                        continue;
-                    }
-               } 
+                    //if (columns[22].PoolStack.Count < 2)
+                    //{
+                    //    columns[22].PoolStack.Push(blackCheckers[i]);
+                    //    blackCheckers[i].State = PoolState.AtHome;
+                    //    continue;
+                    //}
+               }
+               blackCheckers[ 13 ].State = PoolState.OnTheBar;
+               blackCheckers[ 14 ].State = PoolState.OnTheBar;
           }
 
           public void ArrangeWhiteChips( IDictionary<int, IColumn> columns, IList<IPool> whiteCheckers )

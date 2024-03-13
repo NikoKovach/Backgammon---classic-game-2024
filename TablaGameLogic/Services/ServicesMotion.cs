@@ -4,6 +4,7 @@
      using System.Collections.Generic;
      using System.Linq;
      using System.Reflection;
+
      using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Exeptions;
      using TablaGameLogic.Services.Contracts;
@@ -69,14 +70,23 @@
 
                     string className = "Validate" + motion.MoveMethodName;
 
-                    string typeName = $"TablaGameLogic.Services.{className}";
+                    IValidateMove validateInstance = null;
 
-                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    if ( className.Equals("ValidateInside") )
+                    {
+                         validateInstance = new ValidateInside();
+                    }
 
-                    IValidateMove validateInstance =
-                              (IValidateMove) assembly.CreateInstance(typeName);
+                    if ( className.Equals("ValidateMove") )
+                    {
+                         validateInstance = new ValidateMove();
+                    }
 
-                    
+                    if ( className == "ValidateOutside" )
+                    {
+                         validateInstance = new ValidateOutside();
+                    }
+
                     return validateInstance.MoveIsCorrect( motion, board, player );
                }
                catch ( ArgumentNullException nullEx)
@@ -100,7 +110,7 @@
                          moveName = "Inside";
                          break;
                     case 2:
-                         moveName = "OutSide";
+                         moveName = "Outside";
                          break;
                     case 3:
                          moveName = "Move";
@@ -127,3 +137,37 @@
           //"1.For 'Inside'  - ( 1 ) (column number) (pool number)   ;" + NewRow + 
           //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
           //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
+
+/*
+          public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
+          {
+               try
+               {
+                    if ( motion == null || board == null || player == null )
+                    {
+                         throw new ArgumentNullException();
+                    }
+
+                    string className = "Validate" + motion.MoveMethodName;
+
+                    string typeName = $"TablaGameLogic.Services.{className}";
+
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+
+                    IValidateMove validateInstance =
+                              (IValidateMove) assembly.CreateInstance(typeName);
+
+                    
+                    return validateInstance.MoveIsCorrect( motion, board, player );
+               }
+               catch ( ArgumentNullException nullEx)
+               {
+                    throw new Exception(nullEx.Message);
+               }
+               catch ( Exception ex)
+               {
+                    throw new ValidateException(ex.Message);
+               }
+          }
+ 
+ */

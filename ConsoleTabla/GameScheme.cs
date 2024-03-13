@@ -12,7 +12,6 @@ namespace TablaConsoleGame
 {
      public class GameScheme
      {
-          //private IBoard board;
           private IList<IPlayer>  players;
           private IController controler;
           private ClassicConsoleEngine engine;
@@ -25,7 +24,6 @@ namespace TablaConsoleGame
 
           public ClassicConsoleEngine Engine => engine; 
 
-
           public void SchemaBasic(int firstDice,int secondDice)
           {
                this.controler = new Controller();
@@ -34,7 +32,7 @@ namespace TablaConsoleGame
                this.controler.TablaBoard.DiceSet[ 1 ].ValueOfOneDice = firstDice;
                this.controler.TablaBoard.DiceSet[ 2 ].ValueOfOneDice = secondDice;
 
-               this.controler.CurrentPlayer = this.Players[ 0 ];
+               this.controler.CurrentPlayer = this.Players[ 1 ];
 
                ServiceCalculate.SetDiceValueAndMovesCount(this.controler.TablaBoard);
 

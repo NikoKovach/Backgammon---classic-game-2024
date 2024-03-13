@@ -1,5 +1,7 @@
 ﻿namespace TablaGameLogic.Services
 {
+     using System;
+     using System.Collections.Generic;
      using System.Linq;
      using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Services.Contracts;
@@ -16,27 +18,33 @@
                base.SetColumns( board.ColumnSet );
                base.SetMotionParams( motion );
 
-               if ( ChipsOnTheBar() )
-               {
-                    return false;
-               }
-
-               if ( ChipsInGame() )
-               {
-                    return false;
-               }
-
+               //TODO :
                //if ( !base.HasMoves())
                //{
                //     return false;
                //}
 
-               if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) )
+               if ( base.ChipsOnTheBar() )
                {
                     return false;
                }
 
-               if ( !base.BaseColumnIsOpen() )
+               if ( this.ChipsInGame() )
+               {
+                    return false;
+               }
+
+               if ( !base.ColumnIsPartOfTheBoard(MotionParams.ColumnNumber) )
+               {
+                    return false;
+               }
+
+               if ( !this.TargetColumnIsValidAgainstColor() )
+               {
+                    return false;
+               }
+
+               if ( !this.TargetColumnIsValidAgainstPoolCount() )
                {
                     return false;
                }
@@ -44,7 +52,8 @@
                return true;
           }
 
-          public bool ChipsInGame()
+          //*****************************************************************************
+          protected bool ChipsInGame()
           {
                var chipsSet = Color == PoolColor.White ?
                     Board.WhitePoolsSet : Board.BlackPoolsSet;
@@ -52,19 +61,156 @@
                return chipsSet.Any( x => x.State == PoolState.InGame );
           }
 
-          //TODO
+          private bool TargetColumnIsValidAgainstColor()
+          {
+               var whiteColumnsRange = this.Columns
+                    .Where( x => x.Key >= 1 && x.Key <= 6 ).Select( x => x.Key ).ToList();
+               
+               var blackColumnsRange = this.Columns
+                    .Where( x => x.Key >= 19 && x.Key <= 24 ).Select( x => x.Key ).ToList();
 
-          /*
-           ИЗКАРВАНЕ НА ПУЛОВЕ
-           Ако няма пул на позиция отговаряща на зара, 
-          играчът трябва да направи легално движение на пул, 
-          намиращ се на по-висока позиция. 
-          Ако няма пулове на по-висока позиция, 
-          играчът е длъжен да извади пул намиращ се на най-високата възможна позиция, 
-          по-ниска от стойността на зара. 
-          Ако играчът има пул на позиция за изкарване, 
-          но има и възможно движение, той не е длъжен да изкарва пула.
-           */
-      
+               if ( this.Color == PoolColor.White )
+               {
+                    if ( !whiteColumnsRange.Any( x => x == MotionParams.ColumnNumber ) )
+                    {
+                         return false;
+                    }
+               }
+
+               if ( this.Color == PoolColor.Black )
+               {
+                    if ( !blackColumnsRange.Any( x => x == MotionParams.ColumnNumber ) )
+                    {
+                         return false;
+                    }
+               }
+
+               return true;
+          }
+
+          protected bool TargetColumnIsValidAgainstPoolCount()
+          {
+               if ( !base.ColumnIsNotLock(MotionParams.ColumnNumber) )
+               {
+                    return false;
+               }
+
+               int chipsCount = this.Columns[ MotionParams.ColumnNumber ].PoolStack.Count;
+
+               if ( chipsCount == 0 )  return false;
+
+               if ( !DiceExist() )
+               {
+                    return false;
+               }
+
+               return true;
+          }
+
+          private bool DiceExist()
+          {
+               int fakeDice = (this.Color == PoolColor.White) ?
+                    MotionParams.ColumnNumber : 
+                    this.Columns.Count + 1 - MotionParams.ColumnNumber ;
+
+               bool diceExist = this.Board.DiceValueAndMovesCount.ContainsKey( fakeDice );
+
+               if ( !diceExist )
+               {
+                    if ( !ChechSpecialVariant(fakeDice) )
+                    {
+                         return false;
+                    }
+               }
+               else
+               {
+                    this.MotionParams.UseDiceMotionCount.Add(fakeDice);
+               }
+
+               return true;
+          }
+
+          private bool ChechSpecialVariant(int fakeDice)
+          {
+               //Пример :
+               //вземаме от колона 5.На колона5 има пулове .
+               //Имаме зарове по-големи от 5 - 6 и 4. 
+               // За да е валидно колони от 6 - 6 вкл. да са без пулове от съответния цвят 
+
+               List<int> colNumberRange = ( this.Color == PoolColor.White )     ?
+                    this.Columns.Where( x => x.Key > fakeDice && x.Key <= 6 )
+                                .Select( x => x.Key )
+                                .OrderBy(x => x)
+                                .ToList()                                       :
+                    this.Columns.Where( x => x.Key >= 19 && x.Key < 
+                                        (this.Columns.Count + 1 - fakeDice ))
+                                .Select( x => x.Key)
+                                .OrderBy(x => x)
+                                .ToList();
+
+               bool diceExist = default;
+
+               if ( ( this.Color == PoolColor.White ) )
+               {
+                    //colrange - 1,2,3....
+                    diceExist = this.Board.DiceValueAndMovesCount
+                              .Any( x => x.Key >= colNumberRange.Min() && 
+                                         x.Key <= colNumberRange.Max() );
+               }
+               else
+               {
+                    //colrange - 19,20,21....
+                    //            6, 5, 4....
+                    diceExist = this.Board.DiceValueAndMovesCount
+                              .Any( x => x.Key >= 24 + 1 - colNumberRange.Max() && 
+                                         x.Key <= 24 + 1 - colNumberRange.Min() );
+               }
+
+               //ChechSpecialVariant ще връща  true : когато
+               //diceExist == true  и колоните в дадение обхват нямат пулове със същия цвят
+               bool columnWithChipsExist = this.Columns
+                   .Where( x => x.Key >= colNumberRange.Min() && x.Key <= colNumberRange.Max() )
+                   .Any(x => x.Value.PoolStack.Count > 0 && 
+                             x.Value.PoolStack.Peek().PoolColor == this.Color);
+
+               if ( diceExist && columnWithChipsExist )
+               {
+                    return false;
+               }
+
+               ChangeUseDiceMotionCount( colNumberRange );
+
+               return true;
+          }
+
+          private void ChangeUseDiceMotionCount( List<int> colNumberRange )
+          {
+               int diceNumber = (this.Color == PoolColor.White)
+                              ? this.Board.DiceValueAndMovesCount
+                                    .First( x => x.Key >= colNumberRange.Min() &&
+                                                 x.Key <= colNumberRange.Max() ).Key   
+                             :  this.Board.DiceValueAndMovesCount
+                                    .First(x => x.Key >= 24 + 1 - colNumberRange.Max() && 
+                                                x.Key <= 24 + 1 - colNumberRange.Min()).Key;
+               
+               this.MotionParams.UseDiceMotionCount.Add(diceNumber);
+
+          }
      }
 }
+ //TODO
+ /*
+  ИЗКАРВАНЕ НА ПУЛОВЕ
+     Ако няма пул на позиция отговаряща на зара,
+     играчът трябва да направи легално движение на пул, 
+     намиращ се на по-висока позиция. 
+     Ако няма пулове на по-висока позиция,играчът е длъжен да извади пул
+     намиращ се на най-високата възможна позиция, по-ниска от стойността на зара. 
+     Ако играчът има пул на позиция за изкарване, 
+     но има и възможно движение, той не е длъжен да изкарва пула.
+*/
+    
+//"Please enter your move type in following format :"         + NewRow + 
+          //"2.For 'Outside' - ( 2 ) (column number);"        + NewRow + 
+          //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
+          //
