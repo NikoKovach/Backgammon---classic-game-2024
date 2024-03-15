@@ -6,13 +6,24 @@
      using System.Reflection;
 
      using TablaGameLogic.Core.Contracts;
-     using TablaGameLogic.Exeptions;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
 
      public class ServicesMotion : IMoveService
      {
+          private static IDictionary<string,IValidateMove> defaultValidateList = GetDefaultValidateList(); 
+
+          public ServicesMotion() : this(defaultValidateList)
+          { }
+
+          public ServicesMotion(IDictionary<string,IValidateMove> validateList)
+          {
+               this.ValidateList = validateList;
+          }
+
+          public IDictionary<string,IValidateMove> ValidateList { get; set; }
+
           public void ParseMove(string moveString,IMoveParameters motion)
           {    
                int[] moveArray = moveString.Split(new char[] { ' ', ',' },                                                 StringSplitOptions.RemoveEmptyEntries)
@@ -58,7 +69,6 @@
                moveMethodType.Invoke(CurrentPlayer.Move, moveParams); 
           }
 
-//****************************************************************
           public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
           {
                try
@@ -68,23 +78,11 @@
                          throw new ArgumentNullException();
                     }
 
-                    string className = "Validate" + motion.MoveMethodName;
+                    IValidateMove validateInstance = this.ValidateList[motion.MoveMethodName];
 
-                    IValidateMove validateInstance = null;
-
-                    if ( className.Equals("ValidateInside") )
+                    if ( validateInstance == null )
                     {
-                         validateInstance = new ValidateInside();
-                    }
-
-                    if ( className.Equals("ValidateMove") )
-                    {
-                         validateInstance = new ValidateMove();
-                    }
-
-                    if ( className == "ValidateOutside" )
-                    {
-                         validateInstance = new ValidateOutside();
+                         throw new InvalidOperationException();
                     }
 
                     return validateInstance.MoveIsCorrect( motion, board, player );
@@ -93,13 +91,12 @@
                {
                     throw new Exception(nullEx.Message);
                }
-               catch ( Exception ex)
+               catch ( InvalidOperationException invalidEx)
                {
-                    throw new ValidateException(ex.Message);
+                    throw new Exception(invalidEx.Message);
                }
           }
 //**************************************************************
-
           private string GetMethodName( int moveType )
           {
                string moveName = string.Empty;
@@ -130,44 +127,58 @@
 
                return chipList.FirstOrDefault( x => x.IdentityNumber == poolNumber );
           }
+
+          private static IDictionary<string,IValidateMove> GetDefaultValidateList()
+          {
+               IDictionary<string,IValidateMove> validateList = 
+                    new Dictionary<string,IValidateMove>() 
+               {
+                         { "Inside",  new ValidateInside() },
+                         { "Outside", new ValidateOutside()},
+                         { "Move"   , new ValidateMove()   }
+               };
+
+               return validateList;
+          }
      }
 }
 
-          //"Please enter your move type in following format :"         + NewRow + 
-          //"1.For 'Inside'  - ( 1 ) (column number) (pool number)   ;" + NewRow + 
-          //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
-          //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
+  //public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
+          //{
+          //     try
+          //     {
+          //          if ( motion == null || board == null || player == null )
+          //          {
+          //               throw new ArgumentNullException();
+          //          }
 
-/*
-          public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
-          {
-               try
-               {
-                    if ( motion == null || board == null || player == null )
-                    {
-                         throw new ArgumentNullException();
-                    }
+          //          string className = "Validate" + motion.MoveMethodName;
 
-                    string className = "Validate" + motion.MoveMethodName;
+          //          IValidateMove validateInstance = null;
 
-                    string typeName = $"TablaGameLogic.Services.{className}";
+          //          if ( className.Equals("ValidateInside") )
+          //          {
+          //               validateInstance = new ValidateInside();
+          //          }
 
-                    Assembly assembly = Assembly.GetExecutingAssembly();
+          //          if ( className.Equals("ValidateMove") )
+          //          {
+          //               validateInstance = new ValidateMove();
+          //          }
 
-                    IValidateMove validateInstance =
-                              (IValidateMove) assembly.CreateInstance(typeName);
+          //          if ( className == "ValidateOutside" )
+          //          {
+          //               validateInstance = new ValidateOutside();
+          //          }
 
-                    
-                    return validateInstance.MoveIsCorrect( motion, board, player );
-               }
-               catch ( ArgumentNullException nullEx)
-               {
-                    throw new Exception(nullEx.Message);
-               }
-               catch ( Exception ex)
-               {
-                    throw new ValidateException(ex.Message);
-               }
-          }
- 
- */
+          //          return validateInstance.MoveIsCorrect( motion, board, player );
+          //     }
+          //     catch ( ArgumentNullException nullEx)
+          //     {
+          //          throw new Exception(nullEx.Message);
+          //     }
+          //     catch ( Exception ex)
+          //     {
+          //          throw new ValidateException(ex.Message);
+          //     }
+          //}

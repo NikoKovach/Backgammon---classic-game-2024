@@ -36,6 +36,8 @@ namespace TablaConsoleGame
 
                ServiceCalculate.SetDiceValueAndMovesCount(this.controler.TablaBoard);
 
+               this.Controler.MoveCombinations = new MoveCombinations();
+
                this.engine = new ClassicConsoleEngine(this.Controler,new Writer(),new Reader());
           }
 //***************************************************************************

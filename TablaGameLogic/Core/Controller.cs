@@ -8,7 +8,6 @@
      using TablaGameLogic.Factory;
      using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
-     using TablaGameLogic.Exeptions;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums; 
      using TablaModels.ComponentModels.Components.Players;
@@ -59,6 +58,9 @@
 
           public IMoveParameters MoveParams { get; set; }
 
+          public IMoveCombinations MoveCombinations { get; set; }
+
+          //********************************************************************8
           public string PlayersChooseAColor(int color)
           {
                DeterminingTheColorOfThePlayers( color);
@@ -80,7 +82,7 @@
                return message;
           }
 
-          public bool RollDice()
+          public void RollDice()
           {
                for (int i = 0; i < NumberOfDice; i++)
                {
@@ -95,7 +97,7 @@
                     //return false;
                //}
 
-               return true;
+               //return true;
           }
 
           public string InitialInfoCurrentPlayerMoves() 
@@ -122,8 +124,6 @@
 
                     bool moveIsValid = moveService.MoveIsValid( MoveParams, TablaBoard, CurrentPlayer );
 
-                    //bool moveIsValid = true;
-
                     if ( !moveIsValid )
                     {
                          return InvalidMove;
@@ -140,10 +140,6 @@
                     this.MoveParams = default;
 
                     return MoveIsMade;
-               }
-               catch (  ValidateException validateEx)
-               {
-                    return validateEx.Message;
                }
                catch ( InvalidOperationException invalidEx)
                {
@@ -163,6 +159,8 @@
                this.CurrentPlayer = numberOne > numberTwo ? this.Players[0] : this.Players[1];
 
                SetDiceValueAndMovesCount( this.TablaBoard );
+
+               this.MoveCombinations = new MoveCombinations();
           }
 
           public void ChangeCurrentPlayer()
@@ -171,6 +169,10 @@
 
                this.CurrentPlayer = 
                   currentPlayerColor == PoolColor.Black ? this.Players[0] : this.Players[1];
+
+               this.MoveCombinations = default;
+
+               this.MoveCombinations = new MoveCombinations();
           }
 
           public void ClearBoardFromCheckers()
@@ -186,6 +188,18 @@
                ChangeAllCheckersStateToStarting(this.TablaBoard.BlackPoolsSet);
 
                ChangeAllCheckersStateToStarting(this.TablaBoard.WhitePoolsSet);
+          }
+
+          public bool PlayerHasMoves()
+          {
+               bool hasMoveCombinations = this.MoveCombinations.HasAnyMove(this.TablaBoard,this.CurrentPlayer);
+
+               if (!hasMoveCombinations  )
+               {
+                    return false;
+               }
+
+               return true;
           }
 //****************************************************************************
           private void GameHasAWinner()

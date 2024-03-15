@@ -12,10 +12,6 @@
 
           IList<IPool> BlackPoolsSet { get; }
 
-          //IList<IPool> BeatenWhitePoolList { get; set; }
-
-          //IList<IPool> BeatenBlackPoolList { get; set; }
-
           IDictionary<int, int> DiceValueAndMovesCount { get; set; }
      }
 }
