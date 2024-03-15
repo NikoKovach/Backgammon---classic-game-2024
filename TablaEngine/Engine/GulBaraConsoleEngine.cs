@@ -1,9 +1,9 @@
 ﻿namespace TablaEngine.Engine
 {
     using TablaEngine.Engine.Contracts;
-     using TablaGameLogic.Core.Contracts;
+    using TablaGameLogic.Core.Contracts;
 
-     public class GulBaraConsoleEngine //: IEngine
+    public class GulBaraConsoleEngine //: IEngine
     {
           public IController Controller => throw new System.NotImplementedException();
 

@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TablaGameLogic.Core.Contracts;
-using TablaModels.ComponentModels.Components.Interfaces;
-
-namespace TablaGameLogic.Core
+﻿namespace TablaGameLogic.Services
 {
-    public class MoveParameters : IMoveParameters
+     using System.Collections.Generic;
+     using TablaGameLogic.Services.Contracts;
+
+     public class MoveParameters : IMoveParameters
      {
           public MoveParameters()
           {
-               UseDiceMotionCount = new List<int>();
+              UseDiceMotionCount = new List<int>();
           }
 
           public string MoveMethodName { get; set; }

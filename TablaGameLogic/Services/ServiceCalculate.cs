@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TablaGameLogic.Core.Contracts;
+using TablaGameLogic.Services.Contracts;
 using TablaModels.ComponentModels.Components.Interfaces;
 using TablaModels.ComponentModels.Enums;
 using static TablaGameLogic.Utilities.Messages.GameConstants;
 
 namespace TablaGameLogic.Services
 {
-     public static class ServiceCalculate
+    public static class ServiceCalculate
      {
           public static void SetDiceValueAndMovesCount(IBoard board)
           {

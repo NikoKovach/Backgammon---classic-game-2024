@@ -10,7 +10,7 @@ using TablaModels.ComponentModels.Enums;
 
 namespace TablaConsoleGame
 {
-     public class GameScheme
+    public class GameScheme
      {
           private IList<IPlayer>  players;
           private IController controler;
@@ -36,7 +36,7 @@ namespace TablaConsoleGame
 
                ServiceCalculate.SetDiceValueAndMovesCount(this.controler.TablaBoard);
 
-               this.Controler.MoveCombinations = new MoveCombinations();
+               //this.Controler.MoveCombinations = new MoveCombinations();
 
                this.engine = new ClassicConsoleEngine(this.Controler,new Writer(),new Reader());
           }

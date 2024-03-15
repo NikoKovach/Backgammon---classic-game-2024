@@ -2,7 +2,7 @@
 
 namespace TablaEngine.Engine.Contracts
 {
-     public interface IEngine
+    public interface IEngine
      {
           IController Controller { get; }
 

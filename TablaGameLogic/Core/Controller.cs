@@ -9,7 +9,7 @@
      using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums; 
+     using TablaModels.ComponentModels.Enums;
      using TablaModels.ComponentModels.Components.Players;
 
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
@@ -33,7 +33,7 @@
                this.tablaBoard = board ?? 
                     throw new ArgumentNullException
                     (
-                         string.Format(InvalidGameBoard,nameof(board))
+                         string.Format(InvalidMoveConfirmationParameter,nameof(board))
                     );
 
                this.moveService = moveService ??
@@ -54,13 +54,14 @@
     
           public IPlayer CurrentPlayer { get; set; }
 
-          public int CurrentPlayerMovesNumber => this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
+          public int CurrentPlayerMovesNumber => 
+               this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
+
+          public IMoveService MoveService { get; }
 
           public IMoveParameters MoveParams { get; set; }
 
-          public IMoveCombinations MoveCombinations { get; set; }
-
-          //********************************************************************8
+          //********************************************************************
           public string PlayersChooseAColor(int color)
           {
                DeterminingTheColorOfThePlayers( color);
@@ -118,20 +119,20 @@
                {
                     this.MoveParams = new MoveParameters();
 
-                    this.moveService.ParseMove(moveString,this.MoveParams);
+                    this.MoveService.ParseMove(moveString,this.MoveParams);
 
                     CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
-                    bool moveIsValid = moveService.MoveIsValid( MoveParams, TablaBoard, CurrentPlayer );
+                    bool moveIsValid = this.MoveService.MoveIsValid( MoveParams, TablaBoard, CurrentPlayer );
 
                     if ( !moveIsValid )
                     {
                          return InvalidMove;
                     }
 
-                    object[] invokeMethodParams = this.moveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
+                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
 
-                    this.moveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
+                    this.MoveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
 
                     ChangeDiceValueAndMoveCount( this.MoveParams, this.TablaBoard );
                
@@ -159,8 +160,6 @@
                this.CurrentPlayer = numberOne > numberTwo ? this.Players[0] : this.Players[1];
 
                SetDiceValueAndMovesCount( this.TablaBoard );
-
-               this.MoveCombinations = new MoveCombinations();
           }
 
           public void ChangeCurrentPlayer()
@@ -169,10 +168,6 @@
 
                this.CurrentPlayer = 
                   currentPlayerColor == PoolColor.Black ? this.Players[0] : this.Players[1];
-
-               this.MoveCombinations = default;
-
-               this.MoveCombinations = new MoveCombinations();
           }
 
           public void ClearBoardFromCheckers()
@@ -190,17 +185,6 @@
                ChangeAllCheckersStateToStarting(this.TablaBoard.WhitePoolsSet);
           }
 
-          public bool PlayerHasMoves()
-          {
-               bool hasMoveCombinations = this.MoveCombinations.HasAnyMove(this.TablaBoard,this.CurrentPlayer);
-
-               if (!hasMoveCombinations  )
-               {
-                    return false;
-               }
-
-               return true;
-          }
 //****************************************************************************
           private void GameHasAWinner()
           {

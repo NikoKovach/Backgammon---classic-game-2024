@@ -1,17 +1,17 @@
 ﻿namespace TablaEngine.Engine
 {
-     using System;
+    using System;
 
-     using TablaEngine.Engine.Contracts;
-     using TablaGameLogic.Core;
-     using TablaModels.ComponentModels.Enums;    
-     using TablaEngine.IO;
-     using TablaGameLogic.Core.Contracts;
-     using TablaEngine.IO.Contracts;
+    using TablaEngine.Engine.Contracts;
+    using TablaGameLogic.Core;
+    using TablaModels.ComponentModels.Enums;
+    using TablaEngine.IO;
+    using TablaEngine.IO.Contracts;
 
-     using static TablaGameLogic.Utilities.Messages.OutputMessages;
+    using static TablaGameLogic.Utilities.Messages.OutputMessages;
+    using TablaGameLogic.Core.Contracts;
 
-     public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
+    public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
      {
           public ClassicConsoleEngine() : base(new Controller(), new Writer(),new Reader())
           { }
@@ -69,9 +69,10 @@
           {
                Console.Clear();
 
-               if ( !this.Controller.PlayerHasMoves() )
+               if ( !this.Controller.MoveService.PlayerHasMoves
+                         ( this.Controller.TablaBoard,this.Controller.CurrentPlayer ))
                {
-                    this.Writer.WriteLine("No Moves !!!");
+                    this.Writer.WriteLine( "No Moves !!!" );
 
                     return;
                }
@@ -108,7 +109,8 @@
 
                     this.Writer.WriteLine(message);
 
-                    if ( !this.Controller.PlayerHasMoves() )
+                    if ( !this.Controller.MoveService.PlayerHasMoves
+                         ( this.Controller.TablaBoard,this.Controller.CurrentPlayer ))
                     {
                          this.Controller.TablaBoard.DiceValueAndMovesCount.Clear();
                          break;

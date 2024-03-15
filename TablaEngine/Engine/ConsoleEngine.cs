@@ -1,18 +1,18 @@
 ﻿namespace TablaEngine.Engine
 {
-     using System;
-     using System.Threading;
-     using TablaEngine.Engine.Contracts;
-     using TablaEngine.IO.Contracts;
-     using TablaGameLogic.Core.Contracts;
-     using TablaModels.ComponentModels;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
-     using static TablaGameLogic.Utilities.Messages.OutputMessages;
-     using static TablaGameLogic.Utilities.Messages.GameConstants;
-     using TablaGameLogic.Factory;
+    using System;
+    using System.Threading;
+    using TablaEngine.Engine.Contracts;
+    using TablaEngine.IO.Contracts;
+    using TablaModels.ComponentModels;
+    using TablaModels.ComponentModels.Components.Interfaces;
+    using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
+    using static TablaGameLogic.Utilities.Messages.OutputMessages;
+    using static TablaGameLogic.Utilities.Messages.GameConstants;
+    using TablaGameLogic.Factory;
+    using TablaGameLogic.Core.Contracts;
 
-     public abstract class ConsoleEngine : IConsoleEngine,IEngine
+    public abstract class ConsoleEngine : IConsoleEngine,IEngine
      {
           private readonly IController controller;
           private readonly IWriter writer;

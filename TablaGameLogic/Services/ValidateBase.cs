@@ -1,9 +1,7 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System;
      using System.Collections.Generic;
      using System.Linq;
-     using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
@@ -65,7 +63,8 @@
 
           protected virtual bool ColumnIsNotLock(int colNumber)
           {
-               int chipsCount = this.Columns[ colNumber ].PoolStack.Count;
+               int chipsCount = (this.Columns[ colNumber ].PoolStack.Count > 1) ? 
+                                this.Columns[ colNumber ].PoolStack.Count       : default;
 
                if ( chipsCount > 1 )
                {
@@ -88,7 +87,5 @@
           //"1.For 'Inside'  - ( 1 ) (int columnNumber) (IPool chip)   ;" + NewRow + 
           //"2.For 'Outside' - ( 2 ) (int columnNumber)                 ;" + NewRow + 
           //"3.For 'Move'    - ( 3 ) (int columnNumber) (int places to move);";         
-  
-
      }
 }

@@ -1,29 +1,43 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System;
-     using System.Collections.Generic;
-     using System.Linq;
-     using System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaModels.ComponentModels.Enums;
 
-     using TablaGameLogic.Core.Contracts;
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
+    using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
 
-     public class ServicesMotion : IMoveService
+    public class ServicesMotion : IMoveService
      {
           private static IDictionary<string,IValidateMove> defaultValidateList = GetDefaultValidateList(); 
+          private static IDictionary<string,IHasMoves> defaultHasAnyMoveList = GetDefaultHasMoveServiceList();
 
-          public ServicesMotion() : this(defaultValidateList)
+          public ServicesMotion() : this(defaultValidateList,defaultHasAnyMoveList)
           { }
 
-          public ServicesMotion(IDictionary<string,IValidateMove> validateList)
-          {
-               this.ValidateList = validateList;
+          public ServicesMotion(IDictionary<string,IValidateMove> validateList,IDictionary<string,IHasMoves> hasAnyMoveList)
+          {           
+               this.ValidateList = validateList ?? 
+                    throw new ArgumentNullException
+                    (
+                         string.Format(InvalidMoveConfirmationParameter,nameof(validateList))
+                    );
+
+               this.HasAnyMoveList = hasAnyMoveList ?? 
+                    throw new ArgumentNullException
+                    (
+                         string.Format(InvalidMoveConfirmationParameter,nameof(hasAnyMoveList))
+                    );
           }
 
           public IDictionary<string,IValidateMove> ValidateList { get; set; }
 
+          public IDictionary<string,IHasMoves> HasAnyMoveList { get; set; }
+
+//**************************************************************************
           public void ParseMove(string moveString,IMoveParameters motion)
           {    
                int[] moveArray = moveString.Split(new char[] { ' ', ',' },                                                 StringSplitOptions.RemoveEmptyEntries)
@@ -75,14 +89,14 @@
                {
                     if ( motion == null || board == null || player == null )
                     {
-                         throw new ArgumentNullException();
+                         throw new ArgumentNullException();// TODO Message string
                     }
 
                     IValidateMove validateInstance = this.ValidateList[motion.MoveMethodName];
 
                     if ( validateInstance == null )
                     {
-                         throw new InvalidOperationException();
+                         throw new InvalidOperationException();// TODO Message string
                     }
 
                     return validateInstance.MoveIsCorrect( motion, board, player );
@@ -96,7 +110,25 @@
                     throw new Exception(invalidEx.Message);
                }
           }
-//**************************************************************
+
+          public bool PlayerHasMoves(IBoard board, IPlayer player)
+          {
+               List<bool> hasMoveCombinations = new List<bool>();
+
+               foreach ( var item in HasAnyMoveList )
+               {
+                    hasMoveCombinations.Add( item.Value.HasMoves(board,player));
+               }
+
+               if (hasMoveCombinations.All(x => x == false)  )
+               {
+                    return false;
+               }
+
+               return true;
+          }
+
+//***************************************************************************
           private string GetMethodName( int moveType )
           {
                string moveName = string.Empty;
@@ -135,10 +167,23 @@
                {
                          { "Inside",  new ValidateInside() },
                          { "Outside", new ValidateOutside()},
-                         { "Move"   , new ValidateMove()   }
+                         { "Move"   , new ValidateMotion()   }
                };
 
                return validateList;
+          }
+
+          private static IDictionary<string,IHasMoves> GetDefaultHasMoveServiceList()
+          {
+               IDictionary<string,IHasMoves> hasMovesList = 
+                    new Dictionary<string,IHasMoves>() 
+               {
+                         { "Inside",  new ValidateInsideHasMove()   },
+                         { "Outside", new ValidateOutsideHasMove()  },
+                         { "Move"   , new ValidateMotionHasMove()   }
+               };
+
+               return hasMovesList;
           }
      }
 }

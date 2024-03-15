@@ -15,9 +15,9 @@
 
           int CurrentPlayerMovesNumber { get; }
 
-          IMoveParameters MoveParams { get; set; }
+          IMoveService MoveService { get; }
 
-          IMoveCombinations MoveCombinations { get; set; }
+          IMoveParameters MoveParams { get; set; }
 
           string PlayersChooseAColor(int color);
 
@@ -26,8 +26,6 @@
           string InitialInfoCurrentPlayerMoves();
 
           void RollDice();
-
-          bool PlayerHasMoves();
 
           string CurrentPlayerMakesMove(string moveString);
 

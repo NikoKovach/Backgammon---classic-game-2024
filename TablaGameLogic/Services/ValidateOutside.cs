@@ -1,9 +1,7 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System;
      using System.Collections.Generic;
      using System.Linq;
-     using TablaGameLogic.Core.Contracts;
      using TablaGameLogic.Services.Contracts;
      using TablaModels.ComponentModels.Components.Interfaces;
      using TablaModels.ComponentModels.Enums;
