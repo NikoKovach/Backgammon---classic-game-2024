@@ -69,8 +69,7 @@
           {
                Console.Clear();
 
-               if ( !this.Controller.MoveService.PlayerHasMoves
-                         ( this.Controller.TablaBoard,this.Controller.CurrentPlayer ))
+               if ( !this.Controller.HasOtherMoves())
                {
                     this.Writer.WriteLine( "No Moves !!!" );
 
@@ -103,14 +102,13 @@
                while (message.Equals(InvalidMove))
                {
 
-                    string input = "2,20";      //Out    = "2 20";
+                    string input = "2 5";      //
                     message = this.Controller.CurrentPlayerMakesMove( input );
                     //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
 
                     this.Writer.WriteLine(message);
 
-                    if ( !this.Controller.MoveService.PlayerHasMoves
-                         ( this.Controller.TablaBoard,this.Controller.CurrentPlayer ))
+                    if ( !this.Controller.HasOtherMoves())
                     {
                          this.Controller.TablaBoard.DiceValueAndMovesCount.Clear();
                          break;

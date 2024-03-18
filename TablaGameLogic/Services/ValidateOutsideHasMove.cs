@@ -1,8 +1,13 @@
-﻿using TablaGameLogic.Services.Contracts;
-using TablaModels.ComponentModels.Components.Interfaces;
-
-namespace TablaGameLogic.Services
+﻿namespace TablaGameLogic.Services
 {
+     using System.Collections.Generic;
+     using System.Linq;
+     using TablaGameLogic.Services.Contracts;
+     using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaModels.ComponentModels.Enums;
+     
+     using static TablaGameLogic.Utilities.Messages.GameConstants;
+
      public class ValidateOutsideHasMove : ValidateOutside, IHasMoves
      {
           public bool HasMoves( IBoard board, IPlayer player )
@@ -11,10 +16,97 @@ namespace TablaGameLogic.Services
                base.SetColor( player.MyPoolsColor );
                base.SetColumns( board.ColumnSet );
 
-               //TODO ::::::
+               if ( base.ChipsOnTheBar() ) return false;
 
+               if ( this.ChipsInGame() ) return false;
+
+               if ( !CaseHasMotions( player) ) return false;
 
                return true;
           }
+
+//***********************************************************
+          private bool CaseHasMotions(IPlayer player)
+          {
+               Dictionary<int,int> dices = this.Board.DiceValueAndMovesCount
+                                           .Where(x => x.Value > 0)
+                                           .ToDictionary(x => x.Key,x => x.Value);
+
+               List<int> targetColumnNumbers = ( this.Color == PoolColor.White )
+                    ? dices.Select( x => x.Key ).ToList()
+                    : dices.Select( x => ColNumberTwentyFour + 1 - x.Key).ToList();
+
+               List<bool> hasRightMoveList = new List<bool>();
+
+               foreach ( var colNumber in targetColumnNumbers )
+               {
+                    int chipCount = this.Columns[ colNumber ].PoolStack.Count;
+
+                    bool colIsNotLock = base.ColumnIsNotLock( colNumber );
+
+                    if ( chipCount == 0 || colIsNotLock == false )
+                    {
+                         hasRightMoveList.Add(HasHigherPositionWithSameChip(colNumber));  
+                    }
+               }
+
+               if ( hasRightMoveList.Any( x => x == true ) )
+               {
+                    bool result = new ValidateMotionHasMove().HasMoves(this.Board,player);
+
+                    if ( !result ) return false; 
+               }
+
+               return true;
+          }
+
+          private bool HasHigherPositionWithSameChip( int colNumber )
+          {
+               List<IColumn> colSet = new List<IColumn>();
+
+               List<int> rangeOfCol = ( this.Color == PoolColor.White )
+                             ? this.Columns
+                                          .Where( x => x.Key > colNumber &&
+                                                  x.Key <= ColNumberSix )
+                                          .Select( x => x.Key )
+                                          .OrderBy( x => x )
+                                          .ToList()
+                             : this.Columns
+                                          .Where( x => x.Key >= ColNumberNineteen &&
+                                                       x.Key < colNumber )
+                                          .Select( x => x.Key )
+                                          .OrderBy( x => x )
+                                          .ToList();
+
+               foreach ( var item in rangeOfCol )
+               {
+                    colSet.Add( this.Columns[item] );
+               }
+
+               return colSet.Any( x => x.PoolStack.Count > 0 &&
+                               x.PoolStack.Peek().PoolColor == this.Color );
+          }
      }
 }
+
+//List<int> rangeOfCol = default;
+
+               //if ( this.Color == PoolColor.White )
+               //{
+               //     rangeOfCol = this.Columns
+               //                      .Where( x => x.Key > colNumber &&
+               //                              x.Key <= ColNumberSix )
+               //                      .Select( x => x.Key)
+               //                      .OrderBy( x => x )
+               //                      .ToList();  
+
+               //}
+
+               //if ( this.Color == PoolColor.Black )
+               //{
+               //     rangeOfCol = this.Columns.Where( x => x.Key >= ColNumberNineteen &&
+               //                                           x.Key < colNumber )
+               //                              .Select( x => x.Key )
+               //                              .OrderBy( x => x )
+               //                              .ToList();
+               //}

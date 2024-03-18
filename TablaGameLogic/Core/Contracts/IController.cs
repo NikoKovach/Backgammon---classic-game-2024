@@ -17,8 +17,6 @@
 
           IMoveService MoveService { get; }
 
-          IMoveParameters MoveParams { get; set; }
-
           string PlayersChooseAColor(int color);
 
           string ArrangingTheCheckersToPlay();
@@ -28,6 +26,8 @@
           void RollDice();
 
           string CurrentPlayerMakesMove(string moveString);
+
+          bool HasOtherMoves();
 
           void CurrentPlayerFirstSet();
 

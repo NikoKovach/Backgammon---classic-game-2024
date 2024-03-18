@@ -57,11 +57,9 @@
           public int CurrentPlayerMovesNumber => 
                this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
 
-          public IMoveService MoveService { get; }
+          public IMoveService MoveService { get => this.moveService; }
 
-          public IMoveParameters MoveParams { get; set; }
-
-          //********************************************************************
+ //********************************************************************
           public string PlayersChooseAColor(int color)
           {
                DeterminingTheColorOfThePlayers( color);
@@ -117,28 +115,28 @@
           {
                try
                {
-                    this.MoveParams = new MoveParameters();
+                    IMoveParameters moveParams = new MoveParameters();
 
-                    this.MoveService.ParseMove(moveString,this.MoveParams);
+                    this.MoveService.ParseMove(moveString,moveParams);
 
-                    CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
+                    CalculateUseDiceMotionCount( moveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
-                    bool moveIsValid = this.MoveService.MoveIsValid( MoveParams, TablaBoard, CurrentPlayer );
+                    bool moveIsValid = this.MoveService.MoveIsValid( moveParams, TablaBoard, CurrentPlayer );
 
                     if ( !moveIsValid )
                     {
                          return InvalidMove;
                     }
 
-                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
+                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( moveParams,this.TablaBoard, this.CurrentPlayer );
 
-                    this.MoveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
+                    this.MoveService.InvokeMoveMethod(moveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
 
-                    ChangeDiceValueAndMoveCount( this.MoveParams, this.TablaBoard );
+                    ChangeDiceValueAndMoveCount( moveParams, this.TablaBoard );
                
                     GameHasAWinner();
 
-                    this.MoveParams = default;
+                    moveParams = default;
 
                     return MoveIsMade;
                }
@@ -150,6 +148,14 @@
                {
                     return ex.Message;
                }    
+          }
+
+          public bool HasOtherMoves()
+          {
+               if ( !this.MoveService.PlayerHasMoves
+                    ( this.TablaBoard,this.CurrentPlayer ) ) return false;
+
+               return true;
           }
 
           public void CurrentPlayerFirstSet()

@@ -10,7 +10,7 @@
 
     using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
 
-    public class ServicesMotion : IMoveService
+     public class ServicesMotion : IMoveService
      {
           private static IDictionary<string,IValidateMove> defaultValidateList = GetDefaultValidateList(); 
           private static IDictionary<string,IHasMoves> defaultHasAnyMoveList = GetDefaultHasMoveServiceList();
@@ -113,18 +113,14 @@
 
           public bool PlayerHasMoves(IBoard board, IPlayer player)
           {
-               List<bool> hasMoveCombinations = new List<bool>();
+               string moveType =  this.ValidateList
+                              .First().Value.GetMoveType(board,player);
 
-               foreach ( var item in HasAnyMoveList )
-               {
-                    hasMoveCombinations.Add( item.Value.HasMoves(board,player));
-               }
+               bool hasValidMove = this.HasAnyMoveList[ moveType ]
+                                       .HasMoves(board,player);
 
-               if (hasMoveCombinations.All(x => x == false)  )
-               {
-                    return false;
-               }
-
+               if ( !hasValidMove ) return false;
+ 
                return true;
           }
 
@@ -188,6 +184,17 @@
      }
 }
 
+//List<bool> hasMoveCombinations = new List<bool>();
+
+               //foreach ( var item in this.HasAnyMoveList )
+               //{
+               //     hasMoveCombinations.Add( item.Value.HasMoves(board,player));
+               //}
+
+               //if (hasMoveCombinations.All(x => x == false)  )
+               //{
+               //     return false;
+               //}
   //public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
           //{
           //     try

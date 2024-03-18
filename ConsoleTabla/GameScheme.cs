@@ -32,11 +32,9 @@ namespace TablaConsoleGame
                this.controler.TablaBoard.DiceSet[ 1 ].ValueOfOneDice = firstDice;
                this.controler.TablaBoard.DiceSet[ 2 ].ValueOfOneDice = secondDice;
 
-               this.controler.CurrentPlayer = this.Players[ 1 ];
+               this.controler.CurrentPlayer = this.Players[ 0 ];
 
                ServiceCalculate.SetDiceValueAndMovesCount(this.controler.TablaBoard);
-
-               //this.Controler.MoveCombinations = new MoveCombinations();
 
                this.engine = new ClassicConsoleEngine(this.Controler,new Writer(),new Reader());
           }
@@ -66,26 +64,3 @@ namespace TablaConsoleGame
 
      }
 }
-
-//private IMoveService GetMoveService()
-//{
-//     return new MoveServices();
-//}
-
-//private IMotionValidation GetMotionValidation()
-//{
-//     return new MotionValidate();
-//}
-
-          //public GameScheme()
-          //{
-               //this.board = new BoardFactory().Create();
-
-               //this.players = CreatePlayers();
-
-               //this.moveService = GetMoveService();
-
-               //this.moveValidateService = GetMotionValidation();
-
-               //this.controler = new Controller();
-          //}

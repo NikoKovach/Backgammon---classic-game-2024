@@ -61,26 +61,26 @@ namespace TablaConsoleGame
 
                for (int i = 0; i < whiteCheckers.Count; i++)
                {
-                    if (columns[6].PoolStack.Count < 5)
-                    {
-                        columns[6].PoolStack.Push(whiteCheckers[i]);
-                        whiteCheckers[i].State = PoolState.AtHome;
-                        continue;
-                    }
+                    //if (columns[6].PoolStack.Count < 5)
+                    //{
+                    //    columns[6].PoolStack.Push(whiteCheckers[i]);
+                    //    whiteCheckers[i].State = PoolState.AtHome;
+                    //    continue;
+                    //}
 
-                    if (columns[8].PoolStack.Count < 3)
-                    {
-                        columns[8].PoolStack.Push(whiteCheckers[i]);
-                        whiteCheckers[i].State = PoolState.InGame;
-                        continue;
-                    }
+                    //if (columns[8].PoolStack.Count < 3)
+                    //{
+                    //    columns[8].PoolStack.Push(whiteCheckers[i]);
+                    //    whiteCheckers[i].State = PoolState.InGame;
+                    //    continue;
+                    //}
 
-                    if (columns[13].PoolStack.Count < 4)
-                    {
-                        columns[13].PoolStack.Push(whiteCheckers[i]);
-                        whiteCheckers[i].State = PoolState.InGame;
-                        continue;
-                    }
+                    //if (columns[13].PoolStack.Count < 4)
+                    //{
+                    //    columns[13].PoolStack.Push(whiteCheckers[i]);
+                    //    whiteCheckers[i].State = PoolState.InGame;
+                    //    continue;
+                    //}
 
                     if (columns[24].PoolStack.Count < 2)
                     {
@@ -90,7 +90,7 @@ namespace TablaConsoleGame
                     }                   
                } 
                
-               whiteCheckers[ 14 ].State = PoolState.OnTheBar;
+               //whiteCheckers[ 14 ].State = PoolState.OnTheBar;
           }
      }
 }

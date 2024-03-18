@@ -31,12 +31,23 @@
                return true;
           }
 
-          //TODO :
-          //protected bool HasMoves()
-          //{
-          //     //ToDO
-          //     return true;
-          //}
+          public virtual string GetMoveType( IBoard board, IPlayer player )
+          {
+               this.SetBoard( board );
+               this.SetColor(player.MyPoolsColor);
+               this.SetColumns( board.ColumnSet );
+
+               if ( ChipsOnTheBar() ) return "Inside";
+
+               if ( ChipsInGame() ) return "Move";
+
+               if ( ChipsOnTheBar() == false && ChipsInGame() == false && 
+                    ChipsAtHome() == true ) 
+                    return "Outside";
+
+               return default;
+          }
+//**************************************************************
 
           protected bool ColumnIsPartOfTheBoard(int colNumber)
           {
@@ -51,6 +62,22 @@
                return chipsSet.Any( x => x.State == PoolState.OnTheBar );
           }
 
+          protected bool ChipsInGame()
+          {
+               var chipsSet = Color == PoolColor.White ?
+                    Board.WhitePoolsSet : Board.BlackPoolsSet;
+
+               return chipsSet.Any( x => x.State == PoolState.InGame );
+          }
+
+          protected bool ChipsAtHome()
+          {
+               var chipsSet = Color == PoolColor.White ?
+                    Board.WhitePoolsSet : Board.BlackPoolsSet;
+
+               return chipsSet.Any( x => x.State == PoolState.AtHome );
+          }
+
           protected virtual bool BaseColumnIsOpen()
           {
                if ( !ColumnIsNotLock( MotionParams.ColumnNumber ) )
@@ -63,8 +90,9 @@
 
           protected virtual bool ColumnIsNotLock(int colNumber)
           {
-               int chipsCount = (this.Columns[ colNumber ].PoolStack.Count > 1) ? 
-                                this.Columns[ colNumber ].PoolStack.Count       : default;
+               int chipsCount = (this.Columns[ colNumber ].PoolStack.Count > 1) 
+                               ? this.Columns[ colNumber ].PoolStack.Count       
+                               : default;
 
                if ( chipsCount > 1 )
                {
@@ -72,20 +100,11 @@
                                           .PoolStack
                                           .Peek().PoolColor;
 
-                    if ( chipsColor != this.Color )
-                    {
-                         return false;
-                    }  
+                    if ( chipsColor != this.Color ) return false; 
                }
 
                return true;
           }
 
-//****************************************************************************
-
-          //"Please enter your move type in following format :"         + NewRow + 
-          //"1.For 'Inside'  - ( 1 ) (int columnNumber) (IPool chip)   ;" + NewRow + 
-          //"2.For 'Outside' - ( 2 ) (int columnNumber)                 ;" + NewRow + 
-          //"3.For 'Move'    - ( 3 ) (int columnNumber) (int places to move);";         
      }
 }

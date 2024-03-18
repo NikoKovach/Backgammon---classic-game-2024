@@ -66,11 +66,11 @@ namespace TablaConsoleGame
                         continue;
                     }
 
-                    //if (columns[22].PoolStack.Count < 2)
+                    //if ( columns[ 22 ].PoolStack.Count < 2 )
                     //{
-                    //    columns[22].PoolStack.Push(blackCheckers[i]);
-                    //    blackCheckers[i].State = PoolState.AtHome;
-                    //    continue;
+                    //     columns[ 22 ].PoolStack.Push( blackCheckers[ i ] );
+                    //     blackCheckers[ i ].State = PoolState.AtHome;
+                    //     continue;
                     //}
                }
                blackCheckers[ 13 ].State = PoolState.OnTheBar;

@@ -15,40 +15,18 @@
                base.SetColumns( board.ColumnSet );
                base.SetMotionParams( motion );
 
-               //if ( !base.HasMoves())
-               //{
-               //     return false;
-               //}
+               if ( this.MotionParams.UseDiceMotionCount == null ) return false;
 
-               if ( this.MotionParams.UseDiceMotionCount == null )
-               {
-                    return false;
-               }
+               if ( base.ChipsOnTheBar() ) return false;
 
-               if ( ChipsOnTheBar() )
-               {
-                    return false;
-               }
+               if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) ) return false;
 
-               if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) )
-               {
-                    return false;
-               }
+               if ( !base.BaseColumnIsOpen() ) return false;
 
-               if ( !base.BaseColumnIsOpen() )
-               {
-                    return false;
-               }
-
-               if ( !TargetColumnIsOpen() )
-               {
-                    return false;
-               }
+               if ( !TargetColumnIsOpen() ) return false;
 
                return true;
           }
-
-          //**************************************************************************
 
           protected bool TargetColumnIsOpen()
           {
@@ -75,8 +53,9 @@
 
                return true;
           }
+ //**************************************************************************
 
-          private bool TargetColumnIsValid( int targetColumn )
+          protected bool TargetColumnIsValid( int targetColumn )
           {
                if ( !base.ColumnIsPartOfTheBoard(targetColumn) )
                {
@@ -91,7 +70,7 @@
                return true;
           }
 
-          private int CalculateTargetColumn( int movesNumber, int baseColumnNumber )
+          protected int CalculateTargetColumn( int movesNumber, int baseColumnNumber )
           {
                return ( base.Color == PoolColor.Black ) ? 
                     baseColumnNumber  + movesNumber : baseColumnNumber - movesNumber ;
@@ -143,7 +122,6 @@
      }
 }
 
-
           //"Please enter your move type in following format :"         + NewRow + 
           //"1.For 'Inside'  - ( 1 ) (column number) (pool number)   ;" + NewRow + 
           //"2.For 'Outside' - ( 2 ) (column number)                 ;" + NewRow + 
@@ -159,18 +137,3 @@
           стига да има отворена позиция, където да стъпи с 5ца или с 3ка.
 
            */
-               //int chipsCount   = this.Columns[ targetColumn ].PoolStack.Count;
-
-               //if ( chipsCount == 0 )
-               //{
-               //     return true;
-               //}
-
-               //PoolColor chipsColor = this.Columns[ targetColumn ]
-               //                           .PoolStack
-               //                           .Peek().PoolColor;
-
-               //if ( chipsCount > 1 && chipsColor != this.Color )
-               //{
-               //     return false;
-               //}
