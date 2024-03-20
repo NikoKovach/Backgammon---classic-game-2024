@@ -18,4 +18,8 @@
     <ProjectReference Include="..\TablaModels\TablaModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestsTablaGameLogic\" />
+  </ItemGroup>
+
 </Project>
