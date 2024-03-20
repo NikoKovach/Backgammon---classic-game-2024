@@ -4,6 +4,7 @@
      using System.Collections.Generic;
 
      using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaModels.ModelsUtilities.Messages;
 
      public class Board : IBoard
      {
@@ -11,6 +12,7 @@
           /// Keys in range [1 - 24]
           /// </summary>
           private readonly IDictionary<int, IColumn> columnSet;
+
           /// <summary>
           /// Keys in range [1 - 2]
           /// </summary>
@@ -31,29 +33,6 @@
                this.blackPoolsSet = blackPools;
           }
 
-          private void CheckInnerParameters( IDictionary<int, IColumn> columns, IDictionary<int, IDice> dice, IList<IPool> whitePools, IList<IPool> blackPools )
-          {
-               if ( columns == null )
-               {
-                    throw new ArgumentNullException( $"The argument {nameof( columns )} can not be      null !" );
-               };
-
-               if ( dice == null )
-               {
-                    throw new ArgumentNullException( $"The argument {nameof( dice )} can not be     null !" );
-               };
-
-               if ( whitePools == null )
-               {
-                    throw new ArgumentNullException( $"The argument {nameof( whitePools )} can not      be null !" );
-               };
-
-               if ( blackPools == null )
-               {
-                    throw new ArgumentNullException( $"The argument {nameof( blackPools )} can not      be null !" );
-               };
-          }
-
           public IDictionary<int, IColumn> ColumnSet => this.columnSet;
 
           public IDictionary<int, IDice> DiceSet => this.diceSet;
@@ -63,6 +42,29 @@
           public IList<IPool> WhitePoolsSet => this.whitePoolsSet;
 
           public IList<IPool> BlackPoolsSet => this.blackPoolsSet;
+
+           private void CheckInnerParameters( IDictionary<int, IColumn> columns, IDictionary<int, IDice> dice, IList<IPool> whitePools, IList<IPool> blackPools )
+          {
+               if ( columns == null )
+               {
+                    throw new ArgumentNullException(string.Format(ExceptionMessages.BoardArgumentNullException,nameof(columns)) );
+               };
+               
+               if ( dice == null )
+               {
+                    throw new ArgumentNullException( string.Format(ExceptionMessages.BoardArgumentNullException,nameof(dice)) );
+               };
+
+               if ( whitePools == null )
+               {
+                    throw new ArgumentNullException( string.Format(ExceptionMessages.BoardArgumentNullException,nameof(whitePools)));
+               };
+
+               if ( blackPools == null )
+               {
+                    throw new ArgumentNullException( string.Format(ExceptionMessages.BoardArgumentNullException,nameof(blackPools)) );
+               };
+          }
 
     }
 }

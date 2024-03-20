@@ -1,16 +1,16 @@
 ﻿namespace TablaGameLogic.Factory
 {
-    using System.Collections.Generic;
+     using System.Collections.Generic;
 
-    using TablaGameLogic.Factory.Contracts;
-    using TablaModels.ComponentModels;
-    using TablaModels.ComponentModels.Components;
-    using TablaModels.ComponentModels.Components.Interfaces;
-    using TablaModels.ComponentModels.Enums;
-    using static TablaModels.ComponentModels.TableGlobalConstants;
+     using TablaGameLogic.Factory.Contracts;
+     using TablaGameLogic.Utilities.Messages;
+     using TablaModels.ComponentModels;
+     using TablaModels.ComponentModels.Components;
+     using TablaModels.ComponentModels.Components.Interfaces;
+     using TablaModels.ComponentModels.Enums;
 
-    public class BoardFactory : IBoardFactory
-    {
+     public class BoardFactory : IBoardFactory
+     {
           public IBoard Create()
           {
                Dictionary<int,IColumn> columns = CreateColumns();
@@ -28,46 +28,49 @@
                return board;
           }
 
-        private Dictionary<int, IColumn> CreateColumns()
-        {
-            Dictionary<int, IColumn> dictionaryOfColumns = new Dictionary<int, IColumn>();
+          private Dictionary<int, IColumn> CreateColumns()
+          {
+               Dictionary<int, IColumn> dictionaryOfColumns = 
+                                        new Dictionary<int, IColumn> ();
 
-            ColumnColor currentColumnColor = ColumnColor.Dark;
+               string currentColumnColor = GameConstants.ColumnColorDark;
 
-            for (int i = 1; i <= ColumnNumber; i++)
-            {
-                currentColumnColor = currentColumnColor == ColumnColor.Dark ? ColumnColor.Light : ColumnColor.Dark;           
+               for (int i = 1; i <= GameConstants.ColNumberTwentyFour; i++)
+               {
+                   currentColumnColor = currentColumnColor == GameConstants.ColumnColorDark      
+                            ? GameConstants.ColumnColorLight 
+                            : GameConstants.ColumnColorDark;           
 
-                dictionaryOfColumns[i] = new Column(i, currentColumnColor);
-            }
+                   dictionaryOfColumns[i] = new Column(i, currentColumnColor);
+               }
 
-            return dictionaryOfColumns;
-        }
+               return dictionaryOfColumns;
+          }
 
-        private Dictionary<int, IDice> CreateDice()
-        {
-            Dictionary<int, IDice> dictionaryOfDice = new Dictionary<int, IDice>();
+          private Dictionary<int, IDice> CreateDice()
+          {
+               Dictionary<int, IDice> dictionaryOfDice = new Dictionary<int, IDice>();
 
-            for (int i = 1; i <= 2; i++)
-            {
-                dictionaryOfDice[i] = new Dice($"Dice{i}",i + 1, new BoardSettings().DiceSide);
-            }
+               for (int i = 1; i <= GameConstants.NumberOfDice; i++)
+               {
+                   dictionaryOfDice[i] = new Dice($"Dice{i}",i + 1, new BoardSettings      ().DiceSide);
+               }
 
-            return dictionaryOfDice;
-        }
+               return dictionaryOfDice;
+          }
 
-        private List<IPool> CreatePools(PoolColor colorOfPools)
-        {
-            List<IPool> pools = new List<IPool>();
+          private List<IPool> CreatePools(PoolColor colorOfPools)
+          {
+               List<IPool> pools = new List<IPool>();
 
-            for (int i = 1; i <= MaxPoolsNumber; i++)
-            {
-                IPool pool = new Pool(colorOfPools,PoolState.Starting,i);
-                
-                pools.Add(pool);
-            }
+               for (int i = 1; i <= GameConstants.MaxPoolsNumber; i++)
+               {
+                   IPool pool = new Pool(colorOfPools,PoolState.Starting,i);
+                   
+                   pools.Add(pool);
+               }
 
-            return pools;
-        }
-    }
+               return pools;
+          }
+     }
 }

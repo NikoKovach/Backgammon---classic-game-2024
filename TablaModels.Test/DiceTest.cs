@@ -57,7 +57,7 @@
         [TestCase(0)]
         [TestCase(7)]
         [TestCase(-6)]
-        public void ConstructorCanNotCreateDieThrowExceptionWhenWeSetInvavidIntValue(int intNumber)
+        public void ConstructorCanNotCreateDiceThrowExceptionWhenWeSetInvavidIntValue(int intNumber)
         {
             string dieName = "First";
 

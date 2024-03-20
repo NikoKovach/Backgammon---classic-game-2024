@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TablaModels.ComponentModels.Enums
+﻿namespace TablaModels.ComponentModels.Enums
 {
     public enum ColumnColor
     {
-        Dark = 0,
-        Light = 1
+        Dark   = 0,
+        Light  = 1
     }
 }

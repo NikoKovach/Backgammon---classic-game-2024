@@ -10,7 +10,9 @@
 
           public const int MaxPoolsNumber = 15;
 
-          public const int ColumnNumber = 24;
+          public const int MinColumnNumber = 1;
+
+          public const int MaxColumnNumber = 24;
 
           public const int MinLenghtPlayerName = 3;
 

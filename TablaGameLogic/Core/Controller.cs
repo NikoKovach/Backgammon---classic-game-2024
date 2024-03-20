@@ -42,6 +42,8 @@
                         string.Format(InvalidMoveConfirmationParameter,
                         nameof(moveService))
                     );
+
+               this.MoveParams = new MoveParameters();
           }
 
           public IBoard TablaBoard => this.tablaBoard;
@@ -53,6 +55,8 @@
           } 
     
           public IPlayer CurrentPlayer { get; set; }
+
+          public IMoveParameters MoveParams { get; set; }
 
           public int CurrentPlayerMovesNumber => 
                this.TablaBoard.DiceValueAndMovesCount.Values.Sum();
@@ -115,28 +119,26 @@
           {
                try
                {
-                    IMoveParameters moveParams = new MoveParameters();
+                    SetDefaultMoveParams();
 
-                    this.MoveService.ParseMove(moveString,moveParams);
+                    this.MoveService.ParseMove(moveString,this.MoveParams);
 
-                    CalculateUseDiceMotionCount( moveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
+                    CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
-                    bool moveIsValid = this.MoveService.MoveIsValid( moveParams, TablaBoard, CurrentPlayer );
+                    bool moveIsValid = this.MoveService.MoveIsValid( this.MoveParams, TablaBoard, CurrentPlayer );
 
                     if ( !moveIsValid )
                     {
                          return InvalidMove;
                     }
 
-                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( moveParams,this.TablaBoard, this.CurrentPlayer );
+                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
 
-                    this.MoveService.InvokeMoveMethod(moveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
+                    this.MoveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
 
-                    ChangeDiceValueAndMoveCount( moveParams, this.TablaBoard );
+                    ChangeDiceValueAndMoveCount( this.MoveParams, this.TablaBoard );
                
                     GameHasAWinner();
-
-                    moveParams = default;
 
                     return MoveIsMade;
                }
@@ -240,16 +242,16 @@
           {
                return new ArrangePools();
           }
+
+          private void SetDefaultMoveParams()
+          {
+               this.MoveParams.MoveMethodName          = string.Empty;
+               this.MoveParams.ColumnNumber            = default;
+               this.MoveParams.chipNumberOrPlaceToMove = default;
+
+               this.MoveParams.UseDiceMotionCount.Clear(); 
+          }
      }
 }
 
-          //SetValueOfDiceAndCountOfMoves();
-
-          //##################################################
-          //CreateAdditionalServices();
-
-         //public IValidateService SetUpMoveValidation()
-          //{
-          //     return new ServiceValidate();
-          //}
 

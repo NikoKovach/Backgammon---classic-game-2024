@@ -2,6 +2,8 @@
 {
      using System;
 
+     using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
+
      public  class BoardSettings
      {
           private const int OneSideBoardWidth = 270;  
@@ -14,8 +16,6 @@
           public BoardSettings(int sBoardWidth)
           {
               this.SideBoardWidth = sBoardWidth;
-
-              //this.SideBoardHeight = sideBoardHeight;
           }
 
           public int SideBoardWidth 
@@ -26,14 +26,13 @@
                {
                     if (value < TableGlobalConstants.MinSideBoardWidth || value >          TableGlobalConstants.MaxSideBoardWidth)
                     {
-                         throw new ArgumentOutOfRangeException
-                              ("The board width must be in range 12 - 540 units!");
+                         throw new ArgumentOutOfRangeException(BoardWidthArgumentException);
                     }
 
                     if (value % 6 > 0)
                     {
                          throw new ArgumentException
-                              ("The width must be divisible by 6 without a remainder !");
+                              (BoardWidthIsNotMultipleOfSixException);
                     }
 
                     this.sideBoardWidth = value;

@@ -15,5 +15,13 @@
           public const int ColNumberNineteen = 19;
 
           public const int ColNumberTwentyFour = 24;
+
+          public const int MaxPoolsNumber = 15;
+
+          public const string ColumnColorDark = "Dark";
+
+          public const string ColumnColorLight = "Light";
+          //ColumnNumber
+
      }
 }
