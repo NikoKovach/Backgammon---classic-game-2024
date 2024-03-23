@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TablaModels.ComponentModels.Components.Interfaces;
+using TablaModels.Components.Interfaces;
 
 namespace TablaGameLogic.Services.Contracts
 {

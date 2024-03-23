@@ -4,22 +4,22 @@
 
      using TablaGameLogic.Factory.Contracts;
      using TablaGameLogic.Utilities.Messages;
-     using TablaModels.ComponentModels;
-     using TablaModels.ComponentModels.Components;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
+     using TablaModels.Components;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Enums;
+     using TablaModels.ModelsUtilities;
 
      public class BoardFactory : IBoardFactory
      {
           public IBoard Create()
           {
-               Dictionary<int,IColumn> columns = CreateColumns();
+               IDictionary<int,IColumn> columns = CreateColumns();
                
-               Dictionary<int, IDice> diceSet = CreateDice();
+               IDictionary<int, IDice> diceSet = CreateDice();
                
-               List<IPool> whitePools = CreatePools(PoolColor.White);
+               IList<IPool> whitePools = CreatePools(PoolColor.White);
                
-               List<IPool> blackPools = CreatePools(PoolColor.Black);
+               IList<IPool> blackPools = CreatePools(PoolColor.Black);
                
                IBoard board = new Board( columns, diceSet, whitePools, blackPools );
                
@@ -28,7 +28,16 @@
                return board;
           }
 
-          private Dictionary<int, IColumn> CreateColumns()
+          public IBoard Create( IDictionary<int, IColumn> columns, IDictionary<int, IDice> diceSet, IList<IPool> whitePools, IList<IPool> blackPools )
+          {              
+               IBoard board = new Board( columns, diceSet, whitePools, blackPools );
+               
+               board.DiceValueAndMovesCount = new Dictionary<int, int>();
+
+               return board;
+          }
+
+          private IDictionary<int, IColumn> CreateColumns()
           {
                Dictionary<int, IColumn> dictionaryOfColumns = 
                                         new Dictionary<int, IColumn> ();
@@ -47,7 +56,7 @@
                return dictionaryOfColumns;
           }
 
-          private Dictionary<int, IDice> CreateDice()
+          private IDictionary<int, IDice> CreateDice()
           {
                Dictionary<int, IDice> dictionaryOfDice = new Dictionary<int, IDice>();
 
@@ -59,7 +68,7 @@
                return dictionaryOfDice;
           }
 
-          private List<IPool> CreatePools(PoolColor colorOfPools)
+          private IList<IPool> CreatePools(PoolColor colorOfPools)
           {
                List<IPool> pools = new List<IPool>();
 

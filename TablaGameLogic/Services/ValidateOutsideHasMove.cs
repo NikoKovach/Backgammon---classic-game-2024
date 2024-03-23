@@ -1,14 +1,13 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System.Collections.Generic;
-     using System.Linq;
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
-     
-     using static TablaGameLogic.Utilities.Messages.GameConstants;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.Components.Interfaces;
+    using TablaModels.Enums;
+    using static TablaGameLogic.Utilities.Messages.GameConstants;
 
-     public class ValidateOutsideHasMove : ValidateOutside, IHasMoves
+    public class ValidateOutsideHasMove : ValidateOutside, IHasMoves
      {
           public bool HasMoves( IBoard board, IPlayer player )
           {

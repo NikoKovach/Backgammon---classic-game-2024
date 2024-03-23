@@ -1,11 +1,11 @@
 ﻿namespace TablaGameLogic.Factory.Contracts
 {
     using System.Collections.Generic;
-    using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaModels.Components.Interfaces;
 
-     public interface IPlayerFactory
+    public interface IPlayerFactory
      {
-          IPlayer CreatePlayer(string playerName,IMoveChecker moveChecker);
+          IPlayer CreatePlayer(string playerName,IMoveChips moveChecker);
 
           IList<IPlayer> CreatePlayers( string firstPlayerName, string    secondPlayerName,IBoard board );
      }

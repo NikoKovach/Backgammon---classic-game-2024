@@ -1,13 +1,13 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System.Collections.Generic;
-     using System.Linq;
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
-     using static TablaGameLogic.Utilities.Messages.GameConstants;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.Components.Interfaces;
+    using TablaModels.Enums;
+    using static TablaGameLogic.Utilities.Messages.GameConstants;
 
-     public static class ServiceCalculate
+    public static class ServiceCalculate
      {
           public static void SetDiceValueAndMovesCount(IBoard board)
           {

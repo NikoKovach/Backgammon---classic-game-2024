@@ -1,12 +1,12 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System.Collections.Generic;
-     using System.Linq;
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.Components.Interfaces;
+    using TablaModels.Enums;
 
-     public class ValidateMotion:ValidateBase,IValidateMove
+    public class ValidateMotion:ValidateBase,IValidateMove
      {
           public override bool MoveIsCorrect(IMoveParameters motion,IBoard board, IPlayer       player)
           {

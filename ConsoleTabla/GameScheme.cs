@@ -5,12 +5,12 @@ using TablaGameLogic.Core;
 using TablaGameLogic.Core.Contracts;
 using TablaGameLogic.Factory;
 using TablaGameLogic.Services;
-using TablaModels.ComponentModels.Components.Interfaces;
-using TablaModels.ComponentModels.Enums;
+using TablaModels.Components.Interfaces;
+using TablaModels.Enums;
 
 namespace TablaConsoleGame
 {
-    public class GameScheme
+     public class GameScheme
      {
           private IList<IPlayer>  players;
           private IController controler;

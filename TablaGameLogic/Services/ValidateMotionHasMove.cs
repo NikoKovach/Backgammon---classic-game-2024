@@ -1,11 +1,11 @@
 ﻿namespace TablaGameLogic.Services
 {
-     using System.Collections.Generic;
-     using System.Linq;
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.Components.Interfaces;
 
-     public class ValidateMotionHasMove : ValidateMotion,IHasMoves
+    public class ValidateMotionHasMove : ValidateMotion,IHasMoves
      {
           public  bool HasMoves( IBoard board,
                IPlayer player )

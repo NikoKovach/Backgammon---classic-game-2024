@@ -1,8 +1,8 @@
 ﻿namespace TablaGameLogic.Services.Contracts
 {
-     using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaModels.Components.Interfaces;
 
-     public interface IHasMoves
+    public interface IHasMoves
      {
           bool HasMoves( IBoard board, IPlayer player );
      }

@@ -1,13 +1,25 @@
 ﻿namespace TablaGameLogic.Factory
 {
+     using System;
      using System.Collections.Generic;
      using TablaGameLogic.Factory.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Components.Players;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Components.Players;
+
      public class PlayerFactory : IPlayerFactory
      {
-          public IPlayer CreatePlayer(string playerName,IMoveChecker moveChecker)
+          public IPlayer CreatePlayer(string playerName,IMoveChips moveChecker)
           {
+               if ( string.IsNullOrEmpty(playerName) )
+               {
+                    throw new ArgumentNullException(nameof(playerName));
+               }
+
+               if ( moveChecker == null )
+               {
+                    throw new ArgumentNullException(nameof(moveChecker));
+               }
+
                IPlayer player  = new PlayerClassicGame(playerName,
                     moveChecker);         
 
@@ -16,7 +28,22 @@
 
           public IList<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName,IBoard board )
           {
-               IMoveChecker moves = new MoveCheckersClassicGame( board.ColumnSet );
+               if ( string.IsNullOrEmpty(firstPlayerName) )
+               {
+                    throw new ArgumentNullException(nameof(firstPlayerName));
+               }
+
+               if ( string.IsNullOrEmpty(secondPlayerName) )
+               {
+                    throw new ArgumentNullException(nameof(secondPlayerName));
+               }
+
+               if ( board == null )
+               {
+                    throw new ArgumentNullException(nameof(board));
+               }
+
+               IMoveChips moves = new MoveCheckersClassicGame( );
 
                List<IPlayer> defaultPlayers = new List<IPlayer>
                {
@@ -28,5 +55,3 @@
           }
      }
 }
-
-//player.Move = new MoveCheckersClassicGame(columnSet);

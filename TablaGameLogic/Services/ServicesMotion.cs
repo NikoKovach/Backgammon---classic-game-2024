@@ -5,12 +5,11 @@
     using System.Linq;
     using System.Reflection;
     using TablaGameLogic.Services.Contracts;
-    using TablaModels.ComponentModels.Components.Interfaces;
-    using TablaModels.ComponentModels.Enums;
-
+    using TablaModels.Components.Interfaces;
+    using TablaModels.Enums;
     using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
 
-     public class ServicesMotion : IMoveService
+    public class ServicesMotion : IMoveService
      {
           private static IDictionary<string,IValidateMove> defaultValidateList = GetDefaultValidateList(); 
           private static IDictionary<string,IHasMoves> defaultHasAnyMoveList = GetDefaultHasMoveServiceList();
@@ -65,15 +64,16 @@
                {
                     IPool pool = GetPool( board, player, motion.chipNumberOrPlaceToMove);
 
-                    return new object[] {motion.ColumnNumber,pool};
+                    return new object[] {motion.ColumnNumber,pool,board.ColumnSet};
                }
 
                if ( motion.MoveMethodName.Equals( "Outside" ) )
                {
-                    return new object[] {motion.ColumnNumber};
+                    return new object[] {motion.ColumnNumber,board.ColumnSet};
                }
 
-               return new object[] {motion.ColumnNumber,motion.UseDiceMotionCount.Sum()};
+               return new object[] {motion.ColumnNumber
+                    ,motion.UseDiceMotionCount.Sum(),board.ColumnSet};
           }
 
           public void InvokeMoveMethod(string methodName, object[] moveParams,IPlayer CurrentPlayer)

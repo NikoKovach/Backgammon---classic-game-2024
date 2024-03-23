@@ -8,14 +8,14 @@
      using TablaGameLogic.Factory;
      using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
-     using TablaModels.ComponentModels.Enums;
-     using TablaModels.ComponentModels.Components.Players;
 
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
      using static TablaGameLogic.Services.ServiceCalculate;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Enums;
+     using TablaModels.Components.Players;
 
      public class Controller : IController
      {        
@@ -93,14 +93,6 @@
                }
 
                SetDiceValueAndMovesCount(this.TablaBoard);
-
-               //if (this.MotionValidate.CurrentPlayerHasNoMoves())
-               //{
-                    //this.ChangeCurrentPlayer();
-                    //return false;
-               //}
-
-               //return true;
           }
 
           public string InitialInfoCurrentPlayerMoves() 
@@ -240,7 +232,7 @@
 
           private IArrangeChips DefaultArrangePools()
           {
-               return new ArrangePools();
+               return new ArrangeChipsClassicGame();
           }
 
           private void SetDefaultMoveParams()

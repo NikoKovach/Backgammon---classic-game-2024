@@ -1,11 +1,11 @@
 ﻿namespace TablaGameLogic.Core.Contracts
 {
-     using System.Collections.Generic;
+    using System.Collections.Generic;
 
-     using TablaGameLogic.Services.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaGameLogic.Services.Contracts;
+    using TablaModels.Components.Interfaces;
 
-     public interface IController
+    public interface IController
      {
           IBoard TablaBoard { get; }
 

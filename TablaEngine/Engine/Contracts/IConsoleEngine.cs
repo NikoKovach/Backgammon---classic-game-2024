@@ -1,9 +1,9 @@
 ﻿namespace TablaEngine.Engine.Contracts
 {
-     using TablaEngine.IO.Contracts;
-     using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaEngine.IO.Contracts;
+    using TablaModels.Components.Interfaces;
 
-     public interface IConsoleEngine : IEngine
+    public interface IConsoleEngine : IEngine
      {
           IWriter Writer { get; }
 

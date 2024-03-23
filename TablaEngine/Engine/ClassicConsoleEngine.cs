@@ -4,12 +4,12 @@
 
     using TablaEngine.Engine.Contracts;
     using TablaGameLogic.Core;
-    using TablaModels.ComponentModels.Enums;
     using TablaEngine.IO;
     using TablaEngine.IO.Contracts;
 
     using static TablaGameLogic.Utilities.Messages.OutputMessages;
     using TablaGameLogic.Core.Contracts;
+    using TablaModels.Enums;
 
     public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
      {

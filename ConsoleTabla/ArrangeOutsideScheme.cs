@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TablaModels.ComponentModels.Components.Interfaces;
-using TablaModels.ComponentModels.Enums;
+using TablaModels.Components.Interfaces;
+using TablaModels.Enums;
 
 namespace TablaConsoleGame
 {

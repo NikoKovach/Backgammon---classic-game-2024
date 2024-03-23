@@ -1,7 +1,7 @@
 ﻿namespace TablaGameLogic.Factory.Contracts
 {
     using TablaGameLogic.Services.Contracts;
-    using TablaModels.ComponentModels.Components.Interfaces;
+    using TablaModels.Components.Interfaces;
 
     public interface IServicesFactory
     {
