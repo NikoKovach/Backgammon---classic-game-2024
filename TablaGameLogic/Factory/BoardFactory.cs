@@ -74,7 +74,7 @@
 
                for (int i = 1; i <= GameConstants.MaxPoolsNumber; i++)
                {
-                   IPool pool = new Pool(colorOfPools,PoolState.Starting,i);
+                   IPool pool = new Pool(i,colorOfPools,PoolState.Starting);
                    
                    pools.Add(pool);
                }

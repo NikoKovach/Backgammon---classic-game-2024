@@ -43,7 +43,7 @@
                     throw new ArgumentNullException(nameof(board));
                }
 
-               IMoveChips moves = new MoveCheckersClassicGame( );
+               IMoveChips moves = new MoveChipsClassicGame( );
 
                List<IPlayer> defaultPlayers = new List<IPlayer>
                {

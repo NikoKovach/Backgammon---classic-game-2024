@@ -13,11 +13,9 @@
           [TestCase(24, "light")]
           public void CreateAColumnWithDefaultConstructor(int colNumber, string color)
           {
-
               IColumn col = new Column(colNumber, color);
 
               Assert.IsInstanceOf<IColumn>(col);
-
           }
 
           [Test]

@@ -10,11 +10,11 @@
     {
         private int identityNumber;
 
-        public Pool() : this(PoolColor.White, PoolState.Starting, 1)
-        {
-        }
+          public Pool() : this( 1,PoolColor.White, PoolState.Starting)
+          {
+          }
 
-        public Pool(PoolColor color, PoolState poolState, int idNumber)
+          public Pool( int idNumber,PoolColor color, PoolState poolState)
             : this(color, poolState, idNumber, new BoardSettings().OuterPoolDiameter, new BoardSettings().InnerPoolDiameter)
         {
         }

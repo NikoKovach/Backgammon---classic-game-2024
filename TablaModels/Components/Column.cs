@@ -1,21 +1,23 @@
 ﻿namespace TablaModels.Components
 {
-    using System;
-    using System.Collections.Generic;
-    using TablaModels.Components.Interfaces;
-    using TablaModels.Enums;
-    using TablaModels.ModelsUtilities;
-    using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
+     using System;
+     using System.Collections.Generic;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Enums;
+     using TablaModels.ModelsUtilities;
+     using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
 
-    public class Column : IColumn
-    {
-        private int identityNumber;
-        private Stack<IPool> poolStack;
+     public class Column : IColumn
+     {
+          private int identityNumber;
+          private Stack<IPool> poolStack;
 
-        public Column(int idNumber, string colColor)
-            : this(idNumber, colColor, new BoardSettings().ColumnBase, new BoardSettings().ColumnHeight)
-        {
-        }
+          public Column(int idNumber) :this(idNumber,TableGlobalConstants.ColumnColorLight)
+          { }
+
+          public Column(int idNumber, string colColor)
+              : this(idNumber, colColor, new BoardSettings().ColumnBase, new BoardSettings  ().ColumnHeight)
+          { }
 
         public Column(int idNumber, string colColor, int colBase, int colHeight)
         {

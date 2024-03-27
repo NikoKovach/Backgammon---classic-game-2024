@@ -28,7 +28,7 @@ namespace TablaModels.Test.TestsModels
           [TestCase(PoolColor.White)]
           public void CreateAPoolWithParamPoolColor(PoolColor color)
           {
-              IPool pool = new Pool(color, PoolState.Starting, 1);
+              IPool pool = new Pool(1,color, PoolState.Starting);
 
               Assert.IsNotNull(pool);
               Assert.IsInstanceOf<IPool>(pool);
@@ -41,7 +41,7 @@ namespace TablaModels.Test.TestsModels
           [TestCase(PoolState.OutOfGame)]
           public void CreateAPoolWithParamPoolState(PoolState state)
           {
-              IPool pool = new Pool(PoolColor.White, state, 1);
+              IPool pool = new Pool(1,PoolColor.White, state);
 
               Assert.IsNotNull(pool);
               Assert.IsInstanceOf<IPool>(pool);
@@ -52,7 +52,7 @@ namespace TablaModels.Test.TestsModels
           [TestCase(15)]
           public void CreateAPoolWithParamIdNumber(int id)
           {
-              IPool pool = new Pool(PoolColor.Black, PoolState.Starting, id);
+              IPool pool = new Pool(id,PoolColor.Black, PoolState.Starting);
 
               Assert.IsNotNull(pool);
               Assert.IsInstanceOf<IPool>(pool);
@@ -66,7 +66,7 @@ namespace TablaModels.Test.TestsModels
           {
               //Pool pool = new Pool(PoolColor.Black, PoolState.Starting, 1);
 
-              Assert.Throws<ArgumentException>(() => new Pool(PoolColor.Black,    PoolState.Starting, id));
+              Assert.Throws<ArgumentException>(() => new Pool(id,PoolColor.Black,    PoolState.Starting));
           }
      }
 }
