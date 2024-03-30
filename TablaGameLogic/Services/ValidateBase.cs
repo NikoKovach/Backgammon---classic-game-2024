@@ -56,24 +56,21 @@
 
           protected bool ChipsOnTheBar()
           {
-               var chipsSet = (Color == PoolColor.White) ?
-                    Board.WhitePoolsSet : Board.BlackPoolsSet;
+               var chipsSet = GetChipSet();
 
                return chipsSet.Any( x => x.State == PoolState.OnTheBar );
           }
 
           protected bool ChipsInGame()
           {
-               var chipsSet = Color == PoolColor.White ?
-                    Board.WhitePoolsSet : Board.BlackPoolsSet;
+               var chipsSet = GetChipSet();
 
                return chipsSet.Any( x => x.State == PoolState.InGame );
           }
 
           protected bool ChipsAtHome()
           {
-               var chipsSet = Color == PoolColor.White ?
-                    Board.WhitePoolsSet : Board.BlackPoolsSet;
+               var chipsSet = GetChipSet();
 
                return chipsSet.Any( x => x.State == PoolState.AtHome );
           }
@@ -106,5 +103,18 @@
                return true;
           }
 
+          protected IList<IPool> GetChipSet()
+          {
+               return (Color == PoolColor.White )
+                      ? Board.WhitePoolsSet 
+                      : Board.BlackPoolsSet;
+          }
+
+          protected IDictionary<int,int> GetDiceSet()
+          {
+               return this.Board.DiceValueAndMovesCount
+                                .Where(x => x.Value > 0)
+                                .ToDictionary(x => x.Key,x => x.Value);
+          }
      }
 }

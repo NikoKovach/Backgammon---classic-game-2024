@@ -27,13 +27,11 @@
 //***********************************************************
           private bool CaseHasMotions(IPlayer player)
           {
-               Dictionary<int,int> dices = this.Board.DiceValueAndMovesCount
-                                           .Where(x => x.Value > 0)
-                                           .ToDictionary(x => x.Key,x => x.Value);
-
+               IDictionary<int, int> diceSet = base.GetDiceSet();
+               
                List<int> targetColumnNumbers = ( this.Color == PoolColor.White )
-                    ? dices.Select( x => x.Key ).ToList()
-                    : dices.Select( x => ColNumberTwentyFour + 1 - x.Key).ToList();
+                    ? diceSet.Select( x => x.Key ).ToList()
+                    : diceSet.Select( x => ColNumberTwentyFour + 1 - x.Key).ToList();
 
                List<bool> hasRightMoveList = new List<bool>();
 
@@ -65,17 +63,17 @@
 
                List<int> rangeOfCol = ( this.Color == PoolColor.White )
                              ? this.Columns
-                                          .Where( x => x.Key > colNumber &&
-                                                  x.Key <= ColNumberSix )
-                                          .Select( x => x.Key )
-                                          .OrderBy( x => x )
-                                          .ToList()
+                                   .Where( x => x.Key > colNumber &&
+                                           x.Key <= ColNumberSix )
+                                   .Select( x => x.Key )
+                                   .OrderBy( x => x )
+                                   .ToList()
                              : this.Columns
-                                          .Where( x => x.Key >= ColNumberNineteen &&
-                                                       x.Key < colNumber )
-                                          .Select( x => x.Key )
-                                          .OrderBy( x => x )
-                                          .ToList();
+                                   .Where( x => x.Key >= ColNumberNineteen &&
+                                                x.Key < colNumber )
+                                   .Select( x => x.Key )
+                                   .OrderBy( x => x )
+                                   .ToList();
 
                foreach ( var item in rangeOfCol )
                {
@@ -88,24 +86,29 @@
      }
 }
 
+//IDictionary<int, int> diceSet =
+//this.Board.DiceValueAndMovesCount
+// .Where(x => x.Value > 0)
+// .ToDictionary(x => x.Key,x => x.Value);
+
 //List<int> rangeOfCol = default;
 
-               //if ( this.Color == PoolColor.White )
-               //{
-               //     rangeOfCol = this.Columns
-               //                      .Where( x => x.Key > colNumber &&
-               //                              x.Key <= ColNumberSix )
-               //                      .Select( x => x.Key)
-               //                      .OrderBy( x => x )
-               //                      .ToList();  
+//if ( this.Color == PoolColor.White )
+//{
+//     rangeOfCol = this.Columns
+//                      .Where( x => x.Key > colNumber &&
+//                              x.Key <= ColNumberSix )
+//                      .Select( x => x.Key)
+//                      .OrderBy( x => x )
+//                      .ToList();  
 
-               //}
+//}
 
-               //if ( this.Color == PoolColor.Black )
-               //{
-               //     rangeOfCol = this.Columns.Where( x => x.Key >= ColNumberNineteen &&
-               //                                           x.Key < colNumber )
-               //                              .Select( x => x.Key )
-               //                              .OrderBy( x => x )
-               //                              .ToList();
-               //}
+//if ( this.Color == PoolColor.Black )
+//{
+//     rangeOfCol = this.Columns.Where( x => x.Key >= ColNumberNineteen &&
+//                                           x.Key < colNumber )
+//                              .Select( x => x.Key )
+//                              .OrderBy( x => x )
+//                              .ToList();
+//}

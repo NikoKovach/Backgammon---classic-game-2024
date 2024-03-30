@@ -10,15 +10,9 @@
      {
           public IPlayer CreatePlayer(string playerName,IMoveChips moveChecker)
           {
-               if ( string.IsNullOrEmpty(playerName) )
-               {
-                    throw new ArgumentNullException(nameof(playerName));
-               }
+               ArgumentNullException.ThrowIfNullOrEmpty( playerName );
 
-               if ( moveChecker == null )
-               {
-                    throw new ArgumentNullException(nameof(moveChecker));
-               }
+               ArgumentNullException.ThrowIfNull( moveChecker );
 
                IPlayer player  = new PlayerClassicGame(playerName,
                     moveChecker);         
@@ -26,29 +20,16 @@
                return player;
           }
 
-          public IList<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName,IBoard board )
+          public IList<IPlayer> CreatePlayers( string firstPlayerName, string secondPlayerName )
           {
-               if ( string.IsNullOrEmpty(firstPlayerName) )
-               {
-                    throw new ArgumentNullException(nameof(firstPlayerName));
-               }
+               ArgumentException.ThrowIfNullOrEmpty( firstPlayerName );
 
-               if ( string.IsNullOrEmpty(secondPlayerName) )
-               {
-                    throw new ArgumentNullException(nameof(secondPlayerName));
-               }
-
-               if ( board == null )
-               {
-                    throw new ArgumentNullException(nameof(board));
-               }
-
-               IMoveChips moves = new MoveChipsClassicGame( );
+               ArgumentException.ThrowIfNullOrEmpty( secondPlayerName );
 
                List<IPlayer> defaultPlayers = new List<IPlayer>
                {
-                    new PlayerClassicGame( firstPlayerName,moves),
-                    new PlayerClassicGame( secondPlayerName,moves)
+                    new PlayerClassicGame( firstPlayerName),
+                    new PlayerClassicGame( secondPlayerName)
                };
 
                return defaultPlayers;

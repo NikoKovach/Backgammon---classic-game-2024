@@ -15,48 +15,49 @@
                base.SetColor( player.MyPoolsColor );
                base.SetColumns( board.ColumnSet );
 
-               if ( !ChipsOnTheBar() ) return false;
+               if ( !base.ChipsOnTheBar() ) return false;
 
-               if ( !CaseHasChipsOnTheBar() )  return false;
+               if ( !CaseHasChipsOnTheBar() )  return false; // Test
 
                return true;
           }
 //****************************************************************
           private bool CaseHasChipsOnTheBar( )
           {
-               IDictionary<int,int> diceSet = this.Board.DiceValueAndMovesCount
-                                             .Where(x => x.Value > 0)
-                                             .ToDictionary(x => x.Key,x => x.Value);
+               IDictionary<int,int> diceSet = base.GetDiceSet();
 
                List<bool> hasAnyMoveList = new List<bool>();
 
-               if ( this.Color == PoolColor.Black  )
+               foreach ( var item in diceSet )
                {
-                    foreach ( var item in diceSet )
-                    {
-                         hasAnyMoveList.Add(ColumnIsNotLock( item.Key ));
-                    }
+                    int colNumber = GetColNumber( item.Key );
 
-                    if ( hasAnyMoveList.All(x => x == false) )
-                    {
-                         return false;
-                    }
+                    hasAnyMoveList.Add(base.ColumnIsNotLock( colNumber ));
                }
 
-               if ( this.Color == PoolColor.White  )
+               if ( hasAnyMoveList.All(x => x == false) )
                {
-                    foreach ( var item in diceSet )
-                    {
-                         hasAnyMoveList.Add(ColumnIsNotLock( ColNumberTwentyFour + ColNumberOne - item.Key ));
-                    }
-
-                    if ( hasAnyMoveList.All(x => x == false) )
-                    {
-                         return false;
-                    }
+                    return false;
                }
 
                return true;
           }
+
+          private int GetColNumber(int diceValue)
+          {
+               int colNumber = default;
+
+               if ( this.Color == PoolColor.Black  )
+               {
+                    colNumber = diceValue;
+               }
+               else if ( this.Color == PoolColor.White  )
+               {
+                    colNumber = ColNumberTwentyFour + ColNumberOne - diceValue;
+               }
+
+               return colNumber;
+          }
      }
 }
+

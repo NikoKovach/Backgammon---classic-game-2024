@@ -22,6 +22,7 @@
           public ConsoleEngine(IController someController, IWriter outerWriter, IReader         OuterReader)
           {
               this.controller = someController ?? throw new ArgumentNullException("");
+               //TODO
               this.writer = outerWriter ?? throw new ArgumentNullException("");
               this.reader = OuterReader ?? throw new ArgumentNullException("");
           }
@@ -56,14 +57,15 @@
                     Console.Clear();
                }
                
-               this.controller.Players = new PlayerFactory().CreatePlayers(playersName[0],playersName[1],this.Controller.TablaBoard);
+               this.controller.Players = new PlayerFactory().CreatePlayers(playersName[0],playersName[1]);
 
                //this.controller.CreatePlayers( playersName[0], playersName[1] ); 
           }
 
           public virtual void ChoiceOfColorByThePlayers()
           {
-               this.Writer.Write( string.Format( ChooseOfColor, this.Controller.Players[0].Name ));
+               this.Writer.Write( string.Format( ChooseOfColor, 
+                    this.Controller.Players[0].Name ));
 
                string colorNumber = string.Empty;
 

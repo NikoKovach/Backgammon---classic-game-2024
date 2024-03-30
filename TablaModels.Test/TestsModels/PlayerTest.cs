@@ -5,7 +5,6 @@
      using TablaModels.Components.Players;
      using Moq;
      using TablaModels.Enums;
-     using System.Collections.Generic;
      using System;
 
      [TestFixture]

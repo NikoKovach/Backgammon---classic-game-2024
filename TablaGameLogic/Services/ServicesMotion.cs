@@ -11,25 +11,24 @@
 
     public class ServicesMotion : IMoveService
      {
-          private static IDictionary<string,IValidateMove> defaultValidateList = GetDefaultValidateList(); 
-          private static IDictionary<string,IHasMoves> defaultHasAnyMoveList = GetDefaultHasMoveServiceList();
+          private static IDictionary<string,IValidateMove> defaultValidateList 
+               = GetDefaultValidateList(); 
+          private static IDictionary<string,IHasMoves> defaultHasAnyMoveList 
+               = GetDefaultHasMoveServiceList();
 
           public ServicesMotion() : this(defaultValidateList,defaultHasAnyMoveList)
           { }
 
-          public ServicesMotion(IDictionary<string,IValidateMove> validateList,IDictionary<string,IHasMoves> hasAnyMoveList)
-          {           
-               this.ValidateList = validateList ?? 
-                    throw new ArgumentNullException
-                    (
-                         string.Format(InvalidMoveConfirmationParameter,nameof(validateList))
-                    );
+          public ServicesMotion(IDictionary<string,IValidateMove> validateList,
+               IDictionary<string,IHasMoves> hasAnyMoveList)
+          {
+               ArgumentNullException.ThrowIfNull(validateList);
 
-               this.HasAnyMoveList = hasAnyMoveList ?? 
-                    throw new ArgumentNullException
-                    (
-                         string.Format(InvalidMoveConfirmationParameter,nameof(hasAnyMoveList))
-                    );
+               ArgumentNullException.ThrowIfNull(hasAnyMoveList);
+
+               this.ValidateList = validateList ;
+
+               this.HasAnyMoveList = hasAnyMoveList;    
           }
 
           public IDictionary<string,IValidateMove> ValidateList { get; set; }
@@ -58,7 +57,8 @@
                }
           }
 
-          public object[] GenerateInvokeMethodParameters(IMoveParameters motion,IBoard board,IPlayer player)
+          public object[] GenerateInvokeMethodParameters(IMoveParameters motion,
+               IBoard board,IPlayer player)
           {
                if ( motion.MoveMethodName.Equals( "Inside" ) )
                {
@@ -76,27 +76,32 @@
                     ,motion.UseDiceMotionCount.Sum(),board.ColumnSet};
           }
 
-          public void InvokeMoveMethod(string methodName, object[] moveParams,IPlayer CurrentPlayer)
+          public void InvokeMoveMethod(string methodName, object[] moveParams,
+               IPlayer CurrentPlayer)
           {
                MethodInfo moveMethodType = CurrentPlayer.Move.GetType().GetMethod     (methodName);
 
                moveMethodType.Invoke(CurrentPlayer.Move, moveParams); 
           }
 
-          public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
+          public bool MoveIsValid( IMoveParameters motion, IBoard board,
+               IPlayer player )
           {
                try
                {
                     if ( motion == null || board == null || player == null )
                     {
-                         throw new ArgumentNullException();// TODO Message string
+                         throw new ArgumentNullException(ParameterNullException);
                     }
 
-                    IValidateMove validateInstance = this.ValidateList[motion.MoveMethodName];
-
+                    IValidateMove validateInstance = 
+                         this.ValidateList[motion.MoveMethodName];
+                    
                     if ( validateInstance == null )
                     {
-                         throw new InvalidOperationException();// TODO Message string
+                         throw new NullReferenceException(
+                              string.Format(NullReferenceValidateMove,
+                              nameof(validateInstance)));
                     }
 
                     return validateInstance.MoveIsCorrect( motion, board, player );
@@ -105,16 +110,17 @@
                {
                     throw new Exception(nullEx.Message);
                }
-               catch ( InvalidOperationException invalidEx)
+               catch ( NullReferenceException nullRefEx)
                {
-                    throw new Exception(invalidEx.Message);
+                    throw new Exception(nullRefEx.Message);
                }
           }
 
           public bool PlayerHasMoves(IBoard board, IPlayer player)
           {
                string moveType =  this.ValidateList
-                              .First().Value.GetMoveType(board,player);
+                                      .First().Value
+                                      .GetMoveType(board,player);
 
                bool hasValidMove = this.HasAnyMoveList[ moveType ]
                                        .HasMoves(board,player);
@@ -184,53 +190,14 @@
      }
 }
 
-//List<bool> hasMoveCombinations = new List<bool>();
+               //this.ValidateList = validateList ?? 
+               //     throw new ArgumentNullException
+               //     (
+               //          string.Format(InvalidMoveConfirmationParameter,nameof(validateList))
+               //     );
 
-               //foreach ( var item in this.HasAnyMoveList )
-               //{
-               //     hasMoveCombinations.Add( item.Value.HasMoves(board,player));
-               //}
-
-               //if (hasMoveCombinations.All(x => x == false)  )
-               //{
-               //     return false;
-               //}
-  //public bool MoveIsValid( IMoveParameters motion, IBoard board, IPlayer player )
-          //{
-          //     try
-          //     {
-          //          if ( motion == null || board == null || player == null )
-          //          {
-          //               throw new ArgumentNullException();
-          //          }
-
-          //          string className = "Validate" + motion.MoveMethodName;
-
-          //          IValidateMove validateInstance = null;
-
-          //          if ( className.Equals("ValidateInside") )
-          //          {
-          //               validateInstance = new ValidateInside();
-          //          }
-
-          //          if ( className.Equals("ValidateMove") )
-          //          {
-          //               validateInstance = new ValidateMove();
-          //          }
-
-          //          if ( className == "ValidateOutside" )
-          //          {
-          //               validateInstance = new ValidateOutside();
-          //          }
-
-          //          return validateInstance.MoveIsCorrect( motion, board, player );
-          //     }
-          //     catch ( ArgumentNullException nullEx)
-          //     {
-          //          throw new Exception(nullEx.Message);
-          //     }
-          //     catch ( Exception ex)
-          //     {
-          //          throw new ValidateException(ex.Message);
-          //     }
-          //}
+               //this.HasAnyMoveList = hasAnyMoveList ?? 
+               //     throw new ArgumentNullException
+               //     (
+               //          string.Format(InvalidMoveConfirmationParameter,nameof(hasAnyMoveList))
+               //     );

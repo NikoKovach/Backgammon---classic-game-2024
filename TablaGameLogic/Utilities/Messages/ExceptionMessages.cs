@@ -17,5 +17,11 @@
           public const string InvalidPlayerName = "Invalid name !" ;
 
           public const string NullPlayerName = "The player name can not be null !";
+
+          public const string ParameterNullException = 
+               "The input parameter cannot be null !";
+
+          public const string NullReferenceValidateMove = 
+               "The reference of {0} not set to an instance of an object.";
      }
 }

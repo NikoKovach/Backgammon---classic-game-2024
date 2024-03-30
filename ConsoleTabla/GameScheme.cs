@@ -45,7 +45,7 @@ namespace TablaConsoleGame
                string firstPlayerName = "AAAAAAAAA";
                string secondPlayerName = "BBBBBBBB";
 
-               this.Controler.Players  = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName,this.controler.TablaBoard);
+               this.Controler.Players  = new PlayerFactory().CreatePlayers(firstPlayerName,secondPlayerName);
 
                var playerList = this.Controler.Players;
 

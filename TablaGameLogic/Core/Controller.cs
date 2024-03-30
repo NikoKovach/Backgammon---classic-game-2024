@@ -8,14 +8,14 @@
      using TablaGameLogic.Factory;
      using TablaGameLogic.Services;
      using TablaGameLogic.Services.Contracts;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Enums;
+     using TablaModels.Components.Players;
 
      using static TablaGameLogic.Utilities.Messages.ExceptionMessages;
      using static TablaGameLogic.Utilities.Messages.OutputMessages;
      using static TablaGameLogic.Services.ServiceCalculate;
      using static TablaGameLogic.Utilities.Messages.GameConstants;
-     using TablaModels.Components.Interfaces;
-     using TablaModels.Enums;
-     using TablaModels.Components.Players;
 
      public class Controller : IController
      {        
@@ -124,9 +124,13 @@
                          return InvalidMove;
                     }
 
-                    object[] invokeMethodParams = this.MoveService.GenerateInvokeMethodParameters( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
+                    object[] invokeMethodParams = 
+                    this.MoveService.GenerateInvokeMethodParameters
+                    ( this.MoveParams,this.TablaBoard, this.CurrentPlayer );
 
-                    this.MoveService.InvokeMoveMethod(this.MoveParams.MoveMethodName,invokeMethodParams,this.CurrentPlayer);
+                    this.MoveService.InvokeMoveMethod
+                                      (this.MoveParams.MoveMethodName,
+                                       invokeMethodParams,this.CurrentPlayer);
 
                     ChangeDiceValueAndMoveCount( this.MoveParams, this.TablaBoard );
                

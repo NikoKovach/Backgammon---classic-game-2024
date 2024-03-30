@@ -7,6 +7,6 @@
      {
           IPlayer CreatePlayer(string playerName,IMoveChips moveChecker);
 
-          IList<IPlayer> CreatePlayers( string firstPlayerName, string    secondPlayerName,IBoard board );
+          IList<IPlayer> CreatePlayers( string firstPlayerName, string    secondPlayerName );
      }
 }

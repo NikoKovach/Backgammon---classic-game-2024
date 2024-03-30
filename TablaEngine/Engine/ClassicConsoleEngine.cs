@@ -13,10 +13,13 @@
 
     public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
      {
-          public ClassicConsoleEngine() : base(new Controller(), new Writer(),new Reader())
+          public ClassicConsoleEngine() : 
+               base(new Controller(), new Writer(),new Reader())
           { }
 
-          public ClassicConsoleEngine(IController someController, IWriter outerWriter, IReader outerReader) : base(someController,outerWriter,outerReader)
+          public ClassicConsoleEngine
+               (IController someController, IWriter outerWriter, IReader outerReader) :
+               base(someController,outerWriter,outerReader)
           { }
 
           public override void Run()

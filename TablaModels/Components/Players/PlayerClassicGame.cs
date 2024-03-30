@@ -1,64 +1,64 @@
 ﻿namespace TablaModels.Components.Players
 {
-    using System;
-    using TablaModels.Components.Interfaces;
-    using TablaModels.Enums;
-    using TablaModels.ModelsUtilities;
-    using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
+     using System;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.Enums;
+     using TablaModels.ModelsUtilities;
+     using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
 
-    public class PlayerClassicGame : IPlayer
-    {
-        public PlayerClassicGame(string name)
-        {
-            Name = name;
+     public class PlayerClassicGame : IPlayer
+     {
+          public PlayerClassicGame(string name) : this(name,new MoveChipsClassicGame( ))
+          { }
 
-            State = PlayerState.NormalState;
-        }
+          public PlayerClassicGame(string name, IMoveChips moveChip)
+          {
+               Name = name;
 
-        public PlayerClassicGame(string name, IMoveChips moveChip)
-           : this(name)
-        {
-            Move = moveChip;
-        }
+               Move = moveChip;
 
-        public string Name { get; set; }
+               State = PlayerState.NormalState;      
+          }
 
-        public PoolColor MyPoolsColor { get; set; }
+          public string Name { get; set; }
 
-        public PlayerState State { get; set; }
+          public PoolColor MyPoolsColor { get; set; }
 
-        public IMoveChips Move { get; set; }
+          public PlayerState State { get; set; }
 
-        public virtual void ArrangingTheCheckers(IBoard board, IArrangeChips arrangeChips)
-        {
-            if (board == null)
-            {
-                throw new ArgumentNullException(string.Format(InvalidBoardParameter, nameof(board)));
-            }
+          public IMoveChips Move { get; set; }
 
-            if (arrangeChips == null)
-            {
-                throw new ArgumentNullException(string.Format(InvalidBoardParameter, nameof(arrangeChips)));
-            }
+          public virtual void ArrangingTheCheckers(IBoard board, IArrangeChips arrangeChips)
+          {
+               if (board == null)
+               {
+                    throw new ArgumentNullException(string.Format(InvalidBoardParameter,    nameof    (board)));
+               }
 
-            if (MyPoolsColor == PoolColor.White)
-            {
-                arrangeChips.ArrangeWhiteChips(board.ColumnSet, board.WhitePoolsSet);
-            }
-            else
-            {
-                arrangeChips.ArrangeBlackChips(board.ColumnSet, board.BlackPoolsSet);
-            };
-        }
+               if (arrangeChips == null)
+               {
+                    throw new ArgumentNullException(string.Format(InvalidBoardParameter,    nameof    (arrangeChips)));
+               }
 
-        public int RollADice()
-        {
-            Random rnd = new Random();
+               if (MyPoolsColor == PoolColor.White)
+               {
+                    arrangeChips.ArrangeWhiteChips(board.ColumnSet, board.WhitePoolsSet);
+               }
+               else
+               {
+                    arrangeChips.ArrangeBlackChips(board.ColumnSet, board.BlackPoolsSet);
+               };
+          }
 
-            int number = rnd.Next
-                (TableGlobalConstants.MinDiceValue, TableGlobalConstants.MaxDiceValue + 1);
+          public int RollADice()
+          {
+               Random rnd = new Random();
 
-            return number;
-        }
-    }
+               int number = rnd.Next
+                   (TableGlobalConstants.MinDiceValue, 
+                    TableGlobalConstants.MaxDiceValue + 1);
+
+               return number;
+          }
+     }
 }

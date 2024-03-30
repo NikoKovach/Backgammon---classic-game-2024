@@ -9,7 +9,7 @@ using TablaModels.Enums;
 namespace TablaModels.Test.TestsTablaGameLogic
 {
     [TestFixture]
-     public class BoardFactoryTest
+     public class FactoryForBoardTest
      {
           public IBoard Board { get; set; }
 

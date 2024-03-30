@@ -24,9 +24,11 @@
                if ( !base.ColumnIsPartOfTheBoard(MotionParams.ColumnNumber)) 
                     return false;
 
-               if ( !this.TargetColumnIsValidAgainstColor()) return false;
+               if ( !base.BaseColumnIsOpen() ) return false;
 
-               if ( !this.TargetColumnIsValidAgainstPoolCount() ) return false;
+               if ( !this.TargetColumnIsValidAgainstColor()) return false; //TODO
+
+               if ( !this.TargetColumnIsValidAgainstPoolCount() ) return false; //TODO
 
                return true;
           }
@@ -47,7 +49,8 @@
           {
                if ( !base.ColumnIsNotLock(MotionParams.ColumnNumber) ) return false;
 
-               int chipsCount = this.Columns[ MotionParams.ColumnNumber ].PoolStack.Count;
+               int chipsCount = this.Columns[ MotionParams.ColumnNumber ]
+                                    .PoolStack.Count;
 
                if ( chipsCount == 0 )  return false;
 
@@ -136,11 +139,10 @@
                                     .First( x => x.Key >= colNumberRange.Min() &&
                                                  x.Key <= colNumberRange.Max() ).Key   
                              :  this.Board.DiceValueAndMovesCount
-                                    .First(x => x.Key >= 24 + 1 - colNumberRange.Max() && 
-                                                x.Key <= 24 + 1 - colNumberRange.Min()).Key;
+                                    .First(x => x.Key >= 24 + 1 - colNumberRange.Max() 
+                                    && x.Key <= 24 + 1 - colNumberRange.Min()).Key;
                
                this.MotionParams.UseDiceMotionCount.Add(diceNumber);
-
           }
 
           protected List<int> GetColumnsRange()
@@ -172,35 +174,4 @@
 //"2.For 'Outside' - ( 2 ) (column number);"        + NewRow + 
 //"3.For 'Move'    - ( 3 ) (column number) (places to move);";
 */
-/*
- *        //protected bool ChipsInGame()
-          //{
-          //     var chipsSet = Color == PoolColor.White ?
-          //          Board.WhitePoolsSet : Board.BlackPoolsSet;
 
-          //     return chipsSet.Any( x => x.State == PoolState.InGame );
-          //}
-
-List<int> whiteColumnsRange = this.Columns
-     .Where( x => x.Key >= 1 && x.Key <= 6 ).Select( x => x.Key ).ToList();
-               
-List<int> blackColumnsRange = this.Columns
-     .Where( x => x.Key >= 19 && x.Key <= 24 ).Select( x => x.Key ).ToList();
- 
- 
-               if ( this.Color == PoolColor.White )
-               {
-                    if ( !whiteColumnsRange.Any( x => x == MotionParams.ColumnNumber ) )
-                    {
-                         return false;
-                    }
-               }
-
-               if ( this.Color == PoolColor.Black )
-               {
-                    if ( !blackColumnsRange.Any( x => x == MotionParams.ColumnNumber ) )
-                    {
-                         return false;
-                    }
-               }
- */

@@ -1,11 +1,11 @@
 ﻿namespace TablaGameLogic.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using TablaGameLogic.Services.Contracts;
-    using TablaModels.Components.Interfaces;
+     using System.Collections.Generic;
+     using System.Linq;
+     using TablaGameLogic.Services.Contracts;
+     using TablaModels.Components.Interfaces;
 
-    public class ValidateMotionHasMove : ValidateMotion,IHasMoves
+     public class ValidateMotionHasMove : ValidateMotion,IHasMoves
      {
           public  bool HasMoves( IBoard board,
                IPlayer player )
@@ -30,9 +30,7 @@
                     .OrderBy(x => x.IdentityNumber)
                     .ToList();
 
-               IList<int> diceSet = this.Board.DiceValueAndMovesCount
-                                 .Where( x => x.Value > 0 )
-                                 .Select(x => x.Key).ToList();
+               IDictionary<int,int> diceSet = base.GetDiceSet();
 
                List<bool> movesTypeList = new List<bool>();
 
@@ -41,7 +39,7 @@
                     foreach ( var dice in diceSet )
                     {
                          int mainTargetCol = 
-                              this.CalculateTargetColumn( dice, col.IdentityNumber );
+                              this.CalculateTargetColumn( dice.Key, col.IdentityNumber );
 
                          movesTypeList.Add(TargetColumnIsValid(mainTargetCol));
                     }
@@ -55,24 +53,31 @@
      }
 }
 
-          //private bool TheBlacksHasMotions( IList<IColumn> columnSet, 
-          //                                  IList<int> diceSet )
-          //{
-          //     List<bool> movesTypeList = new List<bool>();
+/*
+IList<int> diceSet = this.Board.DiceValueAndMovesCount
+                 .Where( x => x.Value > 0 )
+                 .Select(x => x.Key).ToList();
 
-          //     foreach ( var col in columnSet )
-          //     {
-          //          foreach ( var dice in diceSet )
-          //          {
-          //               int mainTargetCol = 
-          //                    this.CalculateTargetColumn( dice, col.IdentityNumber );
+ */
 
-          //               movesTypeList.Add(TargetColumnIsValid(mainTargetCol));
-          //          }
-          //     }
+//private bool TheBlacksHasMotions( IList<IColumn> columnSet, 
+//                                  IList<int> diceSet )
+//{
+//     List<bool> movesTypeList = new List<bool>();
 
-          //     if ( movesTypeList.All( x => x == false ) )
-          //          return false;
+//     foreach ( var col in columnSet )
+//     {
+//          foreach ( var dice in diceSet )
+//          {
+//               int mainTargetCol = 
+//                    this.CalculateTargetColumn( dice, col.IdentityNumber );
 
-          //     return true;
-          //}
+//               movesTypeList.Add(TargetColumnIsValid(mainTargetCol));
+//          }
+//     }
+
+//     if ( movesTypeList.All( x => x == false ) )
+//          return false;
+
+//     return true;
+//}

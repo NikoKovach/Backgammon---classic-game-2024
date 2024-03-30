@@ -7,8 +7,8 @@
 
     public class ValidateInside : ValidateBase,IValidateMove
      {
-          public override bool MoveIsCorrect(IMoveParameters motion,IBoard board, 
-               IPlayer player)
+          public override bool MoveIsCorrect(IMoveParameters motion,
+                                             IBoard board, IPlayer player)
           {
                base.SetBoard( board );
                base.SetColor(player.MyPoolsColor);
@@ -20,9 +20,9 @@
                if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) ) 
                     return false;
 
-               if ( !ChipStatusIsOnTheBar() ) return false;
-
                if ( !base.BaseColumnIsOpen() ) return false;
+
+               if ( !ChipStatusIsOnTheBar() ) return false;
 
                return true;
           }
@@ -31,8 +31,9 @@
           {
                int chipNumber = this.MotionParams.chipNumberOrPlaceToMove;
 
-               IPool chip = this.Board.BlackPoolsSet
-                            .FirstOrDefault( x => x.IdentityNumber == chipNumber );
+               //WhitePoolSer Missing
+               IPool chip = base.GetChipSet()
+                                .FirstOrDefault( x => x.IdentityNumber == chipNumber );
 
                if ( chip == null )
                {

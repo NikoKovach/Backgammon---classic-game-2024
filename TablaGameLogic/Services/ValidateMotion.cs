@@ -8,7 +8,8 @@
 
     public class ValidateMotion:ValidateBase,IValidateMove
      {
-          public override bool MoveIsCorrect(IMoveParameters motion,IBoard board, IPlayer       player)
+          public override bool MoveIsCorrect(IMoveParameters motion,
+                                             IBoard board, IPlayer player)
           {
                base.SetBoard( board );
                base.SetColor(player.MyPoolsColor);
@@ -19,7 +20,8 @@
 
                if ( base.ChipsOnTheBar() ) return false;
 
-               if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) ) return false;
+               if ( !base.ColumnIsPartOfTheBoard(this.MotionParams.ColumnNumber) ) 
+                    return false;
 
                if ( !base.BaseColumnIsOpen() ) return false;
 
@@ -62,7 +64,7 @@
                     return false;
                }
 
-               if ( !ColumnIsNotLock( targetColumn ) )
+               if ( !base.ColumnIsNotLock( targetColumn ) )
                {
                     return false;
                }
@@ -72,8 +74,9 @@
 
           protected int CalculateTargetColumn( int movesNumber, int baseColumnNumber )
           {
-               return ( base.Color == PoolColor.Black ) ? 
-                    baseColumnNumber  + movesNumber : baseColumnNumber - movesNumber ;
+               return ( base.Color == PoolColor.Black ) 
+                    ? baseColumnNumber  + movesNumber 
+                    : baseColumnNumber - movesNumber ;
           }
           
           private bool PathIsValidDicesAreNotSame(List<int> dices)
