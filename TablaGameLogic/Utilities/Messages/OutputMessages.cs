@@ -77,6 +77,8 @@
 
           public const string InvalidMove = "Move is invalid !";
 
+          public const string NextMoveMessage = "Player {0} make your next move.";
+
 //*****************************************************************************
           public const string TheWinnerIs = "{0},you won the game !!!";
 
@@ -86,7 +88,5 @@
 
           public const string InvalidCommandForExitOrNewGame = 
                "Invalig command ! Please,try again !";
-
-         
     }
 }

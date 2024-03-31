@@ -21,26 +21,21 @@
 
           public ConsoleEngine(IController someController, IWriter outerWriter, IReader         OuterReader)
           {
-              this.controller = someController ?? throw new ArgumentNullException("");
-               //TODO
-              this.writer = outerWriter ?? throw new ArgumentNullException("");
-              this.reader = OuterReader ?? throw new ArgumentNullException("");
+              this.controller = someController 
+                    ?? throw new ArgumentNullException(nameof(someController));
+
+              this.writer = outerWriter 
+                    ?? throw new ArgumentNullException(nameof(outerWriter));
+
+              this.reader = OuterReader 
+                    ?? throw new ArgumentNullException(nameof(OuterReader));
           }
 
-          public IController Controller 
-          { 
-              get => this.controller;
-          }
+          public IController Controller => this.controller;
 
-          public IWriter Writer 
-          { 
-              get => this.writer;
-          }
+          public IWriter Writer => this.writer;
 
-          public IReader Reader 
-          { 
-              get => this.reader;
-          }
+          public IReader Reader => this.reader;
 
           public abstract void Run();
           
@@ -201,9 +196,11 @@
 
                     diceValues[i] = this.Controller.Players[i].RollADice();
 
-                    this.Controller.TablaBoard.DiceSet[i + 1].ValueOfOneDice = diceValues[i];
+                    this.Controller.TablaBoard.DiceSet[i + 1].ValueOfOneDice = 
+                         diceValues[i];
 
-                    this.Writer.WriteLine(string.Format(RollResultOfOneDice, currentPlayerName, diceValues[i]));
+                    this.Writer.WriteLine(string.Format(RollResultOfOneDice,
+                                                currentPlayerName, diceValues[i]));
                }
           }
 

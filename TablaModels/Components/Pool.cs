@@ -16,45 +16,44 @@
 
           public Pool( int idNumber,PoolColor color, PoolState poolState)
             : this(color, poolState, idNumber, new BoardSettings().OuterPoolDiameter, new BoardSettings().InnerPoolDiameter)
-        {
-        }
+          {
+          }
 
-        public Pool(PoolColor color, PoolState poolState, int idNumber, int outerDiameter, int innerDiameter)
-        {
-            State = poolState;
+          public Pool(PoolColor color, PoolState poolState, int idNumber, int outerDiameter, int innerDiameter)
+          {
+               State = poolState;
 
-            PoolColor = color;
+               PoolColor = color;
 
-            IdentityNumber = idNumber;
+               IdentityNumber = idNumber;
 
-            OuterPoolDiameter = outerDiameter;
+               OuterPoolDiameter = outerDiameter;
 
-            InnerPoolDiameter = innerDiameter;
-        }
+               InnerPoolDiameter = innerDiameter;
+          }
 
-        public int IdentityNumber
-        {
-            get => identityNumber;
+          public int IdentityNumber
+          {
+               get => identityNumber;
 
-            private set
-            {
-                if (value < TableGlobalConstants.MinPoolsNumber || value > TableGlobalConstants.MaxPoolsNumber)
-                {
-                    throw new ArgumentException(InvalidPoolId);
-                }
+               private set
+               {
+                    if (value < TableGlobalConstants.MinPoolsNumber || value >      TableGlobalConstants.MaxPoolsNumber)
+                    {
+                       throw new ArgumentException(InvalidPoolId);
+                    }
 
-                identityNumber = value;
-            }
+                    identityNumber = value;
+               }
 
-        }
+          }
 
-        public int OuterPoolDiameter { get; set; }
+          public int OuterPoolDiameter { get; set; }
 
-        public int InnerPoolDiameter { get; set; }
+          public int InnerPoolDiameter { get; set; }
 
-        public PoolColor PoolColor { get; set; }
+          public PoolColor PoolColor { get; set; }
 
-        public PoolState State { get; set; }
-
+          public PoolState State { get; set; }
     }
 }

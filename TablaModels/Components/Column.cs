@@ -19,58 +19,58 @@
               : this(idNumber, colColor, new BoardSettings().ColumnBase, new BoardSettings  ().ColumnHeight)
           { }
 
-        public Column(int idNumber, string colColor, int colBase, int colHeight)
-        {
-            IdentityNumber = idNumber;
+          public Column(int idNumber, string colColor, int colBase, int colHeight)
+          {
+               IdentityNumber = idNumber;
 
-            SetColumnColor(colColor);
+               SetColumnColor(colColor);
 
-            ColumnBase = colBase;
+               ColumnBase = colBase;
 
-            ColumnHeight = colHeight;
+               ColumnHeight = colHeight;
 
-            poolStack = new Stack<IPool>();
-        }
+               poolStack = new Stack<IPool>();
+          }
 
-        public int IdentityNumber
-        {
-            get => identityNumber;
+          public int IdentityNumber
+          {
+               get => identityNumber;
 
-            set
-            {
-                if (value < TableGlobalConstants.MinColumnNumber
-                      || value > TableGlobalConstants.MaxColumnNumber)
-                {
-                    throw new ArgumentException(InvalidColumnId);
-                }
+               set
+               {
+                    if (value < TableGlobalConstants.MinColumnNumber
+                          || value > TableGlobalConstants.MaxColumnNumber)
+                    {
+                        throw new ArgumentException(InvalidColumnId);
+                    }
 
-                identityNumber = value;
-            }
-        }
+                    identityNumber = value;
+               }
+          }
 
-        public int ColumnBase { get; set; }
+          public int ColumnBase { get; set; }
 
-        public int ColumnHeight { get; set; }
+          public int ColumnHeight { get; set; }
 
-        public ColumnColor Color { get; private set; }
+          public ColumnColor Color { get; private set; }
 
-        public Stack<IPool> PoolStack
-        {
-            get => poolStack;
-        }
+          public Stack<IPool> PoolStack
+          {
+              get => poolStack;
+          }
 
-        public void SetColumnColor(string color)
-        {
-            ColumnColor colColor;
-            bool parseIsCorect =
-                 Enum.TryParse(color, true, out colColor);
+          public void SetColumnColor(string color)
+          {
+               ColumnColor colColor;
+               bool parseIsCorect =
+                    Enum.TryParse(color, true, out colColor);
 
-            if (!parseIsCorect)
-            {
-                throw new ArgumentException(InvalidColumnColor);
-            }
+               if (!parseIsCorect)
+               {
+                   throw new ArgumentException(InvalidColumnColor);
+               }
 
-            Color = colColor;
-        }
+               Color = colColor;
+          }
     }
 }

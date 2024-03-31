@@ -1,5 +1,6 @@
 ﻿namespace TablaGameLogic.Factory
 {
+     using System;
      using System.Collections.Generic;
 
      using TablaGameLogic.Factory.Contracts;
@@ -29,7 +30,9 @@
           }
 
           public IBoard Create( IDictionary<int, IColumn> columns, IDictionary<int, IDice> diceSet, IList<IPool> whitePools, IList<IPool> blackPools )
-          {              
+          {
+               CheckInnerParametersForNullValue(columns,diceSet,whitePools,blackPools);
+
                IBoard board = new Board( columns, diceSet, whitePools, blackPools );
                
                board.DiceValueAndMovesCount = new Dictionary<int, int>();
@@ -80,6 +83,19 @@
                }
 
                return pools;
+          }
+
+          private void CheckInnerParametersForNullValue
+               ( IDictionary<int, IColumn> columns, IDictionary<int, 
+                IDice> diceSet, IList<IPool> whitePools, IList<IPool> blackPools )
+          {
+               ArgumentNullException.ThrowIfNull(columns);
+
+               ArgumentNullException.ThrowIfNull(diceSet);
+               
+               ArgumentNullException.ThrowIfNull(whitePools);
+
+               ArgumentNullException.ThrowIfNull(blackPools);
           }
      }
 }

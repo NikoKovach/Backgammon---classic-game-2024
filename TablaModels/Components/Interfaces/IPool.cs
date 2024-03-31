@@ -1,17 +1,17 @@
 ﻿namespace TablaModels.Components.Interfaces
 {
-    using TablaModels.Enums;
+     using TablaModels.Enums;
 
-    public interface IPool
-    {
-        int IdentityNumber { get; }
+     public interface IPool
+     {
+          int IdentityNumber { get; }
 
-        int OuterPoolDiameter { get; }
+          int OuterPoolDiameter { get; }
 
-        int InnerPoolDiameter { get; }
+          int InnerPoolDiameter { get; }
 
-        PoolColor PoolColor { get; }
+          PoolColor PoolColor { get; }
 
-        PoolState State { get; set; }
-    }
+          PoolState State { get; set; }
+     }
 }

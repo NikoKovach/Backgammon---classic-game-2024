@@ -1,73 +1,72 @@
 ﻿namespace TablaModels.Components
 {
-    using System;
-    using TablaModels.Components.Interfaces;
-    using TablaModels.ModelsUtilities;
-    using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
+     using System;
+     using TablaModels.Components.Interfaces;
+     using TablaModels.ModelsUtilities;
+     using static TablaModels.ModelsUtilities.Messages.ExceptionMessages;
 
-    public class Dice : IDice
-    {
-        private string name;
-        private int valueOfOneDice;
-        private int diceSide;
+     public class Dice : IDice
+     {
+          private string name;
+          private int valueOfOneDice;
+          private int diceSide;
 
-        public Dice() : this("Dice1", TableGlobalConstants.MinDiceValue, new BoardSettings().DiceSide)
-        {
-        }
+          public Dice() : this("Dice1", TableGlobalConstants.MinDiceValue, new    BoardSettings().DiceSide)
+          {
+          }
 
-        public Dice(string name, int cubeNumber, int sideOfDice)
-        {
-            Name = name;
+          public Dice(string name, int cubeNumber, int sideOfDice)
+          {
+              Name = name;
 
-            ValueOfOneDice = cubeNumber;
+              ValueOfOneDice = cubeNumber;
 
-            DiceSide = sideOfDice;
-        }
+              DiceSide = sideOfDice;
+          }
 
-        public string Name
-        {
-            get => name;
+          public string Name
+          {
+               get => name;
 
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException(InvalDieName);
-                }
+               set
+               {
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        throw new ArgumentException(InvalDieName);
+                    }
 
-                name = value;
-            }
-        }
+                    name = value;
+               }
+          }
 
-        public int ValueOfOneDice
-        {
-            get => valueOfOneDice;
+          public int ValueOfOneDice
+          {
+               get => valueOfOneDice;
 
-            set
-            {
-                if (value < TableGlobalConstants.MinDiceValue || value > TableGlobalConstants.MaxDiceValue)
-                {
-                    throw new ArgumentException(InvalidDieValue);
-                }
+               set
+               {
+                    if (value < TableGlobalConstants.MinDiceValue || value >          TableGlobalConstants.MaxDiceValue)
+                    {
+                        throw new ArgumentException(InvalidDieValue);
+                    }
 
-                valueOfOneDice = value;
-            }
-        }
+                    valueOfOneDice = value;
+               }
+          }
 
-        public int DiceSide
-        {
-            get => diceSide;
+          public int DiceSide
+          {
+               get => diceSide;
 
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentException(InvalidDieSide);
-                }
+               set
+               {
+                    if (value <= 0)
+                    {
+                        throw new ArgumentException(InvalidDieSide);
+                    }
 
-                diceSide = value;
-            }
-        }
-
+                    diceSide = value;
+               }
+          }
     }
 }

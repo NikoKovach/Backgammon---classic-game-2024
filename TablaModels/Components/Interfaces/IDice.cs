@@ -1,11 +1,11 @@
 ﻿namespace TablaModels.Components.Interfaces
 {
-    public interface IDice
-    {
-        string Name { get; set; }
+     public interface IDice
+     {
+          string Name { get; set; }
 
-        int ValueOfOneDice { get; set; }
+          int ValueOfOneDice { get; set; }
 
-        int DiceSide { get; set; }
-    }
+          int DiceSide { get; set; }
+     }
 }

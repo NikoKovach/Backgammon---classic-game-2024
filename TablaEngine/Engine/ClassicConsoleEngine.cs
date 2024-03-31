@@ -1,17 +1,18 @@
 ﻿namespace TablaEngine.Engine
 {
-    using System;
+     using System;
 
-    using TablaEngine.Engine.Contracts;
-    using TablaGameLogic.Core;
-    using TablaEngine.IO;
-    using TablaEngine.IO.Contracts;
+     using TablaEngine.Engine.Contracts;
+     using TablaGameLogic.Core;
+     using TablaEngine.IO;
+     using TablaEngine.IO.Contracts;
 
-    using static TablaGameLogic.Utilities.Messages.OutputMessages;
-    using TablaGameLogic.Core.Contracts;
-    using TablaModels.Enums;
+     using TablaGameLogic.Core.Contracts;
+     using TablaModels.Enums;
 
-    public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
+     using static TablaGameLogic.Utilities.Messages.OutputMessages;
+
+     public class ClassicConsoleEngine : ConsoleEngine,IConsoleEngine,IEngine
      {
           public ClassicConsoleEngine() : 
                base(new Controller(), new Writer(),new Reader())
@@ -48,7 +49,7 @@
                }       
           }
 
-          public void MainGameMethod() // be private
+          public void MainGameMethod()
           {
                GeneralLoopCurrentPlayerMoves();
 
@@ -56,16 +57,11 @@
 
                string currentPlayerName = this.Controller.CurrentPlayer.Name;
 
+               Console.Clear();
+
                this.PressKeyForRolling(currentPlayerName, AskPlayerToRollDiceAndMakeMove);
 
                this.Controller.RollDice();
-
-               //if (!this.Controller.RollDice())
-               //{
-               //    this.Writer.WriteLine(string.Format(ThePlayerHaveNoMove,      currentPlayerName));
-
-               //    return;
-               //}
           }
 
           private void GeneralLoopCurrentPlayerMoves()
@@ -104,10 +100,8 @@
 
                while (message.Equals(InvalidMove))
                {
-
-                    string input = "2 5";      //
-                    message = this.Controller.CurrentPlayerMakesMove( input );
-                    //message = this.Controller.CurrentPlayerMakesMove(this.Reader.ReadLine());
+                    message = this.Controller
+                             .CurrentPlayerMakesMove( this.Reader.ReadLine() );
 
                     this.Writer.WriteLine(message);
 
@@ -116,19 +110,10 @@
                          this.Controller.TablaBoard.DiceValueAndMovesCount.Clear();
                          break;
                     }
+
+                    string playerName = this.Controller.CurrentPlayer.Name;
+                    this.Writer.WriteLine(string.Format(NextMoveMessage,playerName));
                }
           }
-
-          /*
-               TODO Method()'Undo last move' 
-               отмята на последния ход ,
-               който не е последен от възможните ходове за дадения играч .
-           */
      }
 }
-
-//White :
-//Outside = "2 5 4"
-//Move = "3 24 4";
-//Inside = "1 24 15"
-

@@ -21,7 +21,6 @@
           public const string ColumnColorDark = "Dark";
 
           public const string ColumnColorLight = "Light";
-          //ColumnNumber
 
      }
 }

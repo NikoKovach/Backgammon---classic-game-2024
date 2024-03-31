@@ -70,6 +70,3 @@
         }
     }
 }
-
-// maxOneSideBoardWidth = DefaultOneSideBoardWidth *2
-//private const int OneSideBoardHeight = 441; // BoardHeight / BoardWidth = 1.62963

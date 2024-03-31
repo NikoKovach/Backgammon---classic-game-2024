@@ -13,9 +13,9 @@
 
           public PlayerClassicGame(string name, IMoveChips moveChip)
           {
-               Name = name;
+               Name = name ?? throw new ArgumentNullException(nameof(name));
 
-               Move = moveChip;
+               Move = moveChip ?? throw new ArgumentNullException(nameof(moveChip));;
 
                State = PlayerState.NormalState;      
           }

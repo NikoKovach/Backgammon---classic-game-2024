@@ -115,9 +115,11 @@
 
                     this.MoveService.ParseMove(moveString,this.MoveParams);
 
-                    CalculateUseDiceMotionCount( this.MoveParams,this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
+                    ServiceCalculate.CalculateUseDiceMotionCount( this.MoveParams,
+                              this.CurrentPlayer.MyPoolsColor, this.TablaBoard);
 
-                    bool moveIsValid = this.MoveService.MoveIsValid( this.MoveParams, TablaBoard, CurrentPlayer );
+                    bool moveIsValid = this.MoveService.MoveIsValid( this.MoveParams,
+                                                       TablaBoard, CurrentPlayer );
 
                     if ( !moveIsValid )
                     {
@@ -168,10 +170,10 @@
 
           public void ChangeCurrentPlayer()
           {
-               PoolColor currentPlayerColor = this.CurrentPlayer.MyPoolsColor;
+               int currentPlayerIndex = this.Players.IndexOf( this.CurrentPlayer );
 
-               this.CurrentPlayer = 
-                  currentPlayerColor == PoolColor.Black ? this.Players[0] : this.Players[1];
+               this.CurrentPlayer = ( currentPlayerIndex == 0 )
+                    ? this.Players[ 1 ] : this.Players[ 0 ];
           }
 
           public void ClearBoardFromCheckers()
